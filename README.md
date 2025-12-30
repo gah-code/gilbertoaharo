@@ -70,11 +70,6 @@ High-level map:
 - `docs/` — IA, design system notes, CMS guidance
 
 ---
-Additional context you provided and aligning it with **UI-first, CMS-second** best practices.
-
-This version is **documentation-ready** (README / architecture docs), clarifies **responsibility boundaries**, and makes the **content → UI → routing → preview** pipeline explicit.
-
----
 
 # 📁 Project Structure — `gilbertoaharo`
 
