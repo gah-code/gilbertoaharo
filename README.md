@@ -1,5 +1,5 @@
 
-# Gilberto A. Haro — Personal Site (SPA)
+# Gilberto A. Haro — Personal Site
 
 Single-page **React + TypeScript + Vite** site powered by **Contentful**.  
 The landing page is composed from modular CMS sections, and article pages render deep dives with Rich Text.
@@ -68,6 +68,113 @@ High-level map:
 - `src/components/rich-text` — minimal rich text renderer
 - `src/styles` — tokens + base resets
 - `docs/` — IA, design system notes, CMS guidance
+
+---
+Additional context you provided and aligning it with **UI-first, CMS-second** best practices.
+
+This version is **documentation-ready** (README / architecture docs), clarifies **responsibility boundaries**, and makes the **content → UI → routing → preview** pipeline explicit.
+
+---
+
+# 📁 Project Structure — `gilbertoaharo`
+
+> **Architecture stance:**
+> **Single-Page App (Vite + React)** with a **clean CMS boundary**, a **lightweight router**, and a **design-system-driven UI**.
+> Content models live outside UI logic and flow through adapters before rendering.
+
+```text
+gilbertoaharo/
+├─ .env.example               # Sample env vars (Contentful, site config, preview flags)
+├─ LICENSE                    # Project license
+├─ README.md                  # Project overview, setup, and architecture notes
+├─ eslint.config.js            # ESLint rules (React + TS)
+├─ index.html                 # Vite HTML entry template
+├─ package.json               # Scripts, dependencies, metadata
+├─ package-lock.json          # npm dependency lockfile
+├─ tsconfig.json              # Base TS config with project references
+├─ tsconfig.app.json          # TS config for the app bundle
+├─ tsconfig.node.json         # TS config for Node/Vite tooling
+├─ tsconfig.tsbuildinfo       # TypeScript incremental build cache (generated)
+├─ vite.config.ts             # Vite dev/build config (aliases, plugins, tests)
+│
+├─ public/                    # Static assets copied as-is to build output
+│  ├─ _redirects              # SPA redirect rules (Netlify-style hosting)
+│  └─ vite.svg                # Example static asset
+│
+└─ src/                       # Application source
+   ├─ main.tsx                # React entry point (mounts <App />)
+   ├─ App.tsx                 # Root app component (router + global wiring)
+   ├─ App.css                 # Legacy Vite starter styles (currently unused)
+   ├─ index.css               # Legacy Vite global styles (currently unused)
+   ├─ env.ts                  # Centralized env parsing + defaults (fail-fast)
+   ├─ vite-env.d.ts           # Vite/TS env type declarations
+   │
+   ├─ assets/                 # Bundled app assets (imported by JS/TS)
+   │  └─ react.svg
+   │
+   ├─ styles/                 # Global styling layer
+   │  ├─ tokens.css           # Design tokens (colors, spacing, typography)
+   │  └─ base.css             # Base resets/global styles (imports tokens)
+   │
+   ├─ router/                 # Lightweight SPA routing (no react-router)
+   │  ├─ routes.ts            # Route parsing & route definitions
+   │  ├─ Router.tsx           # Route state + view selection
+   │  └─ link.ts              # Internal navigation helpers (history-based)
+   │
+   ├─ pages/                  # Route-level views (thin, data-driven)
+   │  ├─ LandingPage.tsx      # `/` — Personal landing page
+   │  ├─ ArticlePage.tsx      # `/articles/:slug` — Long-form article view
+   │  ├─ NotFoundPage.tsx     # 404 fallback
+   │  └─ DebugPage.tsx        # Debug/diagnostics view (CMS visibility)
+   │
+   ├─ components/             # UI components (design system + composition)
+   │  ├─ layout/              # Page-level layout & chrome
+   │  │  ├─ PageShell.tsx     # Page wrapper (SEO, spacing, structure)
+   │  │  └─ SeoHead.tsx       # Document head + meta tags
+   │  │
+   │  ├─ rich-text/           # Controlled rich-text rendering
+   │  │  └─ RichTextRenderer.tsx
+   │  │     # Maps allowed Contentful nodes → UI primitives
+   │  │
+   │  ├─ sections/            # Content-driven page sections
+   │  │  ├─ SectionRenderer.tsx # Switch on section content-type ID
+   │  │  ├─ SectionShell.tsx   # Shared section framing (anchors, spacing)
+   │  │  ├─ HeroSection.tsx
+   │  │  ├─ ProjectsSection.tsx
+   │  │  ├─ SkillsSection.tsx
+   │  │  ├─ TimelineSection.tsx
+   │  │  ├─ LearningSection.tsx
+   │  │  └─ ContactSection.tsx
+   │  │
+   │  └─ ui/                  # Design-system primitives (reusable atoms)
+   │     ├─ Badge.tsx         # Badge / label primitive
+   │     ├─ Button.tsx        # Button primitive (CTA)
+   │     ├─ Card.tsx          # Card surface primitive
+   │     ├─ Container.tsx     # Layout container primitive
+   │     ├─ Heading.tsx       # Heading typography primitive
+   │     ├─ Link.tsx          # Styled anchor primitive
+   │     ├─ Stack.tsx         # Stack/spacing layout primitive
+   │     └─ Text.tsx          # Text typography primitive
+   │
+   ├─ content/                # Content layer (CMS abstraction boundary)
+   │  ├─ source.ts            # ContentSource interface (UI-first contract)
+   │  │
+   │  ├─ static/              # UI-first prototyping (no CMS dependency)
+   │  │  ├─ fixtures.ts       # Local fixture content data
+   │  │  └─ staticSource.ts   # Static ContentSource implementation
+   │  │
+   │  └─ contentful/          # Contentful implementation of ContentSource
+   │     ├─ client.ts         # Contentful SDK client (delivery/preview)
+   │     ├─ api.ts            # Raw Contentful query helpers
+   │     ├─ includes.ts       # Include/reference depth helpers
+   │     ├─ types.ts          # Contentful model/type definitions
+   │     ├─ adapters.ts       # CMS → UI data mapping (contracts live here)
+   │     └─ contentfulSource.ts # Contentful ContentSource implementation
+   │
+   └─ preview/                # Preview-mode support (draft content)
+      ├─ previewMode.ts       # Preview state helpers (env + toggles)
+      └─ PreviewBanner.tsx    # Preview mode UI indicator
+```
 
 ---
 
