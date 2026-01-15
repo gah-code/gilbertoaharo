@@ -1,5 +1,21 @@
 # Changelog
 
+## [2026-01-14]
+
+### Added
+
+- `docs/storybook-migration-plan.md` outlining the Storybook architecture, draft config, and phased migration checklist aligned to the current repo layout.
+
+### Verification
+
+- Not run (documentation change only).
+
+### Next Steps
+
+- Decide on in-repo Storybook ownership and story placement (collocated vs `src/stories`).
+- Add Storybook dependencies and scaffold `.storybook/main.ts` + `.storybook/preview.ts`.
+- Create initial token, typography, and primitive stories, then section stories backed by fixtures.
+
 ## [2026-01-13]
 
 ### Added
