@@ -1,5 +1,23 @@
 # Changelog
 
+## [2026-01-15]
+
+### Added
+
+- `VERSION.md` to track versioning rules and baseline history.
+
+### Changed
+
+- Bumped version to `0.0.1` in `package.json` and `VERSION.md`.
+
+### Docs
+
+- Added Design System Roadmap summary and linked `docs/storybook-migration-plan.md` in `README.md`.
+
+### Verification
+
+- Not run (documentation change only).
+
 ## [2026-01-14]
 
 ### Added

@@ -1,8 +1,7 @@
 
 # Gilberto A. Haro — Personal Site
 
-Single-page **React + TypeScript + Vite** site powered by **Contentful**.  
-The landing page is composed from modular CMS sections, and article pages render deep dives with Rich Text.
+My personal website, built with **React + TypeScript + Vite** and **Contentful**: modular landing sections, long-form article pages, and a strict CMS boundary enforced through adapters and minimal primitives.
 
 ---
 
@@ -21,6 +20,7 @@ The landing page is composed from modular CMS sections, and article pages render
 - [Content Modeling Notes](#content-modeling-notes)
 - [Safety & Publishing](#safety--publishing)
 - [Docs](#docs)
+- [Design System Roadmap](#design-system-roadmap)
 
 ---
 
@@ -340,3 +340,15 @@ npm run lint       # eslint
 - `docs/ia.md` — Information architecture & content mapping
 - `docs/editorial-guidelines.md` — writing/SEO/link rules
 - `docs/design-system.md` — UI primitives and component patterns
+- `docs/storybook-migration-plan.md` — Storybook architecture + migration checklist
+
+## Design System Roadmap
+
+Near-term plan for evolving the design system; see `docs/storybook-migration-plan.md`.
+
+- Storybook workspace for tokens, primitives, sections, and docs.
+- Foundational stories: tokens, typography, and layout primitives.
+- Primitive stories with args/controls and basic a11y checks.
+- Section stories driven by fixture data in `src/content/static/fixtures.ts`.
+- Optional page-level stories (PageShell, LandingPage) for layout review.
+- Quality gates: `@storybook/test-runner` for key stories and `build-storybook` in CI.
