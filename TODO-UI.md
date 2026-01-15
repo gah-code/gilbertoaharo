@@ -85,6 +85,17 @@ Accessibility
 - [ ] Implement `.page-header` with sticky and blurred background.
 - [ ] Align `.page-header-inner` with logo and navigation.
 - [ ] Style `.logo` and `.page-nav`.
+- [ ] Add `src/components/layout/Header.tsx` as the header entry component.
+- [ ] Add `src/components/navigation/ResponsiveNav.tsx` for mega menu + mobile drawer.
+- [ ] Add navigation styles in `src/styles/components/navigation.css`.
+- [ ] Query Contentful for `navigationMenu` and wire the data into the header/nav.
+- [ ] Map `navigationMenu.links[]` to desktop nav and mobile drawer links.
+- [ ] Render mega menu dropdown when `navLink.panel` exists (use `navPanel.cards[]`).
+- [ ] Render mobile drawer accordion using the same cards (Projects open by default if configured).
+- [ ] Implement desktop interactions (toggle, outside click, Escape, `aria-expanded`).
+- [ ] Implement mobile drawer interactions (toggle, Escape, scroll lock, close on link click, `aria-*`).
+- [ ] Apply responsive rules (hide desktop nav below breakpoint, show hamburger, full-viewport drawer).
+- [ ] Validate keyboard nav, focus states, and aria updates (expanded/hidden/modal).
 
 #### Buttons
 
@@ -138,6 +149,14 @@ Accessibility
 
 - [ ] Integrate Contentful for primary content.
 - [ ] Map timeline media assets in `src/assets/timeline`.
+
+#### Navigation Menu Content Model (Contentful)
+
+- [ ] Add `contentful/models/navigationMenu.json` to the repo.
+- [ ] Run the Contentful import script against that file (space + environment).
+- [ ] Verify `Navigation Menu` content type exists.
+- [ ] Verify related types exist (`Nav Link`, `Nav Panel`, `Nav Card`).
+- [ ] Confirm all fields match the schema.
 
 ### 7. Usage Guidelines
 
