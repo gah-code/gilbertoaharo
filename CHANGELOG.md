@@ -1,5 +1,24 @@
 # Changelog
 
+## [2026-01-16]
+
+### Added
+
+- Contentful navigation model types (`navigationMenu`, `navLink`, `navPanel`, `navCard`) and UI-ready shapes in `src/content/contentful/types.ts`.
+- Navigation adapter that maps sorted links/panels/cards, resolves CTA, clamps mobile breakpoint, and normalizes asset URLs in `src/content/contentful/adapters.ts`.
+- Header + responsive navigation components (`src/components/layout/Header.tsx`, `src/components/navigation/ResponsiveNav.tsx`) with desktop dropdowns, mobile drawer/accordions, skip link, and brand wiring.
+- Navigation styles in `src/styles/components/navigation.css` covering sticky header, desktop mega panel, mobile drawer, accordions, CTA, and focus/hover states.
+
+### Changed
+
+- `PageShell` now renders the new `Header` and main landmark with padding.
+- Mobile/touch UX refinements: tighter padding, single-column nav cards, smaller icons, sticky drawer header, safe-area padding, softer gradients/shadows, and accordion/link focus states tuned for small viewports.
+
+### Verification
+
+- `npm run build` (passes; Vite warns Node 22.2.0 is below the recommended 22.12+).
+
+
 ## [2026-01-15]
 
 ### Added

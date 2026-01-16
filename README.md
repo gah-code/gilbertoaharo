@@ -41,6 +41,7 @@ This repo powers a personal landing experience and long-form writing pages:
 - Minimal, reusable UI primitives (`src/components/ui`)
 - Small, explicit “content layer” (`src/content/`) that isolates CMS concerns from UI concerns
 - Custom SPA router with internal link interception
+- Responsive navigation header powered by Contentful `navigationMenu` (desktop dropdowns + mobile drawer/accordions)
 
 ---
 
@@ -124,7 +125,8 @@ gilbertoaharo/
    │
    ├─ components/             # UI components (design system + composition)
    │  ├─ layout/              # Page-level layout & chrome
-   │  │  ├─ PageShell.tsx     # Page wrapper (SEO, spacing, structure)
+   │  │  ├─ PageShell.tsx     # Page wrapper (SEO, spacing, structure) + Header
+   │  │  ├─ Header.tsx        # Sticky header + nav (brand, CTA, mega/drawer)
    │  │  └─ SeoHead.tsx       # Document head + meta tags
    │  │
    │  ├─ rich-text/           # Controlled rich-text rendering
@@ -140,6 +142,9 @@ gilbertoaharo/
    │  │  ├─ TimelineSection.tsx
    │  │  ├─ LearningSection.tsx
    │  │  └─ ContactSection.tsx
+   │  │
+   │  ├─ navigation/          # Responsive nav system (desktop + mobile)
+   │  │  └─ ResponsiveNav.tsx # Mega menu + drawer/accordion behaviors
    │  │
    │  └─ ui/                  # Design-system primitives (reusable atoms)
    │     ├─ Badge.tsx         # Badge / label primitive
@@ -251,6 +256,14 @@ Optional (if you support draft preview later):
 
 - `Router` listens to `popstate` and routes between landing, article, and not-found states.
 - A lightweight `Link` / navigation helper intercepts internal links for SPA navigation.
+
+### Navigation header
+
+- `Header` calls `ContentSource.getNavigationMenu()` to fetch the single `navigationMenu` entry, then adapters shape it into UI props (sorted links/cards, CTA, clamped breakpoint).
+- `ResponsiveNav` renders:
+  - **Desktop**: ordered `navLink` list with optional dropdown panels (`navPanel.cards[]`), aria-expanded/button wiring, outside click + Escape to close, lighter pill CTA.
+  - **Mobile/Tablet**: full-height drawer with sticky brand/title row, scroll lock + overlay, accordion behavior when `mobileBehavior`/`mobileVariant` dictate, and CTA near the footer.
+- Sorting: `navLink` and `navCard` use their `order` fields; `mobileBreakpointPx` controls when drawer mode activates (guarded to a sensible minimum).
 
 ### Content source contract
 
