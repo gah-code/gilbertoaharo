@@ -1,5 +1,27 @@
 # Changelog
 
+## [2026-01-20]
+
+### Added
+
+- Spacing scale extensions (space-10/12/16), radius tokens (sm/md/lg/pill), and shared soft shadow token in `src/styles/tokens.css`.
+- Layout density tokens (content max, section padding clamps, stack/heading rhythm, lede width) in `src/styles/tokens.css`.
+
+### Changed
+
+- UI primitives now consume spacing/radius/shadow tokens: card surfaces use `--radius-lg` + `--shadow-soft`; buttons/badges and skills level pills use tokenized pill radius and spacing.
+- Navigation styles aligned to tokenized radii and shadow for panels, pills, toggles, and panel chrome in `src/styles/components/navigation.css`.
+- Updated `TODO-UI.md` to reflect the completed spacing/radius/shadow token task.
+- Layout density tokens now drive shell spacing: `Container` uses `--content-max` and `--section-pad-x`, `SectionShell` uses `--section-pad-y` + `--stack-gap`, and `PageShell` lets the container defaults handle main spacing.
+- Navigation/header resilience on smaller viewports: `Container` now uses border-box sizing to prevent padding overflow, and header/nav flex rows allow shrinking (`min-width: 0`) to avoid wrap/overflow on medium and down.
+- Global box-sizing reset applied to all elements in `src/styles/base.css` to stabilize layout calculations.
+- Full-height root + layout rhythm: `html`, `body`, and `#root` now use `min-height: 100%`; section padding/borders/headings/lede spacing are driven by layout density tokens via `.section` rules; `SectionShell` carries the `.section` class and optional custom class.
+
+### Verification
+
+- Not run (style/token updates only).
+
+
 ## [2026-01-16]
 
 ### Added
