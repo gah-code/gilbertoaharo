@@ -1,5 +1,28 @@
 # Changelog
 
+## [2026-01-21]
+
+### Changed
+
+- Heading component now supports preset weights (`regular`, `semibold`, `bold`) while keeping tokenized sizes/line-heights; hero tagline uses the semibold preset with muted color for consistency.
+- Skills section title now uses the tokenized heading defaults instead of a custom size.
+- Synced `TODO-UI.md` to reflect completed header/navigation tasks and added senior-level design system enhancement checklist items (state/motion/focus tokens, API standards, responsive tokens).
+- Added semantic state tokens (success/warn/error text, bg, border) in `src/styles/tokens.css` and global focus-visible styling using tokens in `src/styles/base.css`.
+- Timeline data model extended with optional media/CTA fields on timeline items; `TimelineSection` now renders media and CTA when present, and checklist doc updated.
+- Added static content source + fixtures with timeline media/CTA populated from local assets, and `getContentSource` now honors `VITE_CONTENT_SOURCE` (`static` vs `contentful`).
+- Timeline renderer already wires `sectionTimeline` through `SectionRenderer`; checklist updated with anchor note.
+- Timeline media strategy implemented: per-item media preferred; otherwise rotates local SVGs with sensible alt text fallback; checklist updated.
+- Timeline checklist items for styling/responsive/QA/accessibility moved into `TODO-UI.md` under the Timeline section for active tracking.
+- Added `docs/design-system-architect-checklist.md` capturing discovery → evolution tasks tailored to the current system state; refined for Contentful-first setup and upcoming Storybook integration.
+- Timeline grid now uses a responsive auto-fit layout for 2-column cards on larger viewports while stacking on small screens; added TODO entry to centralize timeline CSS.
+- Adjusted timeline grid breakpoints and gaps to better match the reference 2-column layout while stacking on narrow screens.
+- Timeline grid tweaks: added card max-widths and staggered vertical offsets for alternating items to mirror the reference spacing on large screens.
+- Timeline layout restructured: media sits in its own column beside content on larger screens, with single-column stacking on mobile and alternating order on even items; timeline CSS updated accordingly.
+
+### Verification
+
+- `npm run build` (passes; Vite warns Node 22.2.0 is below the recommended 22.12+).
+
 ## [2026-01-20]
 
 ### Added
@@ -21,7 +44,6 @@
 
 - Not run (style/token updates only).
 
-
 ## [2026-01-16]
 
 ### Added
@@ -39,7 +61,6 @@
 ### Verification
 
 - `npm run build` (passes; Vite warns Node 22.2.0 is below the recommended 22.12+).
-
 
 ## [2026-01-15]
 
