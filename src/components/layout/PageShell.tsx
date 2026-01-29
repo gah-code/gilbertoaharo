@@ -1,6 +1,7 @@
 import React from "react";
 import { SeoHead } from "./SeoHead";
 import { Container } from "../ui/Container";
+import { Header } from "./Header";
 
 type PageShellProps = {
   title?: string;
@@ -16,9 +17,10 @@ export function PageShell({
   children,
 }: PageShellProps) {
   return (
-    <div style={{ padding: "var(--space-6) 0" }}>
+    <div className="page-shell">
       <SeoHead title={title} description={description} canonicalUrl={canonicalUrl} />
-      <Container as="main">
+      <Header />
+      <Container as="main" id="main-content">
         {children}
       </Container>
     </div>

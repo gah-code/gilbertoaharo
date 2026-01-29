@@ -14,9 +14,11 @@ export function Container({
   return (
     <Element
       style={{
-        maxWidth: "960px",
+        maxWidth: "var(--content-max)",
+        width: "100%",
         margin: "0 auto",
-        padding: "0 var(--space-4)",
+        padding: "0 var(--section-pad-x)",
+        boxSizing: "border-box",
         ...style,
       }}
       {...rest}

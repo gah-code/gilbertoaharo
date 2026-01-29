@@ -6,13 +6,21 @@ type SectionShellProps = {
   anchorId?: string;
   children: React.ReactNode;
   style?: React.CSSProperties;
+  className?: string;
 };
 
-export function SectionShell({ anchorId, children, style }: SectionShellProps) {
+export function SectionShell({
+  anchorId,
+  children,
+  style,
+  className,
+}: SectionShellProps) {
+  const sectionClass = className ? `section ${className}` : "section";
+
   return (
-    <section id={anchorId} style={{ padding: "var(--space-8) 0", ...style }}>
+    <section id={anchorId} className={sectionClass} style={style}>
       <Container>
-        <Stack gap="var(--space-4)">{children}</Stack>
+        <Stack gap="var(--stack-gap)">{children}</Stack>
       </Container>
     </section>
   );

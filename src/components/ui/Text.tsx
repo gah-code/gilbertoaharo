@@ -15,7 +15,11 @@ export function Text({
   const Element: any = Component;
   return (
     <Element
-      style={{ margin: 0, color: muted ? "var(--muted)" : "inherit", ...style }}
+      style={{
+        margin: 0,
+        color: muted ? "var(--color-text-muted)" : "inherit",
+        ...style,
+      }}
       {...rest}
     >
       {children}

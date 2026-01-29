@@ -12,9 +12,7 @@ export function SkillsSection({ section }: { section: SectionSkills }) {
       anchorId={skills.anchorId}
     >
       <Stack gap="var(--space-6)">
-        <Heading level={2} style={{ fontSize: "28px", lineHeight: 1.1 }}>
-          {skills.title}
-        </Heading>
+        <Heading level={2}>{skills.title}</Heading>
         <div
           style={{
             display: "grid",
@@ -33,7 +31,7 @@ export function SkillsSection({ section }: { section: SectionSkills }) {
                   letterSpacing: "0.18em",
                   textTransform: "uppercase",
                   fontWeight: 600,
-                  color: "var(--muted)",
+                  color: "var(--color-text-muted)",
                 }}
               >
                 {group.fields.label}
@@ -50,7 +48,9 @@ export function SkillsSection({ section }: { section: SectionSkills }) {
                       key={skill.sys.id}
                       style={{
                         padding: "var(--space-3) 0",
-                        borderBottom: divider ? "1px solid #e3ddd2" : "none",
+                        borderBottom: divider
+                          ? "1px solid var(--color-border-subtle)"
+                          : "none",
                       }}
                     >
                       <div
@@ -65,15 +65,15 @@ export function SkillsSection({ section }: { section: SectionSkills }) {
                         {levelLabel ? (
                           <span
                             style={{
-                              border: "1px solid #1f2937",
-                              borderRadius: "999px",
-                              padding: "4px 10px",
+                              border: "1px solid var(--color-text)",
+                              borderRadius: "var(--radius-pill)",
+                              padding: "var(--space-1) var(--space-3)",
                               fontSize: "11px",
                               fontWeight: 700,
                               letterSpacing: "0.12em",
                               textTransform: "uppercase",
-                              background: "#f7f1e8",
-                              color: "#1f2937",
+                              background: "var(--color-surface-2)",
+                              color: "var(--color-text)",
                               whiteSpace: "nowrap",
                             }}
                           >
@@ -86,7 +86,7 @@ export function SkillsSection({ section }: { section: SectionSkills }) {
                           style={{
                             marginTop: "var(--space-1)",
                             fontSize: "13px",
-                            color: "var(--muted)",
+                            color: "var(--color-text-muted)",
                           }}
                         >
                           {keywords.join(" / ")}

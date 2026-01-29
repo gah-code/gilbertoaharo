@@ -9,6 +9,7 @@ export type SocialLinkKind =
   | "other";
 export type TimelineItemKind = "role" | "education" | "milestone";
 export type SkillLevel = "working" | "strong" | "expert";
+export type HeroStyle = "typographic" | "avatar" | "image";
 export type ProjectLinkKind =
   | "code"
   | "demo"
@@ -16,6 +17,11 @@ export type ProjectLinkKind =
   | "article"
   | "other";
 export type LearningStatus = "exploring" | "practicing" | "shipping";
+export type NavMobileBehavior = "link" | "drawerAccordion";
+export type NavPanelAlign = "center" | "left";
+export type NavPanelMobileVariant = "dropdown" | "accordionList";
+export type NavCardStatus = "default" | "activeDefault" | "comingSoon";
+export type NavIconType = "emoji" | "svg" | "asset";
 
 export type EntryTypeId =
   | "personProfile"
@@ -33,7 +39,11 @@ export type EntryTypeId =
   | "sectionLearning"
   | "learningItem"
   | "sectionContact"
-  | "article";
+  | "article"
+  | "navigationMenu"
+  | "navLink"
+  | "navPanel"
+  | "navCard";
 
 export interface Sys<T extends EntryTypeId> {
   id: string;
@@ -76,6 +86,57 @@ export type SocialLink = Entry<
   }
 >;
 
+export type NavCard = Entry<
+  "navCard",
+  {
+    title: string;
+    description?: string;
+    href: string;
+    order: number;
+    status?: NavCardStatus;
+    iconType?: NavIconType;
+    iconValue?: string;
+    iconAsset?: Asset;
+  }
+>;
+
+export type NavPanel = Entry<
+  "navPanel",
+  {
+    internalName: string;
+    cards: NavCard[];
+    align?: NavPanelAlign;
+    widthPx?: number;
+    mobileVariant?: NavPanelMobileVariant;
+    defaultOpenMobile?: boolean;
+  }
+>;
+
+export type NavLink = Entry<
+  "navLink",
+  {
+    label: string;
+    href: string;
+    order: number;
+    isCta?: boolean;
+    isExternal?: boolean;
+    mobileBehavior?: NavMobileBehavior;
+    panel?: NavPanel;
+  }
+>;
+
+export type NavigationMenu = Entry<
+  "navigationMenu",
+  {
+    internalName: string;
+    brandLabel: string;
+    brandHref: string;
+    links: NavLink[];
+    ctaLink: NavLink;
+    mobileBreakpointPx?: number;
+  }
+>;
+
 /* ----- Sections ----- */
 
 export type SectionHero = Entry<
@@ -85,6 +146,9 @@ export type SectionHero = Entry<
     anchorId: string;
     title: string;
     eyebrow?: string;
+    heroStyle?: HeroStyle;
+    avatarImage?: Asset;
+    heroImage?: Asset;
     tagline: string;
     intro: string;
     primaryActionLabel?: string;
@@ -107,6 +171,10 @@ export type TimelineItem = Entry<
     summary?: string;
     highlights?: string[];
     tags?: string[];
+    mediaImage?: Asset;
+    mediaAlt?: string;
+    ctaLabel?: string;
+    ctaHref?: string;
   }
 >;
 
@@ -271,4 +339,42 @@ export type ArticlePageData = {
   body: RichTextDocument;
   attachments: Array<{ url: string; fileName?: string; contentType?: string }>;
   seo: { title: string; description?: string; canonicalUrl?: string };
+};
+
+export type NavigationCardData = {
+  id: string;
+  title: string;
+  description?: string;
+  href: string;
+  status: NavCardStatus;
+  iconType: NavIconType;
+  iconValue?: string;
+  iconUrl?: string;
+};
+
+export type NavigationPanelData = {
+  id: string;
+  align: NavPanelAlign;
+  widthPx?: number;
+  mobileVariant: NavPanelMobileVariant;
+  defaultOpenMobile?: boolean;
+  cards: NavigationCardData[];
+};
+
+export type NavigationLinkData = {
+  id: string;
+  label: string;
+  href: string;
+  isExternal: boolean;
+  isCta: boolean;
+  mobileBehavior: NavMobileBehavior;
+  panel?: NavigationPanelData;
+};
+
+export type NavigationMenuData = {
+  brandLabel: string;
+  brandHref: string;
+  links: NavigationLinkData[];
+  cta: NavigationLinkData;
+  mobileBreakpointPx: number;
 };
