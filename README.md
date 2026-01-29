@@ -19,6 +19,7 @@ My personal website, built with **React + TypeScript + Vite** and **Contentful**
 - [Troubleshooting](#troubleshooting)
 - [Content Modeling Notes](#content-modeling-notes)
 - [Safety & Publishing](#safety--publishing)
+- [Contributing](#contributing)
 - [Docs](#docs)
 - [Design System Roadmap](#design-system-roadmap)
 
@@ -203,29 +204,51 @@ Open: `http://localhost:5173`
 
 ## Environment Variables
 
-Copy `.env.example` to `.env.local` (recommended) and fill in your values:
+### Setup
 
-```bash
-cp .env.example .env.local
-```
+1. Copy `.env.example` to `.env.local`:
+   ```bash
+   cp .env.example .env.local
+   ```
 
-Required:
+2. Get your Contentful credentials from **Space Settings → API Keys**:
+   - Go to `https://app.contentful.com/spaces/{SPACE_ID}/api/keys`
+   - Copy the **Space ID**, **Environment**, and **Delivery API Token** (read-only)
 
-- `VITE_CONTENTFUL_SPACE_ID`
-- `VITE_CONTENTFUL_DELIVERY_TOKEN`
-- `VITE_CONTENTFUL_ENVIRONMENT` (defaults to `master`)
+3. Fill in `.env.local` with your values
 
-Recommended:
+4. Verify it works:
+   ```bash
+   npm run dev
+   ```
 
-- `VITE_ARTICLE_ROUTE_PREFIX` (defaults to `/articles`)
-- `VITE_SITE_URL` (absolute URL for canonical fallbacks)
+### Variable Guide
 
-Optional (if you support draft preview later):
+All variables are prefixed with `VITE_` (accessible to client via `import.meta.env`).
 
-- `VITE_CONTENTFUL_USE_PREVIEW`
-- `VITE_CONTENTFUL_PREVIEW_TOKEN`
+**Contentful API** (required):
+- `VITE_CONTENTFUL_SPACE_ID` — Your Contentful space identifier
+- `VITE_CONTENTFUL_ENVIRONMENT` — Content environment (`master` for production, `testing` for draft)
+- `VITE_CONTENTFUL_DELIVERY_TOKEN` — Read-only API token (safe; can be public)
 
-> Never commit `.env.local` or tokens. Commit `.env.example` only.
+**Site Configuration** (recommended):
+- `VITE_SITE_URL` — Absolute URL for canonical links and fallbacks (e.g., `https://gilbertoaharo.com`)
+- `VITE_ARTICLE_ROUTE_PREFIX` — URL prefix for articles (e.g., `/articles`)
+
+**Build Mode** (advanced):
+- `VITE_BUILD_TARGET` — `prod` (default) or `preview` (enables draft toggles and preview API)
+- `VITE_CONTENT_SOURCE` — `contentful` (currently the only supported source)
+
+**Preview Integration** (optional, for draft content):
+- `VITE_CONTENTFUL_USE_PREVIEW` — Set to `true` to enable preview mode UI toggles
+- `VITE_CONTENTFUL_PREVIEW_TOKEN` — Preview API token (for unpublished entries)
+
+### Security
+
+- **Never commit `.env.local`** — Git is configured to ignore it (see `.gitignore`)
+- **Only commit `.env.example`** — Use placeholder values (empty strings or descriptive names)
+- `.env.example` documents what variables are needed without exposing real values
+- If you accidentally commit real tokens, [rotate them in Contentful](https://www.contentful.com/developers/docs/references/content-management-api/#/reference/api-keys/delete-an-api-key)
 
 ---
 
@@ -345,6 +368,37 @@ npm run lint       # eslint
 
 - Dependencies: lockfile is `package-lock.json`.
 - Docs are tracked and safe to publish (no env values in docs).
+
+---
+
+## Contributing
+
+This is a public, open-source project. Contributions are welcome!
+
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — Development guide, code standards, PR process
+- **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** — Community guidelines
+- **[SECURITY.md](SECURITY.md)** — Security policy and vulnerability reporting
+- **[SUPPORT.md](SUPPORT.md)** — Getting help and support
+
+### Quick Start for Contributors
+
+```bash
+# Fork, clone, and set up
+git clone https://github.com/YOUR-USERNAME/gilbertoaharo.git
+cd gilbertoaharo
+npm install
+cp .env.example .env.local
+# Add your Contentful credentials to .env.local
+
+# Make changes and test
+npm run dev
+npm run lint
+npm run build
+
+# Submit a PR!
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full details.
 
 ---
 
