@@ -1,5 +1,42 @@
 # Changelog
 
+## [2026-01-28]
+
+### Added
+
+- **Public Repository Governance & Security:**
+  - `CONTRIBUTING.md`: Comprehensive development guide covering setup, code standards, PR process, project structure, testing, and documentation expectations
+  - `CODE_OF_CONDUCT.md`: Community standards based on Contributor Covenant v2.1; establishes inclusive, respectful environment
+  - `SECURITY.md`: Security policy with vulnerability reporting guidelines, best practices for contributors and users, dependency vulnerability management
+  - `SUPPORT.md`: Support channels (issues, discussions), documentation resources, response time commitments, common troubleshooting guide
+  - `.github/CODEOWNERS`: Code ownership assignment to @gah-code
+  - `.github/ISSUE_TEMPLATE/bug.md`: Standardized bug report template with environment/reproduction/context fields
+  - `.github/ISSUE_TEMPLATE/feature.md`: Feature request template with motivation/proposed solution/alternatives sections
+  - `.github/PULL_REQUEST_TEMPLATE.md`: PR submission template with change description, testing checklist, and related issues
+- **Environment Documentation:**
+  - Enhanced `README.md` "Environment Variables" section with step-by-step setup guide, detailed variable explanations, and security warnings
+  - Updated `.env.example` with comprehensive comments explaining each variable's purpose and required format
+  - Added "Contributing" section to README with quick-start guide and links to governance docs
+
+### Changed
+
+- `.gitignore`: Removed `docs/*` rules to make documentation changes reviewable in PRs; added `tsconfig.tsbuildinfo` to prevent build artifacts
+- `README.md`: Updated table of contents to include Contributing section and governance links
+
+### Security
+
+- **Verified**: No secrets in git history (`.env` and `.env.local` were never committed; only `.env.example` tracked)
+- **Verified**: Repository is public-ready with professional governance standards
+- **Verified**: Build artifacts and local config files properly ignored
+
+### Repository Status
+
+- Repository is now **PUBLIC** with complete governance documentation
+- All NOW (P0) Repository Hygiene & Security tasks completed
+- Community + Governance tasks completed
+
+---
+
 ## [2026-01-21]
 
 ### Changed
