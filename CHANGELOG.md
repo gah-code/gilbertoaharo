@@ -1,5 +1,29 @@
 # Changelog
 
+## [2026-03-24]
+
+### Changed
+
+- Timeline section responsiveness hardened for medium/tablet widths: keep each item as a two-column text/visual pair from 640px up, activate alternating flip at the same breakpoint, tighten gaps, and clamp media widths so visuals shrink before stacking. Mobile (≤639px) now stacks with natural order; desktop (≥1024px) unchanged. (src/styles/components/timeline.css)
+
+### Verification
+
+- Manual check at ~900/800/720px: rows stay horizontal, row 2 flips (visual left), gaps/media slightly tighter.
+- Manual check at ~620px: items stack vertically with natural reading order and comfortable spacing.
+- Spot check ≥1024px: layout matches previous desktop behavior.
+
+## [2026-03-20]
+
+### Changed
+
+- Mobile navigation drawer now spans the full viewport (left/right 0, 100% width) to stop small-screen overflow and ensure the menu overlays content instead of pushing it sideways. (src/styles/components/navigation.css)
+- Global overflow hardening: `body` now hides horizontal overflow; drawer scroll-lock also hides `overflowX` while open to prevent scrollbars when toggling the menu. (src/styles/base.css, src/components/navigation/ResponsiveNav.tsx)
+
+### Verification
+
+- Manual checks recommended: 480/640/768/900 px open/close menu (no horizontal scrollbar, overlay dims background, content stable) and desktop >960 px unchanged, resize back and forth.
+
+
 ## [2026-01-28]
 
 ### Added
