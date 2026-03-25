@@ -1,7 +1,7 @@
 # Versioning
 
-Current version: 0.0.1
-Last updated: 2026-01-28
+Current version: 0.0.2
+Last updated: 2026-03-25
 
 ## Tracking Rules
 
@@ -22,3 +22,5 @@ Last updated: 2026-01-28
 
 - 0.0.1 - Documentation and tracking updates (roadmap, tasks, versioning). (2026-01-15)
 - 0.0.0 - Initial development baseline.
+
+- 0.0.2 - Hero model migration complete (new-model-only), design-system primitives extracted, doc/audit/IA updates, and button typing fixes. (2026-03-25)
