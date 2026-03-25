@@ -3,10 +3,35 @@ import { getContentSource } from "@/content/source";
 import { PageShell } from "@/components/layout/PageShell";
 import { RichTextRenderer } from "@/components/rich-text/RichTextRenderer";
 import type { ArticlePageData } from "@/content/contentful/types";
+import "@/styles/pages/article.css";
 
 type ArticleState =
   | { loading: true; error?: undefined; data?: undefined }
   | { loading: false; error?: string; data?: ArticlePageData | null };
+
+function resolveAssetUrl(url?: string | null) {
+  if (!url) return undefined;
+  return url.startsWith("//") ? `https:${url}` : url;
+}
+
+function formatDate(iso?: string) {
+  if (!iso) return undefined;
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return undefined;
+  return date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function formatFileType(contentType?: string) {
+  if (!contentType) return undefined;
+  if (contentType === "application/pdf") return "PDF";
+  const [type, subtype] = contentType.split("/");
+  if (!subtype) return type.toUpperCase();
+  return `${subtype.toUpperCase()} ${type.toUpperCase() === "IMAGE" ? "image" : type}`;
+}
 
 export function ArticlePage({ slug }: { slug: string }) {
   const [state, setState] = React.useState<ArticleState>({ loading: true });
@@ -54,24 +79,59 @@ export function ArticlePage({ slug }: { slug: string }) {
       description={article.seo.description}
       canonicalUrl={article.seo.canonicalUrl}
     >
-      <article>
-        <h1>{article.title}</h1>
-        {article.excerpt ? <p>{article.excerpt}</p> : null}
-        {article.heroImageUrl ? <img src={article.heroImageUrl} alt="" /> : null}
+      <article className="article-page">
+        <header className="article-header">
+          <h1 className="article-title">{article.title}</h1>
+          <div className="article-meta">
+            {article.authorName ? <span>{article.authorName}</span> : null}
+            {article.publishedAt ? (
+              <time dateTime={article.publishedAt}>
+                Published {formatDate(article.publishedAt)}
+              </time>
+            ) : null}
+            {article.updatedAt ? (
+              <time dateTime={article.updatedAt}>
+                Updated {formatDate(article.updatedAt)}
+              </time>
+            ) : null}
+          </div>
+          {article.excerpt ? <p className="article-excerpt">{article.excerpt}</p> : null}
+        </header>
 
-        <RichTextRenderer document={article.body} />
+        {article.heroImageUrl ? (
+          <figure className="article-hero">
+            <img
+              src={resolveAssetUrl(article.heroImageUrl)}
+              alt={article.title}
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+        ) : null}
+
+        <div className="article-body">
+          <RichTextRenderer document={article.body} className="article-body__content" />
+        </div>
 
         {article.attachments?.length ? (
-          <section>
+          <section className="attachments">
             <h2>Attachments</h2>
-            <ul>
-              {article.attachments.map((file) => (
-                <li key={file.url}>
-                  <a href={file.url} target="_blank" rel="noreferrer">
-                    {file.fileName ?? file.url}
-                  </a>
-                </li>
-              ))}
+            <ul className="attachments-list">
+              {article.attachments.map((file) => {
+                const label = file.fileName ?? file.url;
+                const typeLabel = formatFileType(file.contentType);
+                const href = resolveAssetUrl(file.url);
+                return (
+                  <li key={file.url} className="attachment">
+                    <div className="attachment__info">
+                      <a href={href} target="_blank" rel="noreferrer noopener">
+                        {label}
+                      </a>
+                      {typeLabel ? <span className="attachment__type">{typeLabel}</span> : null}
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           </section>
         ) : null}

@@ -1,16 +1,36 @@
 # Changelog
 
+## [2026-03-25]
+
+### Added
+
+- Section primitives extracted for reuse across sections: `SectionHeader` (eyebrow/name/title/lead/body/actions), `ActionGroup` (variant-aware CTAs), `ProofList` (muted proof bullets), and `MediaFrame` (avatar/image framing with tokenized radii). (src/components/sections/primitives/*)
+
+### Changed
+
+- Hero now renders through the new primitives and normalized data only: header + actions via `SectionHeader`, proof points via `ProofList`, media via `MediaFrame`, keeping the existing grid layout and action gating. (src/components/sections/HeroSection.tsx)
+- Hero normalization hardened: coalesces new/legacy text and list fields, filters empty proof points, normalizes protocol-relative media URLs, and adds asset-title fallback for avatar alt text. (src/components/sections/hero/normalizeHeroSection.ts)
+- Button component typing now supports both anchor and native button modes (target/rel/aria-label typed), removing the TS error when rendering link-style buttons. (src/components/ui/Button.tsx)
+
+### Verification
+
+- `npm run build` (passes: tsc + vite)
+
 ## [2026-03-24]
 
 ### Changed
 
 - Timeline section responsiveness hardened for medium/tablet widths: keep each item as a two-column text/visual pair from 640px up, activate alternating flip at the same breakpoint, tighten gaps, and clamp media widths so visuals shrink before stacking. Mobile (≤639px) now stacks with natural order; desktop (≥1024px) unchanged. (src/styles/components/timeline.css)
+- Article page readability improvements: rich text renderer now supports marks (bold/italic/underline/code), safe external links, and embedded asset rendering (inline + block) with captions/alt resolution; hero and attachment lists styled for clarity with responsive widths and type badges; page now formats author/published/updated metadata. (src/components/rich-text/RichTextRenderer.tsx, src/pages/ArticlePage.tsx, src/styles/pages/article.css)
+- Hero section now normalizes legacy and new Contentful hero fields (lead/body/proofPoints/actions/alt text) into a single render shape; button variants respect action metadata; media alt and protocol-relative URLs handled consistently. (src/components/sections/HeroSection.tsx, src/components/sections/hero/normalizeHeroSection.ts, src/content/contentful/types.ts)
 
 ### Verification
 
 - Manual check at ~900/800/720px: rows stay horizontal, row 2 flips (visual left), gaps/media slightly tighter.
 - Manual check at ~620px: items stack vertically with natural reading order and comfortable spacing.
 - Spot check ≥1024px: layout matches previous desktop behavior.
+- Article sanity pass: render article with hero image, inline + block embedded assets, bold/code/links, and multiple attachments; verify images lazy-load, captions/alt show, links open in new tab with noopener, attachments display type badges and stay tappable on mobile.
+- Hero sanity pass: render legacy hero entries (tagline/intro/highlights + split CTAs) and new entries (lead/body/proofPoints/actions with alt text); ensure variant buttons apply correct styles/targets and media fall back to typographic when assets are missing.
 
 ## [2026-03-20]
 
