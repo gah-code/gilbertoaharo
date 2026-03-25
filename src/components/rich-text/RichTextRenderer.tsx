@@ -2,6 +2,54 @@ import React from "react";
 
 type Node = any;
 
+function resolveAssetUrl(url?: string | null) {
+  if (!url) return undefined;
+  return url.startsWith("//") ? `https:${url}` : url;
+}
+
+function applyMarks(text: string, marks: Array<{ type: string }>) {
+  return marks.reduce<React.ReactNode>((value, mark, idx) => {
+    switch (mark.type) {
+      case "bold":
+        return <strong key={idx}>{value}</strong>;
+      case "italic":
+        return <em key={idx}>{value}</em>;
+      case "underline":
+        return <u key={idx}>{value}</u>;
+      case "code":
+        return <code key={idx}>{value}</code>;
+      default:
+        return value;
+    }
+  }, text);
+}
+
+function renderAsset(node: Node, key: string | number, inline = false) {
+  const asset = node?.data?.target;
+  const file = asset?.fields?.file;
+  const url = resolveAssetUrl(file?.url);
+  if (!url) return null;
+
+  const title = asset?.fields?.title;
+  const description = asset?.fields?.description;
+  const alt = description || title || file?.fileName || "Embedded media";
+
+  if (inline) {
+    return (
+      <span key={key} className="embedded-asset embedded-asset--inline">
+        <img src={url} alt={alt} loading="lazy" decoding="async" />
+      </span>
+    );
+  }
+
+  return (
+    <figure key={key} className="embedded-asset">
+      <img src={url} alt={alt} loading="lazy" decoding="async" />
+      {(description || title) && <figcaption>{description ?? title}</figcaption>}
+    </figure>
+  );
+}
+
 function renderNode(node: Node, key: string | number): React.ReactNode {
   if (!node) return null;
 
@@ -20,8 +68,10 @@ function renderNode(node: Node, key: string | number): React.ReactNode {
         </p>
       );
 
-    case "text":
-      return node.value;
+    case "text": {
+      const marks = node.marks ?? [];
+      return applyMarks(node.value ?? "", marks);
+    }
 
     case "heading-2":
       return (
@@ -88,7 +138,7 @@ function renderNode(node: Node, key: string | number): React.ReactNode {
     case "hyperlink": {
       const href = node.data?.uri;
       return (
-        <a key={key} href={href} target="_blank" rel="noreferrer">
+        <a key={key} href={href} target="_blank" rel="noreferrer noopener">
           {(node.content ?? []).map((n: Node, i: number) =>
             renderNode(n, `${key}-${i}`),
           )}
@@ -96,11 +146,23 @@ function renderNode(node: Node, key: string | number): React.ReactNode {
       );
     }
 
+    case "embedded-asset-block":
+      return renderAsset(node, key, false);
+
+    case "embedded-asset-inline":
+      return renderAsset(node, key, true);
+
     default:
       return null;
   }
 }
 
-export function RichTextRenderer({ document }: { document: any }) {
-  return <div>{renderNode(document, "root")}</div>;
+export function RichTextRenderer({
+  document,
+  className,
+}: {
+  document: any;
+  className?: string;
+}) {
+  return <div className={className}>{renderNode(document, "root")}</div>;
 }

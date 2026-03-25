@@ -10,7 +10,7 @@ import { Button } from "../ui/Button";
 import timelineSearch from "@/assets/timeline/timeline-search.svg";
 import timelineJourney from "@/assets/timeline/timeline-journey.svg";
 import timelineCreative from "@/assets/timeline/timeline-creative.svg";
-import "@/styles/components/timeline.css";
+import "./TimelineSection.css";
 
 function formatDateRange(item: TimelineItem) {
   const start = item.fields.startDate;

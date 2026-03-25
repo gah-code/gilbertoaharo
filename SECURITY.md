@@ -2,11 +2,12 @@
 
 ## Reporting Security Vulnerabilities
 
-**Please do not open public issues for security vulnerabilities.** 
+**Please do not open public issues for security vulnerabilities.**
 
 If you discover a security vulnerability, please report it responsibly by emailing: **[maintainer email or security contact]**
 
 Include:
+
 - Description of the vulnerability
 - Affected versions
 - Steps to reproduce (if possible)
@@ -14,6 +15,7 @@ Include:
 - Suggested fix (if you have one)
 
 We will:
+
 - Acknowledge your report within 48 hours
 - Investigate and validate the vulnerability
 - Develop and test a fix
@@ -22,6 +24,7 @@ We will:
 ## Scope
 
 This security policy covers:
+
 - **Code vulnerabilities** in this repository
 - **Dependency vulnerabilities** we can control
 - **Contentful integration vulnerabilities**
@@ -39,7 +42,7 @@ This security policy covers:
 
 - Never commit secrets (API keys, tokens, passwords)
 - Use `.env.example` with placeholder values
-- Follow the CMS boundary pattern (see `docs/cms-advanced.md`)
+- Follow the CMS boundary pattern (see `docs/content/cms-advanced.md`)
 - Assume all environment variables are potentially public
 - Review `.gitignore` before committing
 
@@ -54,6 +57,7 @@ We use GitHub's [Dependabot](https://dependabot.com/) to scan for vulnerabilitie
 ## Disclosure Timeline
 
 When we fix a security vulnerability:
+
 1. **Day 1:** Develop and test fix
 2. **Day 2-3:** Release patched version
 3. **Day 3:** Publish security advisory with credit

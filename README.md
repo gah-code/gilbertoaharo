@@ -91,7 +91,6 @@ gilbertoaharo/
 ├─ tsconfig.json              # Base TS config with project references
 ├─ tsconfig.app.json          # TS config for the app bundle
 ├─ tsconfig.node.json         # TS config for Node/Vite tooling
-├─ tsconfig.tsbuildinfo       # TypeScript incremental build cache (generated)
 ├─ vite.config.ts             # Vite dev/build config (aliases, plugins, tests)
 │
 ├─ public/                    # Static assets copied as-is to build output
@@ -101,13 +100,10 @@ gilbertoaharo/
 └─ src/                       # Application source
    ├─ main.tsx                # React entry point (mounts <App />)
    ├─ App.tsx                 # Root app component (router + global wiring)
-   ├─ App.css                 # Legacy Vite starter styles (currently unused)
-   ├─ index.css               # Legacy Vite global styles (currently unused)
    ├─ env.ts                  # Centralized env parsing + defaults (fail-fast)
    ├─ vite-env.d.ts           # Vite/TS env type declarations
    │
    ├─ assets/                 # Bundled app assets (imported by JS/TS)
-   │  └─ react.svg
    │
    ├─ styles/                 # Global styling layer
    │  ├─ tokens.css           # Design tokens (colors, spacing, typography)
@@ -207,6 +203,7 @@ Open: `http://localhost:5173`
 ### Setup
 
 1. Copy `.env.example` to `.env.local`:
+
    ```bash
    cp .env.example .env.local
    ```
@@ -218,6 +215,7 @@ Open: `http://localhost:5173`
 3. Fill in `.env.local` with your values
 
 4. Verify it works:
+
    ```bash
    npm run dev
    ```
@@ -227,19 +225,23 @@ Open: `http://localhost:5173`
 All variables are prefixed with `VITE_` (accessible to client via `import.meta.env`).
 
 **Contentful API** (required):
+
 - `VITE_CONTENTFUL_SPACE_ID` — Your Contentful space identifier
 - `VITE_CONTENTFUL_ENVIRONMENT` — Content environment (`master` for production, `testing` for draft)
 - `VITE_CONTENTFUL_DELIVERY_TOKEN` — Read-only API token (safe; can be public)
 
 **Site Configuration** (recommended):
+
 - `VITE_SITE_URL` — Absolute URL for canonical links and fallbacks (e.g., `https://gilbertoaharo.com`)
 - `VITE_ARTICLE_ROUTE_PREFIX` — URL prefix for articles (e.g., `/articles`)
 
 **Build Mode** (advanced):
+
 - `VITE_BUILD_TARGET` — `prod` (default) or `preview` (enables draft toggles and preview API)
 - `VITE_CONTENT_SOURCE` — `contentful` (currently the only supported source)
 
 **Preview Integration** (optional, for draft content):
+
 - `VITE_CONTENTFUL_USE_PREVIEW` — Set to `true` to enable preview mode UI toggles
 - `VITE_CONTENTFUL_PREVIEW_TOKEN` — Preview API token (for unpublished entries)
 
@@ -404,14 +406,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for full details.
 
 ## Docs
 
-- `docs/ia.md` — Information architecture & content mapping
-- `docs/editorial-guidelines.md` — writing/SEO/link rules
-- `docs/design-system.md` — UI primitives and component patterns
-- `docs/storybook-migration-plan.md` — Storybook architecture + migration checklist
+- `docs/architecture/ia.md` — Information architecture & content mapping
+- `docs/content/editorial-guidelines.md` — writing/SEO/link rules
+- `docs/design-system/design-system.md` — UI primitives and component patterns
+- `docs/planning/storybook-migration-plan.md` — Storybook architecture + migration checklist
 
 ## Design System Roadmap
 
-Near-term plan for evolving the design system; see `docs/storybook-migration-plan.md`.
+Near-term plan for evolving the design system; see `docs/planning/storybook-migration-plan.md`.
 
 - Storybook workspace for tokens, primitives, sections, and docs.
 - Foundational stories: tokens, typography, and layout primitives.

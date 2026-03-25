@@ -13,9 +13,9 @@ Describe the bug clearly. What did you expect to happen, and what actually happe
 
 ## Reproduction Steps
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Expected Behavior
 

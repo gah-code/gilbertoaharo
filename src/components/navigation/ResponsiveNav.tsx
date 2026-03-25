@@ -5,6 +5,7 @@ import type {
   NavigationPanelData,
 } from "@/content/contentful/types";
 import { Link } from "../ui/Link";
+import "./Navigation.css";
 
 type ResponsiveNavProps = {
   menu: NavigationMenuData;
@@ -320,8 +321,10 @@ export function ResponsiveNav({ menu }: ResponsiveNavProps) {
 
   React.useEffect(() => {
     document.body.style.overflow = isDrawerOpen ? "hidden" : "";
+    document.body.style.overflowX = isDrawerOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
+      document.body.style.overflowX = "";
     };
   }, [isDrawerOpen]);
 

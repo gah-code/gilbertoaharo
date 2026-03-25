@@ -9,6 +9,7 @@ import type {
   SectionTimeline,
   TimelineItem,
   Asset,
+  LinkAction,
 } from "../contentful/types";
 
 const makeSys = <T extends string>(id: T, type: any) => ({
@@ -124,20 +125,38 @@ const heroSection: SectionHero = {
     internalName: "Hero",
     anchorId: "top",
     title: "Gilberto Alejandro Haro",
+    name: "Gilberto Haro",
     eyebrow: "Web Engineer · Creative Technologist",
     heroStyle: "image",
     heroImage: mediaAssets[0],
-    tagline: "Building resilient web systems with CMS-first foundations.",
-    intro:
+    heroImageAlt: "Illustration representing discovery and research",
+    lead: "Building resilient web systems with CMS-first foundations.",
+    body:
       "I combine engineering, content modeling, and technical marketing ops to deliver scalable, content-driven experiences.",
-    primaryActionLabel: "Read more",
-    primaryActionHref: "#timeline",
-    secondaryActionLabel: "View projects",
-    secondaryActionHref: "#projects",
-    highlights: [
+    proofPoints: [
       "UI-first, CMS-second",
       "TypeScript + strong contracts",
       "Content modeling as code",
+    ],
+    actions: [
+      {
+        sys: makeSys("hero-action-primary", "linkAction"),
+        fields: {
+          label: "Read more",
+          href: "#timeline",
+          variant: "primary",
+          openInNewTab: false,
+        },
+      } as LinkAction,
+      {
+        sys: makeSys("hero-action-secondary", "linkAction"),
+        fields: {
+          label: "View projects",
+          href: "#projects",
+          variant: "secondary",
+          openInNewTab: false,
+        },
+      } as LinkAction,
     ],
   },
 };

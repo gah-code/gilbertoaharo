@@ -28,6 +28,7 @@ Examples of unacceptable behavior include:
 Community leaders are responsible for clarifying standards of acceptable behavior and will take appropriate corrective action in response to instances of unacceptable behavior.
 
 Unacceptable behavior may result in:
+
 - A warning
 - Temporary or permanent ban from the project
 - Reported to GitHub for policy violations
@@ -44,6 +45,7 @@ All reports will be handled confidentially and investigated promptly.
 ## Scope
 
 This Code of Conduct applies to:
+
 - All project spaces (issues, PRs, discussions, code)
 - Community spaces that represent the project
 - Individual communications related to project business

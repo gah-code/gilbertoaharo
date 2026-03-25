@@ -3,7 +3,7 @@ import { getContentSource } from "@/content/source";
 import { PageShell } from "@/components/layout/PageShell";
 import { RichTextRenderer } from "@/components/rich-text/RichTextRenderer";
 import type { ArticlePageData } from "@/content/contentful/types";
-import "@/styles/pages/article.css";
+import "./ArticlePage.css";
 
 type ArticleState =
   | { loading: true; error?: undefined; data?: undefined }

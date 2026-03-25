@@ -26,6 +26,7 @@ export type NavIconType = "emoji" | "svg" | "asset";
 export type EntryTypeId =
   | "personProfile"
   | "socialLink"
+  | "linkAction"
   | "pagePersonalLanding"
   | "sectionHero"
   | "sectionTimeline"
@@ -54,6 +55,18 @@ export interface Entry<T extends EntryTypeId, Fields> {
   sys: Sys<T>;
   fields: Fields;
 }
+
+export type LinkAction = Entry<
+  "linkAction",
+  {
+    internalName?: string;
+    label: string;
+    href: string;
+    variant?: "primary" | "secondary" | "text";
+    openInNewTab?: boolean;
+    ariaLabel?: string;
+  }
+>;
 
 export interface Asset {
   sys: { id: string };
@@ -145,17 +158,17 @@ export type SectionHero = Entry<
     internalName: string;
     anchorId: string;
     title: string;
+    name?: string;
     eyebrow?: string;
     heroStyle?: HeroStyle;
     avatarImage?: Asset;
+    avatarImageAlt?: string;
     heroImage?: Asset;
-    tagline: string;
-    intro: string;
-    primaryActionLabel?: string;
-    primaryActionHref?: string;
-    secondaryActionLabel?: string;
-    secondaryActionHref?: string;
-    highlights?: string[];
+    heroImageAlt?: string;
+    lead?: string;
+    body?: string;
+    proofPoints?: string[];
+    actions?: LinkAction[];
   }
 >;
 

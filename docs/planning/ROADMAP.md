@@ -65,7 +65,7 @@
 
 ### 1. Foundations
 
-- [x] Implement color tokens in `src/styles/tokens.css`. (Added warm palette tokens, semantic mappings, and legacy aliases.)
+- [x] Implement color tokens in `src/styles/tokens.css`. (Added warm palette tokens and semantic mappings.)
 - [x] Define typography tokens in `src/styles/tokens.css`. (Added font stacks and size scale tokens in `src/styles/tokens.css`.)
 - [x] Set up spacing scale, radius, and shadow tokens in `src/styles/tokens.css`. (Added rem-based spacing scale, radius + shadow tokens, and wired components/navigation to use them.)
 - [x] Configure layout density tokens in `src/styles/tokens.css`. (Added content width, section padding clamps, stack/heading rhythm, and lede width tokens.)
@@ -81,20 +81,20 @@
 
 ### 3. Accessibility and Interaction
 
-- [x] Implement skip link for `#main-content`. (Added skip link in header with styles in `src/styles/components/navigation.css`.)
+- [x] Implement skip link for `#main-content`. (Added skip link in header with styles in `src/components/navigation/Navigation.css`.)
 - [x] Style focus-visible states for `a` and `button`. (Added global focus-visible outline using tokens in `src/styles/base.css`.)
-- [x] Create sticky header with blur and gradient background. (Site header is sticky with blur/gradient and border in `src/styles/components/navigation.css`.)
+- [x] Create sticky header with blur and gradient background. (Site header is sticky with blur/gradient and border in `src/components/navigation/Navigation.css`.)
 
 ### 4. Components
 
 #### Header and Navigation
 
-- [x] Implement `.page-header` with sticky and blurred background. (Done in `src/styles/components/navigation.css`.)
+- [x] Implement `.page-header` with sticky and blurred background. (Done in `src/components/navigation/Navigation.css`.)
 - [x] Align `.page-header-inner` with logo and navigation. (Header uses `Container` and flex layout.)
-- [x] Style `.logo` and `.page-nav`. (Brand dot/label and nav list styled in `src/styles/components/navigation.css`.)
+- [x] Style `.logo` and `.page-nav`. (Brand dot/label and nav list styled in `src/components/navigation/Navigation.css`.)
 - [x] Add `src/components/layout/Header.tsx` as the header entry component. (Header renders brand + nav + skip link.)
 - [x] Add `src/components/navigation/ResponsiveNav.tsx` for mega menu + mobile drawer. (Implemented desktop dropdowns and mobile drawer/accordions.)
-- [x] Add navigation styles in `src/styles/components/navigation.css`. (Desktop, mega panel, drawer, accordions, CTA, focus states.)
+- [x] Add navigation styles in `src/components/navigation/Navigation.css`. (Desktop, mega panel, drawer, accordions, CTA, focus states.)
 - [x] Query Contentful for `navigationMenu` and wire the data into the header/nav. (Adapters fetch and map navigation menu data.)
 - [x] Map `navigationMenu.links[]` to desktop nav and mobile drawer links. (ResponsiveNav renders links/panels across desktop/mobile.)
 - [x] Render mega menu dropdown when `navLink.panel` exists (use `navPanel.cards[]`). (Desktop panels render mapped cards.)
@@ -137,7 +137,7 @@
 - [ ] Content QA: date format, optional org/location/summary/highlights rendering, empty states.
 - [ ] Accessibility: heading hierarchy, list semantics (`<ol>/<li>`), alt text for media, focus order if links/CTAs are present.
 
-- [x] Add timeline-specific CSS (grid gaps, breakpoint tweaks, alternating layout) to avoid inline styles and ensure consistency with tokens. (Added `src/styles/components/timeline.css`.)
+- [x] Add timeline-specific CSS (grid gaps, breakpoint tweaks, alternating layout) to avoid inline styles and ensure consistency with tokens. (Added `src/components/sections/TimelineSection.css`.)
 
 #### Projects Section
 

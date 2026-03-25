@@ -1,9 +1,27 @@
-import React from "react";
+import React, {
+  type AnchorHTMLAttributes,
+  type ButtonHTMLAttributes,
+  type ReactNode,
+} from "react";
 import { Link } from "./Link";
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  href?: string;
-};
+type BaseProps = { children: ReactNode };
+
+type ButtonAsButtonProps = BaseProps &
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    href?: undefined;
+  };
+
+type ButtonAsLinkProps = BaseProps &
+  AnchorHTMLAttributes<HTMLAnchorElement> & {
+    href: string;
+  };
+
+export type ButtonProps = ButtonAsButtonProps | ButtonAsLinkProps;
+
+function isLinkProps(props: ButtonProps): props is ButtonAsLinkProps {
+  return "href" in props && typeof props.href === "string" && props.href.length > 0;
+}
 
 const baseStyle: React.CSSProperties = {
   display: "inline-flex",
@@ -19,21 +37,23 @@ const baseStyle: React.CSSProperties = {
   textDecoration: "none",
 };
 
-export function Button({ href, children, style, ...rest }: ButtonProps) {
-  if (href) {
+export function Button(props: ButtonProps) {
+  if (isLinkProps(props)) {
+    const { href, children, style, ...rest } = props;
     return (
-      <Link
-        href={href}
-        style={{ ...baseStyle, ...style }}
-        {...(rest as any)}
-      >
+      <Link href={href} style={{ ...baseStyle, ...style }} {...rest}>
         {children}
       </Link>
     );
   }
 
+  const { children, style, type, ...rest } = props;
   return (
-    <button type="button" style={{ ...baseStyle, ...style }} {...rest}>
+    <button
+      type={type ?? "button"}
+      style={{ ...baseStyle, ...style }}
+      {...rest}
+    >
       {children}
     </button>
   );

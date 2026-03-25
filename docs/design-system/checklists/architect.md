@@ -36,6 +36,11 @@ Purpose: a lightweight, high-level checklist to guide discovery, build-out, gove
 - [ ] Versioning approach for tokens/components (changelogs, deprecation policy, migration notes).
 - [ ] Contribution guidelines (lint/format, testing, a11y checks, naming conventions).
 - [ ] Backlog triage + release cadence for DS updates; align with product milestones.
+- [ ] **Doc update protocol:** when code changes land, update the matching doc:
+  - Tokens/base/responsive rules → `docs/design-system/foundations.md`
+  - Component props/variants or moved CSS → `docs/design-system/components.md` (list code paths)
+  - Risks/state-of-world → new dated file under `docs/design-system/audit/` and relink “Latest audit” in `design-system.md`
+  - Process/guardrails → this checklist (`docs/design-system/checklists/architect.md`)
 
 ## Adoption
 - [ ] Plan onboarding materials: quickstart, examples, token reference, and code recipes.

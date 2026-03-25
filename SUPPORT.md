@@ -13,9 +13,10 @@ If you have questions or need support, here are the best ways to reach out:
 ### Documentation
 
 Check these resources first:
+
 - [README.md](README.md) — Project overview and setup
 - [docs/design-system.md](docs/design-system.md) — Design tokens and patterns
-- [docs/cms-advanced.md](docs/cms-advanced.md) — Contentful integration
+- [docs/content/cms-advanced.md](docs/content/cms-advanced.md) — Contentful integration
 - [CONTRIBUTING.md](CONTRIBUTING.md) — Development guide
 
 ### Security Issues

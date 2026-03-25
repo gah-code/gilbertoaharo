@@ -13,12 +13,14 @@ Please see [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for our community standards.
 Found a bug or have a feature request? Please [open an issue](https://github.com/gah-code/gilbertoaharo/issues/new/choose).
 
 **For bugs, include:**
+
 - Clear description of the problem
 - Steps to reproduce
 - Expected vs. actual behavior
 - Environment (Node version, browser, OS)
 
 **For features, include:**
+
 - Use case or motivation
 - Proposed solution (if you have one)
 - Alternatives you've considered
@@ -26,11 +28,13 @@ Found a bug or have a feature request? Please [open an issue](https://github.com
 ### Submitting Pull Requests
 
 1. **Fork** the repo and create a branch from `master`:
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
 2. **Make your changes** and test locally:
+
    ```bash
    npm install
    npm run dev
@@ -81,21 +85,25 @@ See [README.md](README.md) for full setup instructions.
 ## Code Standards
 
 ### TypeScript
+
 - Use strict mode (`strict: true` in tsconfig.json)
 - Explicit types for function parameters and return values
 - Avoid `any` type
 
 ### React
+
 - Functional components with hooks
 - Keep components small and focused
 - Use `@` alias for imports: `import { Button } from '@/components/ui'`
 
 ### Styling
+
 - Use CSS custom properties (design tokens) from `src/styles/tokens.css`
 - Keep component styles in `src/components/**/*.tsx` (scoped classNames)
 - Global styles in `src/styles/`
 
 ### Accessibility
+
 - Semantic HTML (`<button>`, `<nav>`, `<main>`, etc.)
 - ARIA labels where needed
 - Focus states for interactive elements
@@ -107,7 +115,7 @@ This project uses **Contentful** for content management.
 
 **Important:** All CMS data flows through `src/content/` adapters. Never use raw Contentful responses in components—always map through adapters first.
 
-See `docs/cms-advanced.md` for content modeling guidelines.
+See `docs/content/cms-advanced.md` for content modeling guidelines.
 
 ## Testing & Quality
 

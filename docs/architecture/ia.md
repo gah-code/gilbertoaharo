@@ -136,30 +136,38 @@ Each section includes:
 
 You should treat sections as **content modules** and render them through a stable `SectionShell` component.
 
+_Migration note (Hero): legacy fields have been removed from the content model, adapter, and UI. New hero entries must use `lead`, `body`, `proofPoints`, and `actions` only._
+
 ---
 
 ### D) `sectionHero`
 
 Top-of-page narrative + primary CTAs.
 
-| Field                  | Type     | Req | Notes                                          |
-| ---------------------- | -------- | --: | ---------------------------------------------- |
-| `internalName`         | Symbol   |   ✅ | Editor label.                                  |
-| `anchorId`             | Symbol   |   ✅ | Use for skip links / nav.                      |
-| `title`                | Symbol   |   ✅ | Section heading or H1 variant depending on UI. |
-| `eyebrow`              | Symbol   |   — | Optional micro-copy.                           |
-| `tagline`              | Text     |   ✅ | Prominent value statement.                     |
-| `intro`                | Text     |   ✅ | Supporting paragraph.                          |
-| `primaryActionLabel`   | Symbol   |   — | CTA label.                                     |
-| `primaryActionHref`    | Symbol   |   — | Link URL (could be internal or external).      |
-| `secondaryActionLabel` | Symbol   |   — | Secondary CTA label.                           |
-| `secondaryActionHref`  | Symbol   |   — | Secondary CTA URL.                             |
-| `highlights[]`         | Symbol[] |   — | Bullets (impact, tools, outcomes).             |
+| Field              | Type            | Req | Notes                                                                                  |
+| ------------------ | --------------- | --: | -------------------------------------------------------------------------------------- |
+| `internalName`     | Symbol          |   ✅ | Editor label.                                                                          |
+| `anchorId`         | Symbol          |   ✅ | Use for skip links / nav.                                                              |
+| `title`            | Symbol          |   ✅ | Section heading or H1 variant depending on page context.                               |
+| `name`             | Symbol          |   — | Identity line (e.g., person name).                                                     |
+| `eyebrow`          | Symbol          |   — | Optional micro-copy.                                                                   |
+| `lead`             | Text            |   — | Prominent supporting statement.                                                        |
+| `body`             | Text            |   — | Supporting paragraph.                                                                  |
+| `proofPoints[]`    | Symbol[]        |   — | Bullets for credibility/value.                                                         |
+| `heroStyle`        | Symbol enum     |   — | `typographic` | `avatar` | `image`; defaults to typographic if media missing.        |
+| `avatarImage`      | Asset           |   — | Used when `heroStyle` = `avatar`; protocol-relative URLs normalized.                   |
+| `avatarImageAlt`   | Symbol          |   — | Explicit alt; falls back to asset title or generated portrait label.                   |
+| `heroImage`        | Asset           |   — | Used when `heroStyle` = `image`; protocol-relative URLs normalized.                    |
+| `heroImageAlt`     | Symbol          |   — | Explicit alt; empty string allowed for decorative imagery.                             |
+| `actions[]`        | Reference list  |   — | References `linkAction` (label, href, variant `primary/secondary/text`, new-tab, aria). |
 
-**UI notes**
+**UI notes (normalized rendering)**
 
-* Consider `primaryActionHref` pointing to an article route (`/articles/...`) or an anchor (`#projects`).
-* Later improvement: allow `primaryActionArticle` reference, but not required now.
+* Text order: eyebrow → name → title (H1) → lead (muted/semibold) → body → actions → proof points.
+* Actions render only when label+href exist; variants map to primary/secondary/text button styles and support `openInNewTab`.
+* Proof points render as a muted semantic list; omitted when empty.
+* `heroStyle` resolves to avatar/image only when a valid asset URL exists; otherwise the layout falls back to typographic.
+* Media URLs are normalized when protocol-relative; alt text is explicit, with avatar fallback to asset title or “Portrait of …”.
 
 ---
 
@@ -510,7 +518,7 @@ Implement a `SeoHead` utility that accepts:
 
 ## Step 5 — Editorial guidelines (ship with the system)
 
-Add a `docs/editorial-guidelines.md` later:
+Add a `docs/content/editorial-guidelines.md` later:
 
 * how to write headings in rich text
 * how to write excerpts
@@ -641,6 +649,6 @@ Pick:
 
 If you want, I can also generate:
 
-* `docs/editorial-guidelines.md` (for writing/SEO and link rules)
+* `docs/content/editorial-guidelines.md` (for writing/SEO and link rules)
 * a `SectionRenderer` switch map based on your section IDs
 * TypeScript interfaces for every content type + adapter signatures (UI prop shapes)

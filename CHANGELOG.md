@@ -12,6 +12,10 @@
 - Hero normalization hardened: coalesces new/legacy text and list fields, filters empty proof points, normalizes protocol-relative media URLs, and adds asset-title fallback for avatar alt text. (src/components/sections/hero/normalizeHeroSection.ts)
 - Button component typing now supports both anchor and native button modes (target/rel/aria-label typed), removing the TS error when rendering link-style buttons. (src/components/ui/Button.tsx)
 
+### Notes
+
+- Hero schema is now treated as new-model only across code and docs; legacy fields and fallbacks were removed from `SectionHero`, hero normalization, static fixtures, and IA documentation.
+
 ### Verification
 
 - `npm run build` (passes: tsc + vite)
@@ -20,8 +24,8 @@
 
 ### Changed
 
-- Timeline section responsiveness hardened for medium/tablet widths: keep each item as a two-column text/visual pair from 640px up, activate alternating flip at the same breakpoint, tighten gaps, and clamp media widths so visuals shrink before stacking. Mobile (≤639px) now stacks with natural order; desktop (≥1024px) unchanged. (src/styles/components/timeline.css)
-- Article page readability improvements: rich text renderer now supports marks (bold/italic/underline/code), safe external links, and embedded asset rendering (inline + block) with captions/alt resolution; hero and attachment lists styled for clarity with responsive widths and type badges; page now formats author/published/updated metadata. (src/components/rich-text/RichTextRenderer.tsx, src/pages/ArticlePage.tsx, src/styles/pages/article.css)
+- Timeline section responsiveness hardened for medium/tablet widths: keep each item as a two-column text/visual pair from 640px up, activate alternating flip at the same breakpoint, tighten gaps, and clamp media widths so visuals shrink before stacking. Mobile (≤639px) now stacks with natural order; desktop (≥1024px) unchanged. (src/components/sections/TimelineSection.css)
+- Article page readability improvements: rich text renderer now supports marks (bold/italic/underline/code), safe external links, and embedded asset rendering (inline + block) with captions/alt resolution; hero and attachment lists styled for clarity with responsive widths and type badges; page now formats author/published/updated metadata. (src/components/rich-text/RichTextRenderer.tsx, src/pages/ArticlePage.tsx, src/pages/ArticlePage.css)
 - Hero section now normalizes legacy and new Contentful hero fields (lead/body/proofPoints/actions/alt text) into a single render shape; button variants respect action metadata; media alt and protocol-relative URLs handled consistently. (src/components/sections/HeroSection.tsx, src/components/sections/hero/normalizeHeroSection.ts, src/content/contentful/types.ts)
 
 ### Verification
@@ -36,7 +40,7 @@
 
 ### Changed
 
-- Mobile navigation drawer now spans the full viewport (left/right 0, 100% width) to stop small-screen overflow and ensure the menu overlays content instead of pushing it sideways. (src/styles/components/navigation.css)
+- Mobile navigation drawer now spans the full viewport (left/right 0, 100% width) to stop small-screen overflow and ensure the menu overlays content instead of pushing it sideways. (src/components/navigation/Navigation.css)
 - Global overflow hardening: `body` now hides horizontal overflow; drawer scroll-lock also hides `overflowX` while open to prevent scrollbars when toggling the menu. (src/styles/base.css, src/components/navigation/ResponsiveNav.tsx)
 
 ### Verification
@@ -114,7 +118,7 @@
 ### Changed
 
 - UI primitives now consume spacing/radius/shadow tokens: card surfaces use `--radius-lg` + `--shadow-soft`; buttons/badges and skills level pills use tokenized pill radius and spacing.
-- Navigation styles aligned to tokenized radii and shadow for panels, pills, toggles, and panel chrome in `src/styles/components/navigation.css`.
+- Navigation styles aligned to tokenized radii and shadow for panels, pills, toggles, and panel chrome in `src/components/navigation/Navigation.css`.
 - Updated `TODO-UI.md` to reflect the completed spacing/radius/shadow token task.
 - Layout density tokens now drive shell spacing: `Container` uses `--content-max` and `--section-pad-x`, `SectionShell` uses `--section-pad-y` + `--stack-gap`, and `PageShell` lets the container defaults handle main spacing.
 - Navigation/header resilience on smaller viewports: `Container` now uses border-box sizing to prevent padding overflow, and header/nav flex rows allow shrinking (`min-width: 0`) to avoid wrap/overflow on medium and down.
@@ -132,7 +136,7 @@
 - Contentful navigation model types (`navigationMenu`, `navLink`, `navPanel`, `navCard`) and UI-ready shapes in `src/content/contentful/types.ts`.
 - Navigation adapter that maps sorted links/panels/cards, resolves CTA, clamps mobile breakpoint, and normalizes asset URLs in `src/content/contentful/adapters.ts`.
 - Header + responsive navigation components (`src/components/layout/Header.tsx`, `src/components/navigation/ResponsiveNav.tsx`) with desktop dropdowns, mobile drawer/accordions, skip link, and brand wiring.
-- Navigation styles in `src/styles/components/navigation.css` covering sticky header, desktop mega panel, mobile drawer, accordions, CTA, and focus/hover states.
+- Navigation styles in `src/components/navigation/Navigation.css` covering sticky header, desktop mega panel, mobile drawer, accordions, CTA, and focus/hover states.
 
 ### Changed
 
