@@ -1,5 +1,20 @@
 # Changelog
 
+## [2026-04-12]
+
+### Changed
+
+- Extended timeline types to support section eyebrow/intro, item context, additive date fields (`startDateValue`, `endDateValue`, `isCurrent`), media/media alt, actions, and tags; added reusable `TimelineMedia` and `TimelineAction` unions. (`src/content/contentful/types.ts`)
+- Added defensive timeline mapping in the Contentful adapters with section/item normalization, `anchorId` fallback, safe array defaults, additive field passthrough, and legacy compatibility. (`src/content/contentful/adapters.ts`)
+- Refreshed timeline rendering to support eyebrow/intro, context, backward-compatible date-range normalization (`Present` handling + ISO formatting fallback), tags, variant-aware actions, and CMS media preference while preserving static fallback illustration rotation. (`src/components/sections/TimelineSection.tsx`)
+- Added timeline styles for new content pieces (`.timeline-eyebrow`, `.timeline-intro`, `.timeline-context`, `.timeline-tags`, `.timeline-tag`, `.timeline-action`) while preserving existing layout language and breakpoints. (`src/components/sections/TimelineSection.css`)
+- Updated static timeline fixtures to include additive fields, media/media alt, actions, and section eyebrow/intro for local development coverage. (`src/content/static/fixtures.ts`)
+- Synced design-system documentation for timeline model/API updates, mapping behavior, classnames, and CSS location. (`docs/design-system/sections/timeline-section.md`, `docs/design-system/components.md`)
+
+### Verification
+
+- Not run (`npm run build` not executed in this changelog update step).
+
 ## [2026-03-25]
 
 ### Added
