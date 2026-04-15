@@ -61,8 +61,10 @@ const timelineItems: TimelineItem[] = [
       title: "Senior Web Engineer",
       organization: "Studio North",
       location: "Remote",
+      context: "Marketing platform · Content ops",
       startDate: "2023",
-      endDate: "Present",
+      startDateValue: "2023-03-01",
+      isCurrent: true,
       summary: "Leading web platform delivery across marketing and content-heavy sites.",
       highlights: [
         "Built resilient CMS-first page templates and navigation",
@@ -70,9 +72,17 @@ const timelineItems: TimelineItem[] = [
       ],
       tags: ["CMS", "Design System"],
       mediaImage: mediaAssets[0],
+      media: mediaAssets[0],
       mediaAlt: "Looking at charts and search results",
-      ctaLabel: "View projects",
-      ctaHref: "#projects",
+      action: {
+        sys: makeSys("timeline-1-action", "linkAction"),
+        fields: {
+          label: "View projects",
+          href: "#projects",
+          variant: "text",
+          openInNewTab: false,
+        },
+      } as LinkAction,
     },
   },
   {
@@ -82,8 +92,11 @@ const timelineItems: TimelineItem[] = [
       title: "Frontend Lead",
       organization: "Brightline",
       location: "Austin, TX",
+      context: "Design system leadership",
       startDate: "2021",
+      startDateValue: "2021-01-01",
       endDate: "2023",
+      endDateValue: "2023-12-31",
       summary: "Scaled a component library and mentored engineers across squads.",
       highlights: [
         "Shipped responsive design system across marketing + product surfaces",
@@ -91,9 +104,17 @@ const timelineItems: TimelineItem[] = [
       ],
       tags: ["React", "Contentful"],
       mediaImage: mediaAssets[1],
+      media: mediaAssets[1],
       mediaAlt: "Journey path with milestones",
-      ctaLabel: "See case study",
-      ctaHref: "#",
+      action: {
+        sys: makeSys("timeline-2-action", "linkAction"),
+        fields: {
+          label: "See case study",
+          href: "#",
+          variant: "secondary",
+          openInNewTab: false,
+        },
+      } as LinkAction,
     },
   },
   {
@@ -103,8 +124,11 @@ const timelineItems: TimelineItem[] = [
       title: "Content Modeling Coach",
       organization: "Freelance",
       location: "Remote",
+      context: "Advisory",
       startDate: "2019",
+      startDateValue: "2019-01-01",
       endDate: "2021",
+      endDateValue: "2021-06-30",
       summary: "Advised teams on schema design and content delivery performance.",
       highlights: [
         "Introduced content model versioning and governance",
@@ -112,9 +136,17 @@ const timelineItems: TimelineItem[] = [
       ],
       tags: ["Content Modeling", "Architecture"],
       mediaImage: mediaAssets[2],
+      media: mediaAssets[2],
       mediaAlt: "Creative collaboration illustration",
-      ctaLabel: "Book a chat",
-      ctaHref: "mailto:hello@example.com",
+      action: {
+        sys: makeSys("timeline-3-action", "linkAction"),
+        fields: {
+          label: "Book a chat",
+          href: "mailto:hello@example.com",
+          variant: "text",
+          openInNewTab: false,
+        },
+      } as LinkAction,
     },
   },
 ];
@@ -166,7 +198,9 @@ const timelineSection: SectionTimeline = {
   fields: {
     internalName: "Timeline",
     anchorId: "timeline",
+    eyebrow: "Experience",
     title: "Experience",
+    intro: "A few highlights from the last few years of building and leading content-forward products.",
     items: timelineItems,
   },
 };

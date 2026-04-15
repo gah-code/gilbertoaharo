@@ -13,32 +13,44 @@ Sources of truth
 - `src/assets/timeline/` (local SVG illustrations)
 
 ## Data model
-`TimelineSection` (from `src/data/page-personal-landing.ts`):
+`TimelineSection` (from `src/content/contentful/types.ts` / fixtures):
 - Required: `id`, `sectionType: "timeline"`, `anchorId`, `title`, `items`
+- Optional: `eyebrow`, `intro`
 - `items`: array of `TimelineItem`
 
 `TimelineItem`:
-- Required: `id`, `kind: "role" | "education" | "milestone"`, `title`, `startDate`
-- Optional: `organization`, `location`, `endDate`, `summary`, `highlights` (string[]), `tags` (string[])
-- Rendering uses `startDate` + `endDate ?? "present"` verbatim (no date formatting). `tags` are currently unused in the UI.
+- Required: `id`, `kind: "role" | "education" | "milestone"`, `title`
+- Legacy dates: `startDate`, `endDate`
+- Additive dates: `startDateValue`, `endDateValue`, `isCurrent`
+- Optional: `organization`, `location`, `context`, `summary`, `highlights` (string[]), `tags` (string[])
+- Media: `media` (asset or `{src, alt}`) or legacy `mediaImage`; `mediaAlt` overrides asset title
+- Action: `action` (linkAction or inline object) with `label`, `href`, `variant` (`primary` | `secondary` | `text`), `openInNewTab`, `ariaLabel`
+- Rendering formats date ranges with ISO parsing when possible; `isCurrent` forces `Present`. `tags` render as chips.
 
 ## Component logic (TimelineSection.tsx)
 - Renders inside `<section class="section section-timeline">` via `SectionRenderer.tsx`.
 - Structure:
   - Wrapper: `<div class="timeline">`
   - Heading: `<h2>{section.title}</h2>`
+  - Optional eyebrow `<p class="timeline-eyebrow">`
+  - Optional intro `<p class="timeline-intro">`
   - Ordered list: `<ol class="timeline-list">`
     - Each `<li class="timeline-item">` contains:
       - `.timeline-card` with:
         - Header row: `<h3>{item.title}</h3>` and optional `<span class="timeline-org">{item.organization}</span>`
-        - Meta row: `<span>{startDate} – {endDate ?? "present"}</span>` plus optional location `<span class="timeline-location">`
+        - Context row: optional `<p class="timeline-context">`
+        - Meta row: formatted date range + optional location `<span class="timeline-location">`
         - Optional summary `<p class="timeline-summary">`
         - Optional highlights list `<ul class="timeline-highlights">` with `<li>` entries
+        - Optional tags `<div class="timeline-tags">` with `<span class="timeline-tag">`
+        - Optional action `<a class="timeline-action__link">` (variants `--text|--primary|--secondary`)
       - Optional `.timeline-media` with `<img src={media.src} alt={media.alt} loading="lazy" />`
-- Media assignment: static array of three local SVGs (`timeline-search.svg`, `timeline-journey.svg`, `timeline-creative.svg`). Items pick `timelineMedia[index % 3]`, so illustrations repeat in order and are not content-driven.
+- Media assignment: prefers CMS `media`/`mediaImage`; falls back to static SVG rotation (`timeline-search.svg`, `timeline-journey.svg`, `timeline-creative.svg`).
 
-## Layout and styling (layout.css)
+## Layout and styling (TimelineSection.css)
 - Heading: `.timeline h2 { margin: 0 0 var(--heading-mb); }`
+- Eyebrow: uppercase, letterspaced, muted `.timeline-eyebrow`
+- Intro: muted lede width `.timeline-intro`
 - List: `.timeline-list` is a grid; default gap `var(--space-10)`.
 - Items: `.timeline-item` grid with single column by default; gap `var(--space-4)`.
 - Card: `.timeline-card` uses shared surface (`background: var(--color-surface)`, `border: 1px solid var(--color-border)`, `box-shadow: var(--shadow-soft)`, `border-radius: var(--radius-lg)`, `padding: var(--space-4)`).
@@ -49,6 +61,8 @@ Sources of truth
   - `.timeline-meta` uses `--font-size-xs`, flex wrap with `gap: var(--space-2)`.
   - `.timeline-summary` and `.timeline-highlights` use `--font-size-sm`; highlights are muted and indented with `list-style: disc`.
   - `.timeline-org`, `.timeline-meta`, `.timeline-highlights` share muted text color (`--color-text-muted`).
+  - Tags: `.timeline-tags` flex wrap; `.timeline-tag` uses pill background.
+  - Actions: `.timeline-action__link--text|--primary|--secondary` follow button/link surface tokens.
 
 ## Responsive behavior
 - ≤480px: `.section-timeline` tightens padding (`padding-inline: var(--space-4)`, `padding-block: var(--space-8)`); list gap shrinks; cards reduce padding; meta stacks column; media padding reduces and max-width ~88%.
@@ -56,31 +70,30 @@ Sources of truth
 - ≥768px: two-column grid (`minmax(0, 1.1fr)` text, `minmax(0, 0.9fr)` media) with `gap: var(--space-6)`; `.timeline-media` centered; even items swap order to alternate media/text (`nth-child(even)`).
 - ≥1024px: larger gaps (`var(--space-12)` list, `var(--space-8)` item) and media can grow to max-width 28rem.
 
-## Contentful mapping rules (fetchPersonalLandingPage.ts)
-- `mapTimelineSection` pulls `title`, `anchorId`, and `items` from the entry.
+## Contentful mapping rules
+- `mapTimelineSection` (adapters) pulls `title`, `eyebrow`, `intro`, `anchorId`, and `items`.
 - `anchorId` defaults to the entry `sys.id` when missing.
-- Items: fields `kind`, `title`, `organization`, `location`, `startDate`, `endDate`, `summary`, `highlights`, `tags` are copied as-is; `highlights`/`tags` default to `[]` via `safeArray`.
-- No CMS-provided media; UI continues using static SVG rotation until the model is expanded.
+- Items map `context`, legacy dates (`startDate`, `endDate`), additive dates (`startDateValue`, `endDateValue`, `isCurrent`), `highlights`, `tags`, `media`, `mediaImage`, `mediaAlt`, and `action`; arrays fall back to `[]`.
+- Media prefers `media`/`mediaImage`; still falls back to static SVG rotation when missing.
 
 ## Adaptable conditions
 - Missing `organization` or `location`: those spans are simply omitted; layout flex-wrap keeps spacing tidy.
 - Missing `summary`: card shows only header/meta/highlights.
 - Missing or empty `highlights`: list is not rendered.
-- Missing `endDate`: UI shows `"present"` automatically.
-- Adding more items than three: SVGs repeat due to modulo assignment; add more assets or a media field if unique art is required.
-- If CMS adds media fields later, update `TimelineItem` type, mapper, and component to use those assets instead of the static `timelineMedia` array.
+- Missing `endDate` + `isCurrent`: UI shows `"Present"` automatically.
+- Adding more items than three: SVGs repeat via fallback rotation; provide CMS media for unique art.
 
 ## Implementation steps
 1) Define `TimelineSection` data (`title`, `anchorId`, `items`) in `page-personal-landing.ts` or fetch from CMS using the existing mapper.
 2) Keep `sectionType: "timeline"` so `SectionRenderer` wraps it with `.section.section-timeline`.
 3) Render with `TimelineSectionView` to preserve classnames and responsive layout.
-4) Adjust spacing or typography in `src/styles/layout.css`; rely on tokens in `src/styles/tokens.css`.
-5) When introducing CMS-controlled media, extend the data model and mapper, then replace the static `timelineMedia` selection logic.
+4) Adjust spacing or typography in `src/components/sections/TimelineSection.css`; rely on tokens in `src/styles/tokens.css`.
+5) CMS media now supported; static `timelineMedia` remains as fallback rotation.
 
 ## Notes and gotchas
-- `tags` exist in the data model but are not displayed; avoid relying on them in UX until the component renders them.
-- Date strings are shown verbatim; supply human-friendly formats (e.g., `"2022–01"` or `"2022"`). There is no formatting or validation in the component.
-- Images use `loading="lazy"`; keep alt text meaningful if you replace the static assets.
+- Tags now render as pills; keep them concise.
+- Date strings are formatted when ISO-like; non-ISO strings render verbatim to avoid breaking legacy data.
+- Images use `loading="lazy"`; alt priority: `mediaAlt` > asset title > derived from item title.
 - Even-item alternating order relies on DOM position; if you filter or sort dynamically, verify the pattern still holds.
 
 ## Adaptable checklist for new builds

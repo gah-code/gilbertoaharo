@@ -24,7 +24,7 @@
 ## Sections (`src/components/sections`)
 - **SectionShell**: standard section wrapper (Container + Stack, optional anchorId).
 - **HeroSection**: inline CSS grid; supports `heroStyle` avatar/image/typographic; actions rendered with Button; media framed via `MediaFrame`; proof points list.
-- **TimelineSection**: uses `TimelineSection.css`; classes `timeline`, `timeline-list`, `timeline-item`, `timeline-item--flip`, `timeline-card*`, `timeline-card__media-frame`; breakpoints at 640/768/1024; fallback SVGs from `src/assets/timeline/*` when CMS media missing.
+- **TimelineSection**: uses `TimelineSection.css`; classes `timeline`, `timeline-eyebrow`, `timeline-intro`, `timeline-list`, `timeline-item`, `timeline-item--flip`, `timeline-card*`, `timeline-card__media-frame`, `timeline-context`, `timeline-tags`, `timeline-tag`, `timeline-action`; breakpoints at 640/768/1024; prefers CMS media with fallback SVG rotation from `src/assets/timeline/*`.
 - **SkillsSection**: inline auto-fit grid (`minmax(280px,1fr)`), ledger rows, level pill, muted keywords.
 - **ProjectsSection**: stack of Cards; tech badges; CTA Buttons from resolved links (`resolveProjectLink`).
 - **LearningSection**: Card list with topic, description, status Badge, optional Link.

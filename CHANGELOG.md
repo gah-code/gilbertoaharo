@@ -1,5 +1,11 @@
 # Changelog
 
+## [2026-04-14]
+
+### Verification
+
+- `npm run build` (passes: tsc + vite)
+
 ## [2026-04-12]
 
 ### Changed

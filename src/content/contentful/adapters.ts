@@ -10,13 +10,16 @@ import type {
   NavigationLinkData,
   PagePersonalLanding,
   ProjectLink,
+  SectionEntry,
+  SectionTimeline,
+  TimelineItem,
 } from "./types";
 
 export function mapLandingPage(page: PagePersonalLanding): LandingPageData {
   return {
     metaTitle: page.fields.metaTitle,
     metaDescription: page.fields.metaDescription,
-    sections: page.fields.sections,
+    sections: page.fields.sections.map(mapSection),
   };
 }
 
@@ -158,4 +161,62 @@ export function mapNavigationMenu(menu: NavigationMenu): NavigationMenuData {
     cta,
     mobileBreakpointPx: mobileBreakpoint,
   };
+}
+
+/* -------- Timeline mapping (defensive) -------- */
+
+function safeArray<T>(value: T[] | undefined | null): T[] {
+  return Array.isArray(value) ? value.filter(Boolean) : [];
+}
+
+function mapTimelineItem(item: TimelineItem): TimelineItem {
+  const fields = item.fields;
+
+  return {
+    sys: item.sys,
+    fields: {
+      kind: fields.kind,
+      title: fields.title,
+      organization: fields.organization,
+      location: fields.location,
+      context: fields.context,
+      startDate: fields.startDate,
+      endDate: fields.endDate,
+      startDateValue: fields.startDateValue,
+      endDateValue: fields.endDateValue,
+      isCurrent: fields.isCurrent,
+      summary: fields.summary,
+      highlights: safeArray(fields.highlights),
+      tags: safeArray(fields.tags),
+      mediaImage: fields.mediaImage,
+      media: fields.media,
+      mediaAlt: fields.mediaAlt,
+      action: fields.action,
+      ctaLabel: fields.ctaLabel,
+      ctaHref: fields.ctaHref,
+    },
+  };
+}
+
+function mapTimelineSection(section: SectionTimeline): SectionTimeline {
+  const fields = section.fields;
+  return {
+    sys: section.sys,
+    fields: {
+      internalName: fields.internalName,
+      anchorId: fields.anchorId || section.sys.id,
+      title: fields.title,
+      eyebrow: fields.eyebrow,
+      intro: fields.intro,
+      items: safeArray(fields.items).map(mapTimelineItem),
+    },
+  };
+}
+
+function mapSection(section: SectionEntry): SectionEntry {
+  const id = section.sys.contentType.sys.id;
+  if (id === "sectionTimeline") {
+    return mapTimelineSection(section as SectionTimeline);
+  }
+  return section;
 }

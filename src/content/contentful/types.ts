@@ -68,6 +68,23 @@ export type LinkAction = Entry<
   }
 >;
 
+export type TimelineAction =
+  | {
+      label: string;
+      href: string;
+      variant?: "primary" | "secondary" | "text";
+      openInNewTab?: boolean;
+      ariaLabel?: string;
+    }
+  | LinkAction;
+
+export type TimelineMedia =
+  | Asset
+  | {
+      src: string;
+      alt?: string;
+    };
+
 export interface Asset {
   sys: { id: string };
   fields: {
@@ -179,13 +196,19 @@ export type TimelineItem = Entry<
     title: string;
     organization?: string;
     location?: string;
-    startDate: string;
+    context?: string;
+    startDate?: string;
     endDate?: string;
+    startDateValue?: string;
+    endDateValue?: string;
+    isCurrent?: boolean;
     summary?: string;
     highlights?: string[];
     tags?: string[];
     mediaImage?: Asset;
+    media?: TimelineMedia;
     mediaAlt?: string;
+    action?: TimelineAction;
     ctaLabel?: string;
     ctaHref?: string;
   }
@@ -195,8 +218,10 @@ export type SectionTimeline = Entry<
   "sectionTimeline",
   {
     internalName: string;
+    eyebrow?: string;
     anchorId: string;
     title: string;
+    intro?: string;
     items: TimelineItem[];
   }
 >;
