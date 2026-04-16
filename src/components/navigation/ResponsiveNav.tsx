@@ -35,6 +35,7 @@ function NavPanelList({
           <Link
             href={card.href}
             className="nav-panel__card-link"
+            variant="unstyled"
             onClick={onNavigate}
           >
             <span className="nav-panel__card-icon" aria-hidden="true">
@@ -90,7 +91,9 @@ function DesktopNav({
                 onMouseLeave={() => onTogglePanel(null)}
               >
                 <button
+                  type="button"
                   className="nav-link nav-link--button"
+                  aria-haspopup="menu"
                   aria-expanded={isOpen}
                   aria-controls={panelId}
                   onClick={() => onTogglePanel(isOpen ? null : link.id)}
@@ -101,19 +104,21 @@ function DesktopNav({
                     ▾
                   </span>
                 </button>
-                <div
-                  id={panelId}
-                  className={`nav-panel ${isOpen ? "is-open" : ""} ${link.panel.align === "left" ? "nav-panel--left" : ""}`}
-                  style={
-                    link.panel.widthPx
-                      ? { width: `${link.panel.widthPx}px` }
-                      : undefined
-                  }
-                  role="region"
-                  aria-label={`${link.label} menu`}
-                >
-                  <NavPanelList cards={link.panel.cards} onNavigate={onNavigate} />
-                </div>
+                {isOpen ? (
+                  <div
+                    id={panelId}
+                    className={`nav-panel is-open ${link.panel.align === "left" ? "nav-panel--left" : ""}`}
+                    style={
+                      link.panel.widthPx
+                        ? { width: `${link.panel.widthPx}px` }
+                        : undefined
+                    }
+                    role="region"
+                    aria-label={`${link.label} menu`}
+                  >
+                    <NavPanelList cards={link.panel.cards} onNavigate={onNavigate} />
+                  </div>
+                ) : null}
               </li>
             );
           }
@@ -123,6 +128,7 @@ function DesktopNav({
               <Link
                 href={link.href}
                 className="nav-link"
+                variant="unstyled"
                 onClick={() => {
                   onNavigate();
                 }}
@@ -136,6 +142,7 @@ function DesktopNav({
           <Link
             href={cta.href}
             className="nav-cta"
+            variant="unstyled"
             onClick={onNavigate}
           >
             {cta.label}
@@ -156,6 +163,7 @@ function MobileNav({
   onNavigate,
   brandLabel,
   brandHref,
+  toggleButtonRef,
 }: {
   links: NavigationLinkData[];
   cta: NavigationLinkData;
@@ -166,10 +174,13 @@ function MobileNav({
   onNavigate: () => void;
   brandLabel: string;
   brandHref: string;
+  toggleButtonRef: React.RefObject<HTMLButtonElement | null>;
 }) {
   return (
     <div className="nav-mobile">
       <button
+        type="button"
+        ref={toggleButtonRef}
         className="nav-toggle"
         aria-expanded={isOpen}
         aria-controls="mobile-nav-drawer"
@@ -178,89 +189,112 @@ function MobileNav({
         <span className="nav-toggle__bars" aria-hidden="true" />
         <span className="nav-toggle__label">Menu</span>
       </button>
-      <div
-        className={`nav-drawer ${isOpen ? "is-open" : ""}`}
-        id="mobile-nav-drawer"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Navigation menu"
-      >
-        <div className="nav-drawer__header">
-          <Link href={brandHref} className="nav-drawer__brand" onClick={onNavigate}>
-            <span className="site-brand__dot" aria-hidden="true" />
-            <span className="site-brand__label">{brandLabel}</span>
-          </Link>
-          <div className="nav-drawer__header-actions">
-            <span className="nav-drawer__title">Navigation</span>
-            <button className="nav-toggle nav-toggle--close" onClick={() => onToggleOpen(false)}>
-              <span aria-hidden="true">×</span>
-              <span className="sr-only">Close menu</span>
-            </button>
-          </div>
-        </div>
-        <div className="nav-drawer__body">
-          <ul className="nav-drawer__list">
-            {links.map((link) => {
-              const hasAccordion =
-                link.mobileBehavior === "drawerAccordion" && link.panel;
-              const isAccordionOpen =
-                hasAccordion && openAccordions.has(link.id);
-              const accordionId = `nav-accordion-${link.id}`;
+      {isOpen ? (
+        <>
+          <div
+            className="nav-drawer is-open"
+            id="mobile-nav-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
+          >
+            <div className="nav-drawer__header">
+              <Link
+                href={brandHref}
+                className="nav-drawer__brand"
+                variant="unstyled"
+                onClick={onNavigate}
+              >
+                <span className="site-brand__dot" aria-hidden="true" />
+                <span className="site-brand__label">{brandLabel}</span>
+              </Link>
+              <div className="nav-drawer__header-actions">
+                <span className="nav-drawer__title">Navigation</span>
+                <button
+                  type="button"
+                  className="nav-toggle nav-toggle--close"
+                  onClick={() => onToggleOpen(false)}
+                >
+                  <span aria-hidden="true">×</span>
+                  <span className="sr-only">Close menu</span>
+                </button>
+              </div>
+            </div>
+            <div className="nav-drawer__body">
+              <ul className="nav-drawer__list">
+                {links.map((link) => {
+                  const hasAccordion =
+                    link.mobileBehavior === "drawerAccordion" && link.panel;
+                  const isAccordionOpen =
+                    hasAccordion && openAccordions.has(link.id);
+                  const accordionId = `nav-accordion-${link.id}`;
 
-              return (
-                <li key={link.id} className="nav-drawer__item">
-                  {hasAccordion ? (
-                    <>
-                      <button
-                        className="nav-drawer__accordion-trigger"
-                        aria-expanded={isAccordionOpen}
-                        aria-controls={accordionId}
-                        onClick={() => toggleAccordion(link.id)}
-                      >
-                        <span>{link.label}</span>
-                        <span
-                          className={`nav-drawer__chevron ${isAccordionOpen ? "is-open" : ""}`}
-                          aria-hidden="true"
+                  return (
+                    <li key={link.id} className="nav-drawer__item">
+                      {hasAccordion ? (
+                        <>
+                          <button
+                            type="button"
+                            className="nav-drawer__accordion-trigger"
+                            aria-expanded={isAccordionOpen}
+                            aria-controls={accordionId}
+                            onClick={() => toggleAccordion(link.id)}
+                          >
+                            <span>{link.label}</span>
+                            <span
+                              className={`nav-drawer__chevron ${isAccordionOpen ? "is-open" : ""}`}
+                              aria-hidden="true"
+                            >
+                              ▾
+                            </span>
+                          </button>
+                          <div
+                            id={accordionId}
+                            className={`nav-drawer__accordion ${isAccordionOpen ? "is-open" : ""}`}
+                            aria-hidden={!isAccordionOpen}
+                          >
+                            {link.panel ? (
+                              <NavPanelList
+                                cards={link.panel.cards}
+                                onNavigate={onNavigate}
+                              />
+                            ) : null}
+                          </div>
+                        </>
+                      ) : (
+                        <Link
+                          href={link.href}
+                          className="nav-drawer__link"
+                          variant="unstyled"
+                          onClick={onNavigate}
                         >
-                          ▾
-                        </span>
-                      </button>
-                      <div
-                        id={accordionId}
-                        className={`nav-drawer__accordion ${isAccordionOpen ? "is-open" : ""}`}
-                      >
-                        {link.panel ? (
-                          <NavPanelList
-                            cards={link.panel.cards}
-                            onNavigate={onNavigate}
-                          />
-                        ) : null}
-                      </div>
-                    </>
-                  ) : (
-                    <Link
-                      href={link.href}
-                      className="nav-drawer__link"
-                      onClick={onNavigate}
-                    >
-                      {link.label}
-                    </Link>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-          <div className="nav-drawer__cta">
-            <Link href={cta.href} className="nav-cta" onClick={onNavigate}>
-              {cta.label}
-            </Link>
+                          {link.label}
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+              <div className="nav-drawer__cta">
+                <Link
+                  href={cta.href}
+                  className="nav-cta"
+                  variant="unstyled"
+                  onClick={onNavigate}
+                >
+                  {cta.label}
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div
-        className={`nav-drawer__overlay ${isOpen ? "is-open" : ""}`}
-        onClick={() => onToggleOpen(false)}
-      />
+          <button
+            type="button"
+            className="nav-drawer__overlay is-open"
+            aria-label="Close navigation menu"
+            onClick={() => onToggleOpen(false)}
+          />
+        </>
+      ) : null}
     </div>
   );
 }
@@ -279,6 +313,7 @@ export function ResponsiveNav({ menu }: ResponsiveNavProps) {
   });
 
   const navRef = React.useRef<HTMLDivElement>(null);
+  const mobileToggleRef = React.useRef<HTMLButtonElement>(null);
 
   React.useEffect(() => {
     const handleResize = () => setViewportWidth(window.innerWidth);
@@ -328,6 +363,18 @@ export function ResponsiveNav({ menu }: ResponsiveNavProps) {
     };
   }, [isDrawerOpen]);
 
+  React.useEffect(() => {
+    if (isDrawerOpen) {
+      const firstFocusable = navRef.current?.querySelector<HTMLElement>(
+        ".nav-drawer a, .nav-drawer button",
+      );
+      firstFocusable?.focus();
+      return;
+    }
+
+    mobileToggleRef.current?.focus();
+  }, [isDrawerOpen]);
+
   const toggleAccordion = (id: string) =>
     setOpenAccordions((prev) => {
       const next = new Set(prev);
@@ -365,6 +412,7 @@ export function ResponsiveNav({ menu }: ResponsiveNavProps) {
           onNavigate={handleNavigate}
           brandLabel={menu.brandLabel}
           brandHref={menu.brandHref}
+          toggleButtonRef={mobileToggleRef}
         />
       )}
     </div>

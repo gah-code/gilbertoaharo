@@ -1,54 +1,40 @@
 import React from "react";
+import { classNames } from "../../ui/classNames";
+import "./MediaFrame.css";
 
 type MediaFrameProps =
   | {
       kind: "avatar";
       src: string;
       alt?: string;
-      size?: number;
     }
   | {
       kind: "image";
       src: string;
       alt?: string;
-      maxWidth?: string;
     };
 
 export function MediaFrame(props: MediaFrameProps) {
   if (props.kind === "avatar") {
-    const { src, alt, size = 220 } = props;
+    const { src, alt } = props;
     return (
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div className="section-media-frame section-media-frame--avatar">
         <img
           src={src}
           alt={alt ?? ""}
-          style={{
-            width: `${size}px`,
-            height: `${size}px`,
-            borderRadius: "var(--radius-pill)",
-            objectFit: "cover",
-            border: "1px solid var(--color-border-subtle)",
-            background: "var(--color-surface)",
-          }}
+          className="section-media-frame__asset"
         />
       </div>
     );
   }
 
-  const { src, alt, maxWidth = "520px" } = props;
+  const { src, alt } = props;
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <div className={classNames(["section-media-frame", "section-media-frame--image"])}>
       <img
         src={src}
         alt={alt ?? ""}
-        style={{
-          width: "100%",
-          maxWidth,
-          borderRadius: "var(--radius-lg)",
-          objectFit: "cover",
-          border: "1px solid var(--color-border-subtle)",
-          background: "var(--color-surface)",
-        }}
+        className="section-media-frame__asset"
       />
     </div>
   );

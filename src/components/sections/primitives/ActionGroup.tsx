@@ -1,39 +1,24 @@
 import React from "react";
-import { Button } from "../../ui/Button";
+import { Button, type ButtonVariant } from "../../ui/Button";
+import { Cluster, type ClusterGap } from "../../ui/Cluster";
+import "./ActionGroup.css";
 
 export type ActionItem = {
   label: string;
   href: string;
-  variant?: "primary" | "secondary" | "text";
+  variant?: ButtonVariant;
   openInNewTab?: boolean;
   ariaLabel?: string;
 };
 
-function actionStyle(variant: ActionItem["variant"]) {
-  if (variant === "secondary") {
-    return { background: "transparent", color: "var(--color-accent)" };
-  }
-  if (variant === "text") {
-    return {
-      background: "transparent",
-      color: "var(--color-accent)",
-      border: "none",
-      padding: 0,
-    };
-  }
-  return {};
-}
-
 type ActionGroupProps = {
   actions: ActionItem[];
-  gap?: string;
-  wrap?: boolean;
+  gap?: ClusterGap;
 };
 
 export function ActionGroup({
   actions,
-  gap = "var(--space-3)",
-  wrap = true,
+  gap = "3",
 }: ActionGroupProps) {
   if (!actions?.length) return null;
 
@@ -43,13 +28,7 @@ export function ActionGroup({
   if (!safeActions.length) return null;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        gap,
-        flexWrap: wrap ? "wrap" : "nowrap",
-      }}
-    >
+    <Cluster className="section-action-group" gap={gap}>
       {safeActions.map((action, idx) => (
         <Button
           key={`${action.label}-${idx}`}
@@ -57,11 +36,11 @@ export function ActionGroup({
           target={action.openInNewTab ? "_blank" : undefined}
           rel={action.openInNewTab ? "noreferrer noopener" : undefined}
           aria-label={action.ariaLabel ?? action.label}
-          style={actionStyle(action.variant)}
+          variant={action.variant ?? "primary"}
         >
           {action.label}
         </Button>
       ))}
-    </div>
+    </Cluster>
   );
 }

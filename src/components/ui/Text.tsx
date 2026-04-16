@@ -1,25 +1,45 @@
 import React from "react";
+import { classNames } from "./classNames";
+import "./Text.css";
 
-type TextProps = React.HTMLAttributes<HTMLElement> & {
-  as?: keyof JSX.IntrinsicElements;
+export type TextTone = "default" | "muted";
+export type TextSize = "sm" | "md" | "lg";
+export type TextWeight = "regular" | "medium" | "semibold";
+export type TextTracking = "normal" | "tight";
+
+type TextProps = Omit<React.HTMLAttributes<HTMLElement>, "style"> & {
+  as?: keyof HTMLElementTagNameMap;
+  tone?: TextTone;
+  size?: TextSize;
+  weight?: TextWeight;
+  tracking?: TextTracking;
   muted?: boolean;
 };
 
 export function Text({
   as: Component = "p",
+  tone,
+  size = "md",
+  weight = "regular",
+  tracking = "normal",
   muted = false,
-  style,
+  className,
   children,
   ...rest
 }: TextProps) {
-  const Element: any = Component;
+  const Element = Component;
+  const resolvedTone = muted ? "muted" : (tone ?? "default");
+
   return (
     <Element
-      style={{
-        margin: 0,
-        color: muted ? "var(--color-text-muted)" : "inherit",
-        ...style,
-      }}
+      className={classNames([
+        "ui-text",
+        `ui-text--tone-${resolvedTone}`,
+        `ui-text--size-${size}`,
+        `ui-text--weight-${weight}`,
+        `ui-text--tracking-${tracking}`,
+        className,
+      ])}
       {...rest}
     >
       {children}

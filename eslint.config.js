@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 
 export default [
   {
-    ignores: ['dist'],
+    ignores: ['dist', 'storybook-static'],
   },
   {
     files: ['**/*.{ts,tsx,js,jsx}'],

@@ -1,4 +1,5 @@
 import React from "react";
+import "./ProofList.css";
 
 type ProofListProps = {
   items: string[];
@@ -8,15 +9,7 @@ export function ProofList({ items }: ProofListProps) {
   if (!items?.length) return null;
 
   return (
-    <ul
-      style={{
-        paddingLeft: "20px",
-        margin: 0,
-        color: "var(--color-text-muted)",
-        display: "grid",
-        gap: "var(--space-2)",
-      }}
-    >
+    <ul className="proof-list">
       {items.map((item, idx) => (
         <li key={idx}>{item}</li>
       ))}

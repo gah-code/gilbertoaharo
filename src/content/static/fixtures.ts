@@ -5,6 +5,7 @@ import type {
   LandingPageData,
   NavigationMenuData,
   NavigationLinkData,
+  EntryTypeId,
   SectionHero,
   SectionTimeline,
   TimelineItem,
@@ -12,8 +13,8 @@ import type {
   LinkAction,
 } from "../contentful/types";
 
-const makeSys = <T extends string>(id: T, type: any) => ({
-  id: String(id),
+const makeSys = <T extends EntryTypeId>(id: string, type: T) => ({
+  id,
   contentType: { sys: { id: type } },
 });
 

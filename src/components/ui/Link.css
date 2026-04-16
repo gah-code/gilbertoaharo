@@ -1,0 +1,74 @@
+@import "../../styles/tokens.css";
+
+.ui-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--link-color);
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, var(--link-color) 42%, transparent);
+  border-radius: var(--radius-sm);
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    text-decoration-color var(--motion-duration-fast) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.ui-link:hover {
+  color: var(--link-color-hover);
+  text-decoration-color: color-mix(in srgb, var(--link-color-hover) 55%, transparent);
+}
+
+.ui-link:active {
+  color: var(--link-color-active);
+}
+
+.ui-link:focus-visible {
+  outline: none;
+  box-shadow: var(--link-focus-ring-shadow);
+}
+
+.ui-link--sm {
+  font-size: var(--font-size-sm);
+}
+
+.ui-link--md {
+  font-size: var(--font-size-base);
+}
+
+.ui-link--muted {
+  color: var(--color-text-muted);
+  text-decoration-color: color-mix(in srgb, var(--color-text-muted) 40%, transparent);
+}
+
+.ui-link--muted:hover {
+  color: var(--color-text);
+  text-decoration-color: color-mix(in srgb, var(--color-text) 50%, transparent);
+}
+
+.ui-link--unstyled {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ui-link--unstyled:hover,
+.ui-link--unstyled:active {
+  color: inherit;
+}
+
+.ui-link.is-disabled {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  cursor: not-allowed;
+  opacity: var(--control-disabled-opacity);
+  pointer-events: none;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-link {
+    transition: none;
+  }
+}

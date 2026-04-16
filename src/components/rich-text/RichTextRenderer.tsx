@@ -1,13 +1,41 @@
 import React from "react";
 
-type Node = any;
+type RichTextMark = { type: string };
+
+type RichTextNode = {
+  nodeType?: string;
+  content?: RichTextNode[];
+  marks?: RichTextMark[];
+  value?: string;
+  data?: Record<string, unknown>;
+};
+
+type AssetLike = {
+  fields?: {
+    file?: {
+      url?: string;
+      fileName?: string;
+    };
+    title?: string;
+    description?: string;
+  };
+};
+
+function asNode(value: unknown): RichTextNode | null {
+  if (typeof value !== "object" || value === null) return null;
+  return value as RichTextNode;
+}
+
+function nodeChildren(node: RichTextNode): RichTextNode[] {
+  return Array.isArray(node.content) ? node.content : [];
+}
 
 function resolveAssetUrl(url?: string | null) {
   if (!url) return undefined;
   return url.startsWith("//") ? `https:${url}` : url;
 }
 
-function applyMarks(text: string, marks: Array<{ type: string }>) {
+function applyMarks(text: string, marks: RichTextMark[]) {
   return marks.reduce<React.ReactNode>((value, mark, idx) => {
     switch (mark.type) {
       case "bold":
@@ -24,8 +52,12 @@ function applyMarks(text: string, marks: Array<{ type: string }>) {
   }, text);
 }
 
-function renderAsset(node: Node, key: string | number, inline = false) {
-  const asset = node?.data?.target;
+function renderAsset(
+  node: RichTextNode,
+  key: string | number,
+  inline = false,
+) {
+  const asset = asNode(node.data?.target) as AssetLike | null;
   const file = asset?.fields?.file;
   const url = resolveAssetUrl(file?.url);
   if (!url) return null;
@@ -50,50 +82,51 @@ function renderAsset(node: Node, key: string | number, inline = false) {
   );
 }
 
-function renderNode(node: Node, key: string | number): React.ReactNode {
+function renderNode(node: RichTextNode, key: string | number): React.ReactNode {
   if (!node) return null;
+  const children = nodeChildren(node);
 
   switch (node.nodeType) {
     case "document":
-      return (node.content ?? []).map((n: Node, i: number) => (
-        <React.Fragment key={i}>{renderNode(n, i)}</React.Fragment>
+      return children.map((child, i) => (
+        <React.Fragment key={i}>{renderNode(child, i)}</React.Fragment>
       ));
 
     case "paragraph":
       return (
         <p key={key}>
-          {(node.content ?? []).map((n: Node, i: number) =>
-            renderNode(n, `${key}-${i}`),
+          {children.map((child, i) =>
+            renderNode(child, `${key}-${i}`),
           )}
         </p>
       );
 
     case "text": {
-      const marks = node.marks ?? [];
+      const marks = Array.isArray(node.marks) ? node.marks : [];
       return applyMarks(node.value ?? "", marks);
     }
 
     case "heading-2":
       return (
         <h2 key={key}>
-          {(node.content ?? []).map((n: Node, i: number) =>
-            renderNode(n, `${key}-${i}`),
+          {children.map((child, i) =>
+            renderNode(child, `${key}-${i}`),
           )}
         </h2>
       );
     case "heading-3":
       return (
         <h3 key={key}>
-          {(node.content ?? []).map((n: Node, i: number) =>
-            renderNode(n, `${key}-${i}`),
+          {children.map((child, i) =>
+            renderNode(child, `${key}-${i}`),
           )}
         </h3>
       );
     case "heading-4":
       return (
         <h4 key={key}>
-          {(node.content ?? []).map((n: Node, i: number) =>
-            renderNode(n, `${key}-${i}`),
+          {children.map((child, i) =>
+            renderNode(child, `${key}-${i}`),
           )}
         </h4>
       );
@@ -101,24 +134,24 @@ function renderNode(node: Node, key: string | number): React.ReactNode {
     case "unordered-list":
       return (
         <ul key={key}>
-          {(node.content ?? []).map((n: Node, i: number) =>
-            renderNode(n, `${key}-${i}`),
+          {children.map((child, i) =>
+            renderNode(child, `${key}-${i}`),
           )}
         </ul>
       );
     case "ordered-list":
       return (
         <ol key={key}>
-          {(node.content ?? []).map((n: Node, i: number) =>
-            renderNode(n, `${key}-${i}`),
+          {children.map((child, i) =>
+            renderNode(child, `${key}-${i}`),
           )}
         </ol>
       );
     case "list-item":
       return (
         <li key={key}>
-          {(node.content ?? []).map((n: Node, i: number) =>
-            renderNode(n, `${key}-${i}`),
+          {children.map((child, i) =>
+            renderNode(child, `${key}-${i}`),
           )}
         </li>
       );
@@ -126,8 +159,8 @@ function renderNode(node: Node, key: string | number): React.ReactNode {
     case "quote":
       return (
         <blockquote key={key}>
-          {(node.content ?? []).map((n: Node, i: number) =>
-            renderNode(n, `${key}-${i}`),
+          {children.map((child, i) =>
+            renderNode(child, `${key}-${i}`),
           )}
         </blockquote>
       );
@@ -136,11 +169,11 @@ function renderNode(node: Node, key: string | number): React.ReactNode {
       return <hr key={key} />;
 
     case "hyperlink": {
-      const href = node.data?.uri;
+      const href = typeof node.data?.uri === "string" ? node.data.uri : "#";
       return (
         <a key={key} href={href} target="_blank" rel="noreferrer noopener">
-          {(node.content ?? []).map((n: Node, i: number) =>
-            renderNode(n, `${key}-${i}`),
+          {children.map((child, i) =>
+            renderNode(child, `${key}-${i}`),
           )}
         </a>
       );
@@ -161,8 +194,10 @@ export function RichTextRenderer({
   document,
   className,
 }: {
-  document: any;
+  document: unknown;
   className?: string;
 }) {
-  return <div className={className}>{renderNode(document, "root")}</div>;
+  const root = asNode(document);
+  if (!root) return null;
+  return <div className={className}>{renderNode(root, "root")}</div>;
 }

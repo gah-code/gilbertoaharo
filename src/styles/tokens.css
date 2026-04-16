@@ -12,6 +12,8 @@
   --color-surface: #fffdf8;
   --color-surface-2: #f2ede2;
   --color-accent: #0b2a6f;
+  --color-accent-hover: #163f96;
+  --color-accent-active: #09245c;
   --color-accent-soft: #dde6fb;
   --color-text: #111827;
   --color-muted: #4b5563;
@@ -58,4 +60,51 @@
   --radius-pill: 999px;
 
   --shadow-soft: 0 18px 40px rgba(17, 24, 39, 0.1);
+  --shadow-soft-strong: 0 20px 60px rgba(17, 24, 39, 0.14);
+
+  --motion-duration-fast: 120ms;
+  --motion-duration-base: 180ms;
+  --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  --control-font-size-sm: var(--font-size-sm);
+  --control-font-size-md: var(--font-size-base);
+  --control-font-size-lg: var(--font-size-lg);
+  --control-height-sm: 2.25rem;
+  --control-height-md: 2.75rem;
+  --control-height-lg: 3.25rem;
+  --control-px-sm: var(--space-3);
+  --control-px-md: var(--space-4);
+  --control-px-lg: var(--space-6);
+  --control-disabled-opacity: 0.56;
+
+  --button-font-weight: 600;
+  --button-focus-ring-shadow: 0 0 0 3px rgba(122, 162, 255, 0.35);
+  --button-active-translate-y: 1px;
+
+  --link-color: var(--color-accent);
+  --link-color-hover: var(--color-accent-hover);
+  --link-color-active: var(--color-accent-active);
+  --link-focus-ring-shadow: 0 0 0 3px rgba(122, 162, 255, 0.28);
+
+  --card-focus-ring-shadow:
+    0 0 0 3px rgba(122, 162, 255, 0.28),
+    var(--shadow-soft-strong);
+
+  --button-primary-bg: var(--color-accent);
+  --button-primary-bg-hover: var(--color-accent-hover);
+  --button-primary-bg-active: var(--color-accent-active);
+  --button-primary-text: var(--color-surface);
+  --button-primary-border: var(--color-accent);
+
+  --button-secondary-bg: transparent;
+  --button-secondary-bg-hover: rgba(11, 42, 111, 0.08);
+  --button-secondary-bg-active: rgba(11, 42, 111, 0.14);
+  --button-secondary-text: var(--color-accent);
+  --button-secondary-border: rgba(11, 42, 111, 0.45);
+
+  --button-text-bg: transparent;
+  --button-text-bg-hover: rgba(11, 42, 111, 0.08);
+  --button-text-bg-active: rgba(11, 42, 111, 0.14);
+  --button-text: var(--color-accent);
+  --button-text-border: transparent;
 }

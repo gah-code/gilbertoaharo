@@ -14,6 +14,7 @@ import type {
   SectionTimeline,
   TimelineItem,
 } from "./types";
+import { env } from "@/env";
 
 export function mapLandingPage(page: PagePersonalLanding): LandingPageData {
   return {
@@ -28,9 +29,7 @@ export function resolveProjectLink(link: ProjectLink): {
   label: string;
   analyticsLabel?: string;
 } {
-  const prefix = String(
-    import.meta.env.VITE_ARTICLE_ROUTE_PREFIX || "/articles",
-  );
+  const prefix = env.articlePrefix;
 
   // internal article reference wins
   const slug = link.fields.article?.fields.slug;
@@ -44,10 +43,8 @@ export function resolveProjectLink(link: ProjectLink): {
 }
 
 export function mapArticlePage(article: Article): ArticlePageData {
-  const prefix = String(
-    import.meta.env.VITE_ARTICLE_ROUTE_PREFIX || "/articles",
-  );
-  const siteUrl = String(import.meta.env.VITE_SITE_URL || "");
+  const prefix = env.articlePrefix;
+  const siteUrl = env.siteUrl;
 
   const canonicalFallback = siteUrl
     ? `${siteUrl}${prefix}/${article.fields.slug}`

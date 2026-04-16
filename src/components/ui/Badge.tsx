@@ -1,21 +1,30 @@
 import React from "react";
+import { classNames } from "./classNames";
+import "./Badge.css";
 
-type BadgeProps = React.HTMLAttributes<HTMLSpanElement>;
+export type BadgeTone = "default" | "muted" | "success" | "warning";
+export type BadgeSize = "sm" | "md";
 
-export function Badge({ children, style, ...rest }: BadgeProps) {
+type BadgeProps = Omit<React.HTMLAttributes<HTMLSpanElement>, "style"> & {
+  tone?: BadgeTone;
+  size?: BadgeSize;
+};
+
+export function Badge({
+  children,
+  className,
+  tone = "default",
+  size = "md",
+  ...rest
+}: BadgeProps) {
   return (
     <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        padding: "var(--space-1) var(--space-3)",
-        borderRadius: "var(--radius-pill)",
-        background: "var(--color-surface-2)",
-        color: "var(--color-text)",
-        fontSize: "12px",
-        letterSpacing: "0.02em",
-        ...style,
-      }}
+      className={classNames([
+        "ui-badge",
+        `ui-badge--${tone}`,
+        `ui-badge--${size}`,
+        className,
+      ])}
       {...rest}
     >
       {children}

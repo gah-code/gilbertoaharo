@@ -6,7 +6,8 @@ export const staticSource: ContentSource = {
   async getLandingPage() {
     return staticLandingPage;
   },
-  async getArticleBySlug(_slug: string): Promise<ArticlePageData | null> {
+  async getArticleBySlug(slug: string): Promise<ArticlePageData | null> {
+    void slug;
     return null;
   },
   async getNavigationMenu() {

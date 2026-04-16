@@ -43,7 +43,7 @@ Sources of truth
         - Optional summary `<p class="timeline-summary">`
         - Optional highlights list `<ul class="timeline-highlights">` with `<li>` entries
         - Optional tags `<div class="timeline-tags">` with `<span class="timeline-tag">`
-        - Optional action `<a class="timeline-action__link">` (variants `--text|--primary|--secondary`)
+        - Optional action `<Button variant="text|primary|secondary" size="sm">`
       - Optional `.timeline-media` with `<img src={media.src} alt={media.alt} loading="lazy" />`
 - Media assignment: prefers CMS `media`/`mediaImage`; falls back to static SVG rotation (`timeline-search.svg`, `timeline-journey.svg`, `timeline-creative.svg`).
 
@@ -62,7 +62,7 @@ Sources of truth
   - `.timeline-summary` and `.timeline-highlights` use `--font-size-sm`; highlights are muted and indented with `list-style: disc`.
   - `.timeline-org`, `.timeline-meta`, `.timeline-highlights` share muted text color (`--color-text-muted`).
   - Tags: `.timeline-tags` flex wrap; `.timeline-tag` uses pill background.
-  - Actions: `.timeline-action__link--text|--primary|--secondary` follow button/link surface tokens.
+  - Actions: use shared `Button` API variants (`text|primary|secondary`) so CTA states come from `src/components/ui/Button.css` + tokens.
 
 ## Responsive behavior
 - ≤480px: `.section-timeline` tightens padding (`padding-inline: var(--space-4)`, `padding-block: var(--space-8)`); list gap shrinks; cards reduce padding; meta stacks column; media padding reduces and max-width ~88%.

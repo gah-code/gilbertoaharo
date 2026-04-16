@@ -1,7 +1,7 @@
 import React from "react";
 
 type StackProps = React.HTMLAttributes<HTMLElement> & {
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof HTMLElementTagNameMap;
   gap?: string;
 };
 
@@ -12,7 +12,7 @@ export function Stack({
   children,
   ...rest
 }: StackProps) {
-  const Element: any = Component;
+  const Element = Component;
   return (
     <Element
       style={{ display: "flex", flexDirection: "column", gap, ...style }}

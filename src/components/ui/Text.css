@@ -1,0 +1,46 @@
+@import "../../styles/tokens.css";
+
+.ui-text {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.ui-text--tone-default {
+  color: var(--color-text);
+}
+
+.ui-text--tone-muted {
+  color: var(--color-text-muted);
+}
+
+.ui-text--size-sm {
+  font-size: var(--font-size-sm);
+}
+
+.ui-text--size-md {
+  font-size: var(--font-size-base);
+}
+
+.ui-text--size-lg {
+  font-size: var(--font-size-lg);
+}
+
+.ui-text--weight-regular {
+  font-weight: 400;
+}
+
+.ui-text--weight-medium {
+  font-weight: 500;
+}
+
+.ui-text--weight-semibold {
+  font-weight: 600;
+}
+
+.ui-text--tracking-normal {
+  letter-spacing: normal;
+}
+
+.ui-text--tracking-tight {
+  letter-spacing: -0.01em;
+}

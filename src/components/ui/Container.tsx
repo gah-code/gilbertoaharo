@@ -1,7 +1,7 @@
 import React from "react";
 
 type ContainerProps = React.HTMLAttributes<HTMLElement> & {
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof HTMLElementTagNameMap;
 };
 
 export function Container({
@@ -10,7 +10,7 @@ export function Container({
   children,
   ...rest
 }: ContainerProps) {
-  const Element: any = Component;
+  const Element = Component;
   return (
     <Element
       style={{

@@ -1,6 +1,5 @@
 import React from "react";
 import type { SectionProjects } from "@/content/contentful/types";
-import { resolveProjectLink } from "@/content/contentful/adapters";
 import { SectionShell } from "./SectionShell";
 import { Heading } from "../ui/Heading";
 import { Text } from "../ui/Text";
@@ -8,41 +7,49 @@ import { Stack } from "../ui/Stack";
 import { Card } from "../ui/Card";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
+import { Cluster } from "../ui/Cluster";
+import { normalizeProjectsSection } from "./projects/normalizeProjectsSection";
+import "./ProjectsSection.css";
 
 export function ProjectsSection({ section }: { section: SectionProjects }) {
-  const projects = section.fields;
+  const projects = normalizeProjectsSection(section);
 
   return (
-    <SectionShell anchorId={projects.anchorId}>
+    <SectionShell anchorId={projects.anchorId} className="section-projects">
       <Heading level={2}>{projects.title}</Heading>
       <Stack gap="var(--space-4)">
         {projects.projects.map((project) => {
-          const links = (project.fields.links ?? []).map(resolveProjectLink);
+          const links = project.links;
           return (
-            <Card key={project.sys.id}>
+            <Card key={project.id} className="projects-card">
               <Stack gap="var(--space-3)">
-                <Heading level={3}>{project.fields.name}</Heading>
-                {project.fields.tagline ? (
-                  <Text muted>{project.fields.tagline}</Text>
+                <Heading level={3}>{project.name}</Heading>
+                {project.tagline ? (
+                  <Text tone="muted">{project.tagline}</Text>
                 ) : null}
-                {project.fields.summary ? (
-                  <Text>{project.fields.summary}</Text>
-                ) : null}
-                {project.fields.techStack?.length ? (
-                  <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
-                    {project.fields.techStack.map((tech) => (
-                      <Badge key={tech}>{tech}</Badge>
+                {project.summary ? <Text>{project.summary}</Text> : null}
+                {project.techStack.length ? (
+                  <Cluster className="projects-tech" gap="2" align="center">
+                    {project.techStack.map((tech) => (
+                      <Badge key={tech} tone="muted">
+                        {tech}
+                      </Badge>
                     ))}
-                  </div>
+                  </Cluster>
                 ) : null}
                 {links.length ? (
-                  <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
-                    {links.map((link) => (
-                      <Button key={link.href} href={link.href}>
+                  <Cluster className="projects-links" gap="2" align="center">
+                    {links.map((link, index) => (
+                      <Button
+                        key={link.href}
+                        href={link.href}
+                        variant={index === 0 ? "primary" : "secondary"}
+                        size="sm"
+                      >
                         {link.label}
                       </Button>
                     ))}
-                  </div>
+                  </Cluster>
                 ) : null}
               </Stack>
             </Card>

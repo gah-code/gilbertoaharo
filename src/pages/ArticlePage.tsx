@@ -3,6 +3,7 @@ import { getContentSource } from "@/content/source";
 import { PageShell } from "@/components/layout/PageShell";
 import { RichTextRenderer } from "@/components/rich-text/RichTextRenderer";
 import type { ArticlePageData } from "@/content/contentful/types";
+import { getErrorMessage } from "@/lib/errors";
 import "./ArticlePage.css";
 
 type ArticleState =
@@ -44,7 +45,7 @@ export function ArticlePage({ slug }: { slug: string }) {
       .catch((err: unknown) =>
         setState({
           loading: false,
-          error: String((err as any)?.message ?? err),
+          error: getErrorMessage(err),
         }),
       );
   }, [slug]);

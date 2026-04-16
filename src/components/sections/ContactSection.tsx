@@ -5,24 +5,27 @@ import { Heading } from "../ui/Heading";
 import { Text } from "../ui/Text";
 import { Stack } from "../ui/Stack";
 import { Link } from "../ui/Link";
+import { Cluster } from "../ui/Cluster";
+import { normalizeContactSection } from "./contact/normalizeContactSection";
+import "./ContactSection.css";
 
 export function ContactSection({ section }: { section: SectionContact }) {
-  const contact = section.fields;
+  const contact = normalizeContactSection(section);
 
   return (
-    <SectionShell anchorId={contact.anchorId}>
+    <SectionShell anchorId={contact.anchorId} className="section-contact">
       <Heading level={2}>{contact.title}</Heading>
       {contact.intro ? <Text>{contact.intro}</Text> : null}
       <Stack gap="var(--space-2)">
-        <Link href={`mailto:${contact.email}`}>{contact.email}</Link>
-        {contact.links?.length ? (
-          <div style={{ display: "flex", gap: "var(--space-3)", flexWrap: "wrap" }}>
+        <Link href={contact.emailHref}>{contact.email}</Link>
+        {contact.links.length ? (
+          <Cluster className="contact-links" gap="3">
             {contact.links.map((link) => (
-              <Link key={link.sys.id} href={link.fields.url}>
-                {link.fields.label}
+              <Link key={link.id} href={link.href}>
+                {link.label}
               </Link>
             ))}
-          </div>
+          </Cluster>
         ) : null}
       </Stack>
     </SectionShell>

@@ -1,5 +1,6 @@
 import React from "react";
 import { contentful } from "@/content/contentful/client";
+import { getErrorMessage } from "@/lib/errors";
 
 type Summary = { type: string; total: number; sampleIds: string[] };
 
@@ -12,7 +13,9 @@ async function summarize(type: string): Promise<Summary> {
   return {
     type,
     total: res.total,
-    sampleIds: res.items.map((i: any) => i.sys?.id).filter(Boolean),
+    sampleIds: res.items
+      .map((item) => item.sys?.id)
+      .filter((id): id is string => typeof id === "string"),
   };
 }
 
@@ -42,7 +45,7 @@ export function DebugPage() {
 
     Promise.all(types.map(summarize))
       .then(setRows)
-      .catch((e) => setErr(String(e?.message ?? e)));
+      .catch((e) => setErr(getErrorMessage(e)));
   }, []);
 
   if (err) return <pre>Error: {err}</pre>;

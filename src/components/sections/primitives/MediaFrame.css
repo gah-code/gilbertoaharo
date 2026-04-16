@@ -1,0 +1,25 @@
+@import "../../../styles/tokens.css";
+
+.section-media-frame {
+  display: flex;
+  justify-content: center;
+}
+
+.section-media-frame__asset {
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface);
+  object-fit: cover;
+  display: block;
+}
+
+.section-media-frame--avatar .section-media-frame__asset {
+  width: 220px;
+  height: 220px;
+  border-radius: var(--radius-pill);
+}
+
+.section-media-frame--image .section-media-frame__asset {
+  width: 100%;
+  max-width: 520px;
+  border-radius: var(--radius-lg);
+}

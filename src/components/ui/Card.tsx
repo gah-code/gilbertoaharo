@@ -1,18 +1,33 @@
 import React from "react";
+import { classNames } from "./classNames";
+import "./Card.css";
 
-type CardProps = React.HTMLAttributes<HTMLDivElement>;
+export type CardVariant = "default" | "subtle" | "elevated";
+export type CardDensity = "sm" | "md" | "lg";
 
-export function Card({ children, style, ...rest }: CardProps) {
+type CardProps = Omit<React.HTMLAttributes<HTMLDivElement>, "style"> & {
+  variant?: CardVariant;
+  density?: CardDensity;
+  interactive?: boolean;
+};
+
+export function Card({
+  children,
+  className,
+  variant = "default",
+  density = "md",
+  interactive = false,
+  ...rest
+}: CardProps) {
   return (
     <div
-      style={{
-        border: "1px solid var(--color-border-subtle)",
-        borderRadius: "var(--radius-lg)",
-        padding: "var(--space-4)",
-        background: "var(--color-surface)",
-        boxShadow: "var(--shadow-soft)",
-        ...style,
-      }}
+      className={classNames([
+        "ui-card",
+        `ui-card--${variant}`,
+        `ui-card--${density}`,
+        interactive && "ui-card--interactive",
+        className,
+      ])}
       {...rest}
     >
       {children}

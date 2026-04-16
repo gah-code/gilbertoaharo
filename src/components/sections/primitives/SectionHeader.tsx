@@ -4,6 +4,7 @@ import { Heading } from "../../ui/Heading";
 import { Text } from "../../ui/Text";
 import { Stack } from "../../ui/Stack";
 import { ActionGroup, type ActionItem } from "./ActionGroup";
+import "./SectionHeader.css";
 
 type SectionHeaderProps = {
   eyebrow?: string;
@@ -23,24 +24,22 @@ export function SectionHeader({
   actions,
 }: SectionHeaderProps) {
   return (
-    <Stack gap="var(--space-4)">
-      {eyebrow ? <Badge>{eyebrow}</Badge> : null}
+    <Stack className="section-header" gap="var(--space-4)">
+      {eyebrow ? <Badge className="section-header__eyebrow">{eyebrow}</Badge> : null}
       {name ? (
-        <Text muted style={{ letterSpacing: "-0.01em" }}>
+        <Text tone="muted" tracking="tight" className="section-header__name">
           {name}
         </Text>
       ) : null}
-      <Heading level={1}>{title}</Heading>
+      <Heading level={1} className="section-header__title">
+        {title}
+      </Heading>
       {lead ? (
-        <Heading
-          level={3}
-          weight="semibold"
-          style={{ color: "var(--color-text-muted)" }}
-        >
+        <Heading level={3} weight="semibold" tone="muted" className="section-header__lead">
           {lead}
         </Heading>
       ) : null}
-      {body ? <Text>{body}</Text> : null}
+      {body ? <Text className="section-header__body">{body}</Text> : null}
       {actions && actions.length ? <ActionGroup actions={actions} /> : null}
     </Stack>
   );

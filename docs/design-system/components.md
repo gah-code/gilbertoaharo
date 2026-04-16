@@ -1,50 +1,53 @@
 # Components
 
-**Purpose:** Current components, props/variants, and where their styles live.
+**Purpose:** Current components, API contracts, and style colocation.
 
 ## Primitives (`src/components/ui`)
-- **Button** (`Button.tsx`): accent-filled by default; renders `<a>` when `href` provided; inline token styles; gaps/padding/radius from tokens; needs focus-visible + variants work.
-- **Link** (`Link.tsx`): safe external rel handling; inherits color; no custom focus yet.
-- **Card** (`Card.tsx`): surface/border/shadow via tokens; inline styles.
-- **Heading** (`Heading.tsx`): levels 1–6; optional `weight`; font size/line-height from tokens.
-- **Text** (`Text.tsx`): body text with `muted` option.
-- **Badge** (`Badge.tsx`): pill label using token radius/padding.
-- **Stack** (`Stack.tsx`): vertical layout with `gap` prop.
-- **Container** (`Container.tsx`): max width `--content-max`, side padding `--section-pad-x`, `as` prop.
+- **Button** (`Button.tsx`, `Button.css`): explicit `variant` (`primary|secondary|text`), `size` (`sm|md|lg`), `fullWidth`, disabled behavior for button/link modes, reduced-motion handling.
+- **Link** (`Link.tsx`, `Link.css`): explicit `variant` (`default|muted|unstyled`), `size` (`sm|md`), `disabled` contract (`aria-disabled`, tab exclusion, click guard), safe external rel handling.
+- **Card** (`Card.tsx`, `Card.css`): explicit `variant` (`default|subtle|elevated`), `density` (`sm|md|lg`), optional `interactive` state styles.
+- **Badge** (`Badge.tsx`, `Badge.css`): explicit `tone` (`default|muted|success|warning`) and `size` (`sm|md`).
+- **Text** (`Text.tsx`, `Text.css`): explicit `tone`, `size`, `weight`, `tracking`; supports semantic `as`.
+- **Heading** (`Heading.tsx`, `Heading.css`): semantic `level` + explicit `size`, `weight`, `tone`, `tracking` contracts.
+- **Stack** (`Stack.tsx`): vertical flow with tokenized gap.
+- **Container** (`Container.tsx`): content max-width + horizontal padding.
+- **Inline / Cluster / Grid** (`Inline.tsx`, `Cluster.tsx`, `Grid.tsx` + colocated CSS): reusable horizontal/wrapping/grid layout primitives replacing repeated flex/grid snippets.
 
 ## Layout (`src/components/layout`)
-- **PageShell**: wraps page with `SeoHead`, `Header`, and `main#main-content` Container.
-- **Header**: loads navigation menu via `getContentSource().getNavigationMenu()`, renders brand + skip link + `ResponsiveNav`; placeholder text while loading/error.
+- **PageShell**: page wrapper (`SeoHead`, `Header`, main landmark).
+- **Header**: content-source navigation fetch + skip link + responsive nav.
 - **SeoHead**: title/description/canonical meta.
 
 ## Navigation (`src/components/navigation`)
-- **ResponsiveNav.tsx**: desktop mega panels + mobile drawer; breakpoint from CMS (`menu.mobileBreakpointPx`); uses `Navigation.css` for styling (sticky header, panels, drawer, accordions, CTA).
-- **Navigation.css**: tokenized spacing/color/shadow; breakpoint tweaks at `max-width: 960px`; needs focus-visible/motion tokens.
+- **ResponsiveNav.tsx**: desktop panel + mobile drawer from CMS menu data.
+- Accessibility updates: button `type` guards, menu panel conditional rendering, mobile drawer mount/unmount behavior, focus return to mobile toggle, escape-to-close behavior.
+- **Navigation.css**: tokenized interaction states and reduced-motion support.
 
 ## Sections (`src/components/sections`)
-- **SectionShell**: standard section wrapper (Container + Stack, optional anchorId).
-- **HeroSection**: inline CSS grid; supports `heroStyle` avatar/image/typographic; actions rendered with Button; media framed via `MediaFrame`; proof points list.
-- **TimelineSection**: uses `TimelineSection.css`; classes `timeline`, `timeline-eyebrow`, `timeline-intro`, `timeline-list`, `timeline-item`, `timeline-item--flip`, `timeline-card*`, `timeline-card__media-frame`, `timeline-context`, `timeline-tags`, `timeline-tag`, `timeline-action`; breakpoints at 640/768/1024; prefers CMS media with fallback SVG rotation from `src/assets/timeline/*`.
-- **SkillsSection**: inline auto-fit grid (`minmax(280px,1fr)`), ledger rows, level pill, muted keywords.
-- **ProjectsSection**: stack of Cards; tech badges; CTA Buttons from resolved links (`resolveProjectLink`).
-- **LearningSection**: Card list with topic, description, status Badge, optional Link.
-- **ContactSection**: heading, intro, mailto, and link row.
-- **RichTextRenderer** (`components/rich-text`): controlled mapping for headings 2–4, lists, blockquote, links (noopener), embedded assets; no code block styling yet.
-- **Section primitives** (`components/sections/primitives/*`): `SectionHeader`, `ProofList`, `MediaFrame`, `ActionGroup` used by Hero and other sections; all token-based inline styles.
+- **SectionShell**: standard wrapper (`.section`, container, stack).
+- **HeroSection** (`HeroSection.tsx`, `HeroSection.css`): normalized hero model + grid/layout primitives.
+- **TimelineSection** (`TimelineSection.tsx`, `TimelineSection.css`): normalized timeline model + tokenized card/media/action states.
+- **SkillsSection** (`SkillsSection.tsx`, `SkillsSection.css`): normalized skills model + grid/inline primitives.
+- **ProjectsSection** (`ProjectsSection.tsx`, `ProjectsSection.css`): normalized projects model + cluster-based tag/action groups.
+- **LearningSection** (`LearningSection.tsx`, `LearningSection.css`): normalized learning model + status tone mapping.
+- **ContactSection** (`ContactSection.tsx`, `ContactSection.css`): normalized contact model + cluster-based link rows.
+- **Section primitives** (`components/sections/primitives/*` + colocated CSS): `SectionHeader`, `ActionGroup`, `ProofList`, `MediaFrame` now class-based (no inline visual styling).
+- **SectionRenderer**: typed renderer mapping keyed by section content type IDs; cast-free dispatch.
 
-## Pages (`src/pages`)
-- **LandingPage**: fetches landing via `getContentSource`, renders SectionRenderer.
-- **ArticlePage** + `ArticlePage.css`: handles SEO, hero image, rich text, attachments, date meta.
-- **DebugPage**, **NotFoundPage**: simple route views.
+## Section normalizers (view-model boundary)
+- `hero/normalizeHeroSection.ts`
+- `timeline/normalizeTimelineSection.ts`
+- `skills/normalizeSkillsSection.ts`
+- `projects/normalizeProjectsSection.ts`
+- `learning/normalizeLearningSection.ts`
+- `contact/normalizeContactSection.ts`
 
-## Stylesheets (colocated)
-- `src/components/navigation/Navigation.css`
-- `src/components/sections/TimelineSection.css`
-- `src/pages/ArticlePage.css`
-- Globals: `src/styles/base.css`, `src/styles/tokens.css`
+Section components now render from stable normalized view models only.
 
-## Known gaps / risks
-- Missing motion + breakpoint tokens; easing/durations are one-off per component.
-- Focus-visible states not bespoke for nav/drawer/buttons/links.
-- Lint backlog: `no-explicit-any` occurrences across UI/content and one unused var in `staticSource.ts`.
-- RichTextRenderer still lacks code-block styling and link focus states.
+## Storybook and tests
+- Storybook scaffolded (`.storybook/main.ts`, `.storybook/preview.ts`) with hybrid layout:
+  - Collocated stories: `src/components/**/*.stories.tsx`
+  - Cross-cutting stories: `src/stories/*`
+- Primitive interaction tests: `src/components/ui/*.test.tsx`
+- Normalizer tests: `src/components/sections/**/normalize*.test.ts`
+- Renderer coverage test: `src/components/sections/SectionRenderer.test.tsx`

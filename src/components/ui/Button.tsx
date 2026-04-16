@@ -1,11 +1,23 @@
 import React, {
   type AnchorHTMLAttributes,
   type ButtonHTMLAttributes,
+  type MouseEvent,
   type ReactNode,
 } from "react";
 import { Link } from "./Link";
+import { classNames } from "./classNames";
+import "./Button.css";
 
-type BaseProps = { children: ReactNode };
+export type ButtonVariant = "primary" | "secondary" | "text";
+export type ButtonSize = "sm" | "md" | "lg";
+
+type BaseProps = {
+  children: ReactNode;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  fullWidth?: boolean;
+  disabled?: boolean;
+};
 
 type ButtonAsButtonProps = BaseProps &
   ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -23,35 +35,77 @@ function isLinkProps(props: ButtonProps): props is ButtonAsLinkProps {
   return "href" in props && typeof props.href === "string" && props.href.length > 0;
 }
 
-const baseStyle: React.CSSProperties = {
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: "var(--space-2)",
-  padding: "var(--space-3) var(--space-4)",
-  borderRadius: "var(--radius-pill)",
-  border: "1px solid var(--color-accent)",
-  background: "var(--color-accent)",
-  color: "var(--color-surface)",
-  cursor: "pointer",
-  textDecoration: "none",
-};
-
 export function Button(props: ButtonProps) {
   if (isLinkProps(props)) {
-    const { href, children, style, ...rest } = props;
+    const {
+      href,
+      children,
+      className,
+      variant = "primary",
+      size = "md",
+      fullWidth = false,
+      disabled = false,
+      onClick,
+      tabIndex,
+      ...rest
+    } = props;
+
+    const classes = classNames([
+      "ui-button",
+      `ui-button--${variant}`,
+      `ui-button--${size}`,
+      fullWidth && "ui-button--full",
+      disabled && "is-disabled",
+      className,
+    ]);
+
+    const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+      if (disabled) {
+        event.preventDefault();
+        return;
+      }
+      onClick?.(event);
+    };
+
     return (
-      <Link href={href} style={{ ...baseStyle, ...style }} {...rest}>
+      <Link
+        href={href}
+        className={classes}
+        aria-disabled={disabled || undefined}
+        tabIndex={disabled ? -1 : tabIndex}
+        onClick={handleClick}
+        {...rest}
+      >
         {children}
       </Link>
     );
   }
 
-  const { children, style, type, ...rest } = props;
+  const {
+    children,
+    className,
+    variant = "primary",
+    size = "md",
+    fullWidth = false,
+    type,
+    disabled,
+    ...rest
+  } = props;
+
+  const classes = classNames([
+    "ui-button",
+    `ui-button--${variant}`,
+    `ui-button--${size}`,
+    fullWidth && "ui-button--full",
+    disabled && "is-disabled",
+    className,
+  ]);
+
   return (
     <button
       type={type ?? "button"}
-      style={{ ...baseStyle, ...style }}
+      className={classes}
+      disabled={disabled}
       {...rest}
     >
       {children}

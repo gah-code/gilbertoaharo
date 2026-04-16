@@ -1,0 +1,7 @@
+@import "../../../styles/tokens.css";
+
+.section-header__title,
+.section-header__lead,
+.section-header__body {
+  max-width: var(--lede-max);
+}

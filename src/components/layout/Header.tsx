@@ -1,6 +1,7 @@
 import React from "react";
 import { getContentSource } from "@/content/source";
 import type { NavigationMenuData } from "@/content/contentful/types";
+import { getErrorMessage } from "@/lib/errors";
 import { Container } from "../ui/Container";
 import { Link } from "../ui/Link";
 import { ResponsiveNav } from "../navigation/ResponsiveNav";
@@ -27,7 +28,7 @@ export function Header() {
         if (!cancelled) {
           setState({
             loading: false,
-            error: String((err as any)?.message ?? err),
+            error: getErrorMessage(err),
           });
         }
       });
@@ -46,7 +47,7 @@ export function Header() {
         Skip to content
       </a>
       <Container className="site-header__inner">
-        <Link href={brandHref} className="site-brand">
+        <Link href={brandHref} className="site-brand" variant="unstyled">
           <span className="site-brand__dot" aria-hidden="true" />
           <span className="site-brand__label">{brandLabel}</span>
         </Link>

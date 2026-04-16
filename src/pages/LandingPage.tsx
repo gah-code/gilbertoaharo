@@ -3,6 +3,7 @@ import { getContentSource } from "@/content/source";
 import { SectionRenderer } from "@/components/sections/SectionRenderer";
 import { PageShell } from "@/components/layout/PageShell";
 import type { LandingPageData } from "@/content/contentful/types";
+import { getErrorMessage } from "@/lib/errors";
 
 type LandingState =
   | { loading: true; error?: undefined; data?: undefined }
@@ -19,7 +20,7 @@ export function LandingPage() {
       .catch((err: unknown) =>
         setState({
           loading: false,
-          error: String((err as any)?.message ?? err),
+          error: getErrorMessage(err),
         }),
       );
   }, []);

@@ -7,6 +7,7 @@ Single source of truth for the current UI system. Start here, then dive deeper v
 - Components & sections: `docs/design-system/components.md`
 - Checklist (only checklist): `docs/design-system/checklists/architect.md`
 - Latest audit (2026-03): `docs/design-system/audit/2026-03-snapshot.md`
+- Senior readiness context (2026-04): `docs/design-system/audit/2026-04-15-senior-readiness-context.md`
 - Deprecated stubs (pointers only): `docs/design-system/ui-foundation.md`, `docs/design-system/hero-section-ui-spec.md`
 
 ## Principles (kept short)
@@ -15,11 +16,12 @@ Single source of truth for the current UI system. Start here, then dive deeper v
 - **Accessibility default:** semantic HTML, visible focus, keyboard paths; fix focus-visible gaps called out in audits.
 - **Colocation:** globals limited to `tokens.css` + `base.css`; feature styles live next to their components.
 
-## Current state (Mar 2026)
-- Styles: globals (`tokens.css`, `base.css`); colocated CSS for nav (`Navigation.css`), timeline (`TimelineSection.css`), article (`ArticlePage.css`); rest inline with tokens.
+## Current state (Apr 2026)
+- Styles: globals (`tokens.css`, `base.css`) plus colocated CSS across primitives, sections, nav, and article page.
 - Nav breakpoint comes from CMS (`menu.mobileBreakpointPx`); timeline responsive at 640/768/1024.
-- Content layer swaps Contentful/static via `content/source.ts`; timeline uses fallback SVGs when media missing.
-- Known gaps: missing motion/breakpoint tokens; bespoke focus-visible for nav/buttons/links; lint backlog (`no-explicit-any`, one unused var).
+- Content layer swaps Contentful/static via `content/source.ts`; all sections render from normalized view-model mappers.
+- Storybook and CI gates are integrated (`lint`, `build`, `test`, `build-storybook`).
+- Remaining gaps: preview wiring is partial and shared breakpoint token governance still needs formalization.
 
 Repo map (design-system–relevant roots)
 - Styles: `src/styles/{tokens.css,base.css}`
@@ -37,6 +39,6 @@ Repo map (design-system–relevant roots)
 4) Keep checklists in `checklists/architect.md`—don’t duplicate checklists elsewhere.
 
 ## Next recommended moves
-- Add motion + breakpoint tokens; thread into nav/timeline/buttons.
-- Resolve lint backlog (`no-explicit-any`, unused var) and add focus-visible variants for nav/buttons/links.
-- Optional: capture the next audit as `audit/2026-06-snapshot.md` after those fixes.
+- Add shared breakpoint tokens and migrate nav/timeline breakpoints to tokenized values.
+- Expand Storybook interaction coverage with `test:storybook` for critical flows.
+- Optional: capture the next audit as `audit/2026-06-snapshot.md` after breakpoint-token rollout.

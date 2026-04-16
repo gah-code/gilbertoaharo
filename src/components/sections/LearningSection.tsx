@@ -7,25 +7,27 @@ import { Stack } from "../ui/Stack";
 import { Card } from "../ui/Card";
 import { Badge } from "../ui/Badge";
 import { Link } from "../ui/Link";
+import { normalizeLearningSection } from "./learning/normalizeLearningSection";
+import "./LearningSection.css";
 
 export function LearningSection({ section }: { section: SectionLearning }) {
-  const learning = section.fields;
+  const learning = normalizeLearningSection(section);
 
   return (
-    <SectionShell anchorId={learning.anchorId}>
+    <SectionShell anchorId={learning.anchorId} className="section-learning">
       <Heading level={2}>{learning.title}</Heading>
       <Stack gap="var(--space-4)">
         {learning.items.map((item) => (
-          <Card key={item.sys.id}>
+          <Card key={item.id} className="learning-card">
             <Stack gap="var(--space-2)">
-              <Heading level={4}>{item.fields.topic}</Heading>
-              {item.fields.description ? (
-                <Text>{item.fields.description}</Text>
+              <Heading level={4}>{item.topic}</Heading>
+              {item.description ? <Text>{item.description}</Text> : null}
+              {item.status ? (
+                <Badge tone={item.statusTone}>{item.status}</Badge>
               ) : null}
-              {item.fields.status ? <Badge>{item.fields.status}</Badge> : null}
-              {item.fields.linkUrl ? (
-                <Link href={item.fields.linkUrl}>
-                  {item.fields.linkLabel ?? item.fields.linkUrl}
+              {item.linkUrl ? (
+                <Link href={item.linkUrl}>
+                  {item.linkLabel ?? item.linkUrl}
                 </Link>
               ) : null}
             </Stack>

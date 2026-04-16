@@ -1,0 +1,31 @@
+@import "../../styles/tokens.css";
+
+.skills-group__label {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-text-muted);
+}
+
+.skills-item {
+  padding: var(--space-3) 0;
+}
+
+.skills-item--divider {
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.skills-item__header {
+  width: 100%;
+}
+
+.skills-item__name {
+  color: var(--color-text);
+}
+
+.skills-item__level {
+  white-space: nowrap;
+}
+
+.skills-item__keywords {
+  margin-top: var(--space-1);
+}

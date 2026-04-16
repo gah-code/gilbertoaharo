@@ -3,102 +3,57 @@ import type { SectionSkills } from "@/content/contentful/types";
 import { SectionShell } from "./SectionShell";
 import { Heading } from "../ui/Heading";
 import { Stack } from "../ui/Stack";
+import { Grid } from "../ui/Grid";
+import { Inline } from "../ui/Inline";
+import { Badge } from "../ui/Badge";
+import { Text } from "../ui/Text";
+import { normalizeSkillsSection } from "./skills/normalizeSkillsSection";
+import "./SkillsSection.css";
 
 export function SkillsSection({ section }: { section: SectionSkills }) {
-  const skills = section.fields;
+  const skills = normalizeSkillsSection(section);
 
   return (
-    <SectionShell
-      anchorId={skills.anchorId}
-    >
+    <SectionShell anchorId={skills.anchorId} className="section-skills">
       <Stack gap="var(--space-6)">
         <Heading level={2}>{skills.title}</Heading>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "var(--space-6)",
-          }}
-        >
+        <Grid className="skills-grid" columns="auto-fit" minItemWidth="280" gap="6">
           {skills.groups.map((group) => (
-            <div
-              key={group.sys.id}
-              style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}
-            >
-              <div
-                style={{
-                  fontSize: "12px",
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  fontWeight: 600,
-                  color: "var(--color-text-muted)",
-                }}
-              >
-                {group.fields.label}
-              </div>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                {group.fields.skills.map((skill, index) => {
-                  const level = skill.fields.level;
-                  const levelLabel = level ? level.toUpperCase() : null;
-                  const keywords = skill.fields.keywords ?? [];
-                  const divider = index < group.fields.skills.length - 1;
+            <Stack key={group.id} className="skills-group" gap="var(--space-3)">
+              <Text as="div" className="skills-group__label" size="sm" weight="semibold">
+                {group.label}
+              </Text>
+              <Stack className="skills-group__rows" gap="0">
+                {group.skills.map((skill, index) => {
+                  const divider = index < group.skills.length - 1;
 
                   return (
                     <div
-                      key={skill.sys.id}
-                      style={{
-                        padding: "var(--space-3) 0",
-                        borderBottom: divider
-                          ? "1px solid var(--color-border-subtle)"
-                          : "none",
-                      }}
+                      key={skill.id}
+                      className={`skills-item${divider ? " skills-item--divider" : ""}`}
                     >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          gap: "var(--space-3)",
-                        }}
-                      >
-                        <div style={{ fontWeight: 600 }}>{skill.fields.name}</div>
-                        {levelLabel ? (
-                          <span
-                            style={{
-                              border: "1px solid var(--color-text)",
-                              borderRadius: "var(--radius-pill)",
-                              padding: "var(--space-1) var(--space-3)",
-                              fontSize: "11px",
-                              fontWeight: 700,
-                              letterSpacing: "0.12em",
-                              textTransform: "uppercase",
-                              background: "var(--color-surface-2)",
-                              color: "var(--color-text)",
-                              whiteSpace: "nowrap",
-                            }}
-                          >
-                            {levelLabel}
-                          </span>
+                      <Inline className="skills-item__header" justify="between" align="center" gap="3">
+                        <Text as="div" className="skills-item__name" weight="semibold">
+                          {skill.name}
+                        </Text>
+                        {skill.levelLabel ? (
+                          <Badge className="skills-item__level" size="sm" tone="default">
+                            {skill.levelLabel}
+                          </Badge>
                         ) : null}
-                      </div>
-                      {keywords.length ? (
-                        <div
-                          style={{
-                            marginTop: "var(--space-1)",
-                            fontSize: "13px",
-                            color: "var(--color-text-muted)",
-                          }}
-                        >
-                          {keywords.join(" / ")}
-                        </div>
+                      </Inline>
+                      {skill.keywords.length ? (
+                        <Text className="skills-item__keywords" size="sm" tone="muted">
+                          {skill.keywords.join(" / ")}
+                        </Text>
                       ) : null}
                     </div>
                   );
                 })}
-              </div>
-            </div>
+              </Stack>
+            </Stack>
           ))}
-        </div>
+        </Grid>
       </Stack>
     </SectionShell>
   );

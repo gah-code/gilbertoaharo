@@ -1,5 +1,56 @@
 # Changelog
 
+## [2026-04-16]
+
+### Changed
+
+- Added explicit Node engine constraints to enforce Storybook/Vite-compatible runtimes (`>=20.19.0 <21 || >=22.12.0`). (`package.json`)
+- Updated local setup docs to prioritize Homebrew-based Node upgrades and include shell cache/path guidance after upgrading. (`README.md`)
+- Standardized Storybook dev script to explicit long-form port flag (`storybook dev --port 6006`) for clearer runtime invocation. (`package.json`, `docs/planning/storybook-migration-plan.md`)
+
+### Verification
+
+- `node -v` resolves to `v22.12.0` in workspace shell.
+- `npm run storybook -- --help` runs and prints Storybook CLI usage.
+
+## [2026-04-15]
+
+### Added
+
+- Added shared error normalization helper `getErrorMessage` to standardize unknown error handling in async UI flows. (`src/lib/errors.ts`)
+- Added a consolidated senior-readiness context/spec document to capture architecture findings, decisions, anti-drift protocol, and component API rollout guidance. (`docs/design-system/audit/2026-04-15-senior-readiness-context.md`)
+- Added reusable layout primitives `Inline`, `Cluster`, and `Grid` with typed contracts and colocated CSS for repeated flex/grid patterns. (`src/components/ui/{Inline,Cluster,Grid}.{tsx,css}`)
+- Added section normalization modules for timeline/skills/projects/learning/contact to enforce stable view-model inputs before render. (`src/components/sections/*/normalize*.ts`)
+- Added Storybook workspace scaffolding and stories (primitives, sections, and foundation stories). (`.storybook/*`, `src/components/**/*.stories.tsx`, `src/stories/*`)
+- Added component/normalizer test coverage plus renderer integration coverage. (`src/components/ui/*.test.tsx`, `src/components/sections/**/normalize*.test.ts`, `src/components/sections/SectionRenderer.test.tsx`)
+- Added CI workflow gates for `lint`, `build`, `test`, and `build-storybook`. (`.github/workflows/ci.yml`)
+
+### Changed
+
+- Updated `README.md` to match current routing/content behavior (`/debug`, `contentful` vs `static` source support), corrected env var guidance, and refreshed troubleshooting/checklist wording. (`README.md`)
+- Removed `any`-based error parsing in page/layout fetch states by routing unknown errors through `getErrorMessage`. (`src/components/layout/Header.tsx`, `src/pages/LandingPage.tsx`, `src/pages/ArticlePage.tsx`, `src/pages/DebugPage.tsx`)
+- Tightened `RichTextRenderer` typing by replacing untyped node handling with explicit rich-text node/mark shapes and safer document normalization. (`src/components/rich-text/RichTextRenderer.tsx`)
+- Hardened polymorphic UI primitives typing to avoid unsafe `any` element casts while preserving `as` support for HTML tags. (`src/components/ui/Container.tsx`, `src/components/ui/Heading.tsx`, `src/components/ui/Stack.tsx`, `src/components/ui/Text.tsx`)
+- Centralized runtime configuration usage by wiring Contentful client/adapters to shared `env` values and removing conflicting inline env defaults. (`src/env.ts`, `src/content/contentful/client.ts`, `src/content/contentful/adapters.ts`)
+- Updated Contentful API fetch helpers to use explicit unknown-bridge casts compatible with strict TypeScript checks and removed stale legacy blocks. (`src/content/contentful/api.ts`)
+- Tightened static data typing: `makeSys` now uses `EntryTypeId`, and static article source now explicitly consumes unused slug input. (`src/content/static/fixtures.ts`, `src/content/static/staticSource.ts`)
+- Implemented a token-driven button API surface with explicit `variant` (`primary`/`secondary`/`text`), `size` (`sm`/`md`/`lg`), `fullWidth`, and consistent disabled/focus/active behavior across anchor/button render modes. (`src/components/ui/Button.tsx`, `src/components/ui/Button.css`, `src/styles/tokens.css`, `src/components/ui/Link.tsx`)
+- Removed section-level CTA style overrides by migrating Hero/Timeline action rendering to the shared Button variants and cleaning timeline-specific CTA variant CSS. (`src/components/sections/primitives/ActionGroup.tsx`, `src/components/sections/TimelineSection.tsx`, `src/components/sections/TimelineSection.css`)
+- Synced design-system docs with the new button API and context source of truth link. (`docs/design-system/design-system.md`, `docs/design-system/components.md`, `docs/design-system/foundations.md`)
+- Standardized primitive API contracts for `Link`, `Card`, `Badge`, `Text`, and `Heading` with explicit variants/sizes/states and class-driven styling (no style-prop hacks in section consumers). (`src/components/ui/*`)
+- Removed inline visual styles from Hero/Skills/Projects/Learning/Contact and section primitives by moving styles into colocated CSS and layout primitives. (`src/components/sections/{Hero,Skills,Projects,Learning,Contact}Section.*`, `src/components/sections/primitives/*`)
+- Refactored `TimelineSection` to render from normalized view models and updated timeline card/date/summary class contracts. (`src/components/sections/TimelineSection.tsx`, `src/components/sections/TimelineSection.css`, `src/components/sections/timeline/normalizeTimelineSection.ts`)
+- Hardened `SectionRenderer` with a typed section mapping keyed by content type IDs and removed cast-based dispatching. (`src/components/sections/SectionRenderer.tsx`)
+- Improved navigation accessibility behavior (explicit button types, mobile drawer mount semantics, focus return, reduced-motion coverage). (`src/components/navigation/ResponsiveNav.tsx`, `src/components/navigation/Navigation.css`, `src/components/layout/Header.tsx`)
+- Updated Storybook migration documentation and design-system docs to reflect implemented architecture state. (`docs/planning/storybook-migration-plan.md`, `docs/design-system/*`, `docs/design-system/audit/2026-04-15-senior-readiness-context.md`)
+
+### Verification
+
+- `npm run lint` (passes)
+- `npm run build` (passes: `tsc -b` + `vite build`)
+- `npm run test` (passes: Vitest 10/10 tests)
+- `npm run build-storybook` (passes; Storybook v10 build succeeds)
+
 ## [2026-04-14]
 
 ### Verification

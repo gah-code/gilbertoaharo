@@ -2,10 +2,12 @@ import React from "react";
 import type { SectionHero } from "@/content/contentful/types";
 import { SectionShell } from "./SectionShell";
 import { Stack } from "../ui/Stack";
+import { Grid } from "../ui/Grid";
 import { normalizeHeroSection } from "./hero/normalizeHeroSection";
 import { SectionHeader } from "./primitives/SectionHeader";
 import { ProofList } from "./primitives/ProofList";
 import { MediaFrame } from "./primitives/MediaFrame";
+import "./HeroSection.css";
 
 export function HeroSection({ section }: { section: SectionHero }) {
   const hero = normalizeHeroSection(section);
@@ -14,17 +16,13 @@ export function HeroSection({ section }: { section: SectionHero }) {
   );
 
   return (
-    <SectionShell anchorId={hero.anchorId}>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            hero.heroStyle === "typographic"
-              ? "1fr"
-              : "repeat(auto-fit, minmax(260px, 1fr))",
-          alignItems: "center",
-          gap: "var(--space-6)",
-        }}
+    <SectionShell anchorId={hero.anchorId} className="section-hero">
+      <Grid
+        className={`hero-layout hero-layout--${hero.heroStyle}`}
+        columns={hero.heroStyle === "typographic" ? 1 : "auto-fit"}
+        minItemWidth="260"
+        gap="6"
+        align="center"
       >
         <Stack gap="var(--space-4)">
           <SectionHeader
@@ -51,7 +49,7 @@ export function HeroSection({ section }: { section: SectionHero }) {
             alt={hero.heroImageAlt}
           />
         ) : null}
-      </div>
+      </Grid>
     </SectionShell>
   );
 }
