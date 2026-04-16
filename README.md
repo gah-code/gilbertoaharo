@@ -1,53 +1,60 @@
-# Gilberto A. Haro — Personal Site
+# Gilberto A. Haro — My Personal Site
 
-Personal site built with **React + TypeScript + Vite + Contentful** with a strict CMS boundary, typed section view models, Storybook architecture coverage, and CI quality gates.
+A personal site built with **React + TypeScript + Vite + Contentful**.
+It is designed around a strict CMS boundary, typed section view models, and a design-system workflow validated through Storybook and CI.
+It exists as a maintainable portfolio/content platform where content operations and frontend architecture can evolve independently.
+
+![Content Model](./docs/architecture/contentful-cm-view.png)
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Core Features](#core-features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Scripts](#scripts)
+- [Repository Structure](#repository-structure)
+- [Architecture Notes](#architecture-notes)
+- [Quality Gates](#quality-gates)
+- [Troubleshooting](#troubleshooting)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Overview
 
-- Landing page (`/`) is composed from modular Contentful sections.
-- Article pages (`/articles/:slug`) render long-form content with SEO fallbacks.
-- Debug page (`/debug`) shows content-model diagnostics.
-- Router is intentionally lightweight (no routing framework dependency).
+This repo powers:
 
-## Current Highlights
+- `/` — modular landing page from Contentful section entries
+- `/articles/:slug` — article pages with SEO fallback behavior
+- `/debug` — diagnostics for content and model visibility
 
-- Typed section renderer with cast-free mapping by content type ID.
-- Section normalization layer before render (hero/timeline/skills/projects/learning/contact).
-- Primitive API contracts with explicit variants/sizes/states:
-  - `Button`, `Link`, `Card`, `Badge`, `Text`, `Heading`
-- Reusable layout primitives:
-  - `Stack`, `Inline`, `Cluster`, `Grid`, `Container`
-- Colocated CSS for primitives and sections (inline visual style cleanup complete for target sections).
-- Storybook integrated as in-repo architecture workspace.
-- CI gates for lint/build/test/storybook build.
+## Core Features
+
+- Typed section renderer with content-type keyed mapping
+- Section normalization layer before rendering
+- Reusable UI primitives with explicit variant/size/state contracts
+- Layout primitives (`Stack`, `Inline`, `Cluster`, `Grid`, `Container`)
+- Storybook 10 integrated as architecture workspace
+- CI gates for lint, build, tests, and Storybook build
 
 ## Tech Stack
 
 - React 19 + TypeScript
 - Vite 7 (`@` alias to `src`)
-- Contentful Delivery SDK + adapter/normalizer boundary
+- Contentful Delivery SDK
 - Vitest + Testing Library
 - Storybook 10
 
-## Project Structure
+## Getting Started
 
-- `src/components/ui` — primitives + layout primitives + stories/tests
-- `src/components/sections` — sections, normalizers, section stories
-- `src/components/layout` — shell/header/seo
-- `src/content` — content source contract + Contentful/static implementations
-- `src/router` — lightweight SPA routing helpers
-- `src/pages` — route-level pages
-- `src/styles` — tokens + base
-- `src/stories` — cross-cutting foundation stories
-- `.storybook` — Storybook config
-- `.github/workflows/ci.yml` — lint/build/test/storybook gate
-
-## Prerequisites
+### Prerequisites
 
 - Node: **20.19+** or **22.12+**
 - npm
 
-Homebrew flow:
+If using Homebrew:
 
 ```bash
 brew upgrade node
@@ -55,14 +62,14 @@ hash -r
 node -v
 ```
 
-If `node -v` still shows an unexpected version, verify path resolution:
+If `node -v` is unexpected, verify path resolution:
 
 ```bash
 which node
 which -a node
 ```
 
-## Setup
+### Install and Run
 
 ```bash
 npm install
@@ -93,27 +100,161 @@ Mode/source:
 ## Scripts
 
 ```bash
-npm run dev               # local dev
-npm run build             # type-check + production build
-npm run preview           # preview production build
-npm run lint              # eslint
-npm run test              # vitest run
-npm run test:watch        # vitest watch mode
-npm run storybook         # storybook dev --port 6006
-npm run build-storybook   # build static storybook
-npm run test:storybook    # storybook test runner
+npm run dev                # local dev server
+npm run build              # type-check + production build
+npm run preview            # preview production build
+npm run lint               # eslint
+npm run test               # vitest run
+npm run test:watch         # vitest watch mode
+npm run storybook          # storybook dev --port 6006
+npm run build-storybook    # static storybook output
+npm run test:storybook     # storybook test runner
 ```
+
+## Repository Structure
+
+### High-level File Tree
+
+```text
+.
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── content/
+│   ├── lib/
+│   ├── pages/
+│   ├── preview/
+│   ├── router/
+│   ├── stories/
+│   ├── styles/
+│   └── test/
+├── docs/
+├── .storybook/
+├── .github/workflows/
+├── package.json
+├── vite.config.ts
+├── tsconfig*.json
+└── README.md
+```
+
+### Major Folders and Files
+
+- `src/components/`  
+  UI system and feature composition. `ui/` holds reusable primitives, `sections/` holds CMS-driven sections, `layout/` holds page shell/navigation chrome.
+
+- `src/content/`  
+  Content boundary layer. Defines the source contract and isolates Contentful mapping/normalization from rendering concerns.
+
+- `src/pages/` and `src/router/`  
+  Route-level pages and lightweight SPA navigation logic. Keeps routing simple without adding router framework overhead.
+
+- `src/styles/`  
+  Global design tokens and base styles. Component and section-specific visuals are colocated with their implementation.
+
+- `src/stories/` and `.storybook/`  
+  Storybook foundation stories plus workspace config for component architecture proofing.
+
+- `docs/`  
+  Architecture, planning, and design-system references used to keep implementation and docs aligned.
+
+- `.github/workflows/ci.yml`  
+  CI quality gate entrypoint for lint/build/test/storybook checks.
+
+### Detailed Tree (Expandable)
+
+<details>
+<summary>Open detailed structure with key modules</summary>
+
+```text
+src/
+├── App.tsx
+├── main.tsx
+├── env.ts
+├── assets/
+│   └── timeline/
+├── components/
+│   ├── layout/
+│   │   ├── Header.tsx
+│   │   ├── PageShell.tsx
+│   │   └── SeoHead.tsx
+│   ├── navigation/
+│   │   ├── ResponsiveNav.tsx
+│   │   └── Navigation.css
+│   ├── rich-text/
+│   │   └── RichTextRenderer.tsx
+│   ├── sections/
+│   │   ├── SectionRenderer.tsx
+│   │   ├── SectionShell.tsx
+│   │   ├── HeroSection.tsx
+│   │   ├── TimelineSection.tsx
+│   │   ├── SkillsSection.tsx
+│   │   ├── ProjectsSection.tsx
+│   │   ├── LearningSection.tsx
+│   │   ├── ContactSection.tsx
+│   │   ├── hero/
+│   │   ├── timeline/
+│   │   ├── skills/
+│   │   ├── projects/
+│   │   ├── learning/
+│   │   └── contact/
+│   └── ui/
+│       ├── Button.tsx / Button.css
+│       ├── Link.tsx / Link.css
+│       ├── Card.tsx / Card.css
+│       ├── Badge.tsx / Badge.css
+│       ├── Text.tsx / Text.css
+│       ├── Heading.tsx / Heading.css
+│       ├── Stack.tsx
+│       ├── Inline.tsx / Inline.css
+│       ├── Cluster.tsx / Cluster.css
+│       ├── Grid.tsx / Grid.css
+│       └── Container.tsx
+├── content/
+│   ├── source.ts
+│   ├── contentful/
+│   │   ├── client.ts
+│   │   ├── api.ts
+│   │   ├── adapters.ts
+│   │   ├── includes.ts
+│   │   ├── contentfulSource.ts
+│   │   └── types.ts
+│   └── static/
+│       ├── fixtures.ts
+│       └── staticSource.ts
+├── lib/
+│   └── errors.ts
+├── pages/
+│   ├── LandingPage.tsx
+│   ├── ArticlePage.tsx
+│   ├── NotFoundPage.tsx
+│   └── DebugPage.tsx
+├── preview/
+│   ├── previewMode.ts
+│   └── PreviewBanner.tsx
+├── router/
+│   ├── Router.tsx
+│   ├── routes.ts
+│   └── link.ts
+├── stories/
+├── styles/
+│   ├── tokens.css
+│   └── base.css
+└── test/
+    └── setup.ts
+```
+
+</details>
 
 ## Architecture Notes
 
 - `src/content/source.ts` defines the runtime content contract.
-- UI consumes normalized, stable section view models (not raw CMS fields).
-- Section rendering is mapped by typed content-type IDs in `SectionRenderer`.
-- Internal project links prefer references (e.g. `projectLink.article`) over URL strings.
+- UI renders normalized view models, not raw CMS payloads.
+- Section dispatch is keyed by typed content type IDs.
+- Internal project linking prefers reference-driven routing over hardcoded URLs.
 
 ## Quality Gates
 
-CI runs:
+CI currently runs:
 
 - `npm run lint`
 - `npm run build`
@@ -122,22 +263,22 @@ CI runs:
 
 ## Troubleshooting
 
-### Storybook says Node is unsupported
+### Storybook Node runtime error
 
-- Ensure `node -v` is `>=20.19` or `>=22.12` in the same terminal session.
-- Recheck PATH ordering if multiple Node installs exist.
+- Ensure `node -v` is `>=20.19` or `>=22.12` in the same terminal.
+- Recheck shell PATH ordering if multiple Node installs are present.
 
-### Content appears missing
+### Missing content
 
-- Confirm `VITE_CONTENT_SOURCE` and Contentful env/token values.
-- Ensure entries/references are published.
+- Confirm `VITE_CONTENT_SOURCE` and Contentful token/env values.
+- Ensure referenced entries are published.
 
-### Article route returns not found in static mode
+### Article route not found in static mode
 
-- Static source currently does not provide article content.
+- Static source currently does not provide article bodies.
 - Use `VITE_CONTENT_SOURCE=contentful` for article testing.
 
-## Docs
+## Documentation
 
 - `docs/architecture/ia.md`
 - `docs/design-system/design-system.md`
@@ -151,3 +292,7 @@ CI runs:
 - `CODE_OF_CONDUCT.md`
 - `SECURITY.md`
 - `SUPPORT.md`
+
+## License
+
+MIT (see `LICENSE`).
