@@ -7,6 +7,7 @@ import type {
   NavigationLinkData,
   EntryTypeId,
   SectionHero,
+  SectionProjects,
   SectionSkills,
   SectionTimeline,
   TimelineItem,
@@ -207,6 +208,139 @@ const timelineSection: SectionTimeline = {
   },
 };
 
+const projectsSection: SectionProjects = {
+  sys: makeSys("section-projects", "sectionProjects"),
+  fields: {
+    internalName: "Projects",
+    anchorId: "projects",
+    eyebrow: "Selected Work",
+    title: "Selected Projects",
+    intro: "A few product and platform builds with measurable outcomes and strong execution detail.",
+    projects: [
+      {
+        sys: makeSys("project-platform-refresh", "project"),
+        fields: {
+          internalName: "Platform Refresh",
+          name: "Platform Refresh",
+          tagline: "Resilient web foundations for content-heavy pages",
+          summary:
+            "Modernized rendering and section contracts so teams could ship content changes faster with fewer regressions.",
+          role: "Lead Engineer",
+          period: "2024 — Present",
+          featured: true,
+          thumbnail: mediaAssets[0],
+          thumbnailAlt: "Dashboard showing rollout progress and content metrics",
+          highlights: [
+            "Reduced regressions by standardizing section contracts",
+            "Accelerated authoring velocity with reusable content patterns",
+          ],
+          techStack: ["React", "TypeScript", "Storybook"],
+          links: [
+            {
+              sys: makeSys("project-platform-refresh-link-case-study", "projectLink"),
+              fields: {
+                internalName: "Platform Refresh Case Study",
+                label: "Case Study",
+                href: "https://example.com/platform-refresh/case-study",
+                kind: "case-study",
+                analyticsLabel: "platform-refresh-case-study",
+              },
+            },
+            {
+              sys: makeSys("project-platform-refresh-link-demo", "projectLink"),
+              fields: {
+                label: "Live Demo",
+                href: "https://example.com/platform-refresh/live",
+                url: "https://example.com/platform-refresh/demo",
+                kind: "demo",
+                openInNewTab: false,
+              },
+            },
+            {
+              sys: makeSys("project-platform-refresh-link-code", "projectLink"),
+              fields: {
+                label: "Source",
+                url: "https://example.com/platform-refresh/code",
+                kind: "code",
+                ariaLabel: "Open platform refresh source code",
+              },
+            },
+          ],
+        },
+      },
+      {
+        sys: makeSys("project-editorial-workflow", "project"),
+        fields: {
+          internalName: "Editorial Workflow Toolkit",
+          name: "Editorial Workflow Toolkit",
+          tagline: "Governance and publishing quality, built into the flow",
+          summary:
+            "Designed reusable entry patterns and checks that reduced publishing friction while improving content quality.",
+          role: "Content Systems",
+          period: "2023 — 2024",
+          thumbnail: mediaAssets[1],
+          highlights: [
+            "Introduced authoring QA gates with clear escalation paths",
+            "Lowered time-to-publish across high-volume pages",
+          ],
+          techStack: ["Contentful", "CI", "Automation"],
+          links: [
+            {
+              sys: makeSys("project-editorial-workflow-link-article", "projectLink"),
+              fields: {
+                label: "Implementation Notes",
+                url: "https://example.com/editorial-workflow/article",
+                kind: "article",
+                variant: "primary",
+                openInNewTab: true,
+              },
+            },
+            {
+              sys: makeSys("project-editorial-workflow-link-demo", "projectLink"),
+              fields: {
+                label: "Workflow Demo",
+                href: "https://example.com/editorial-workflow/demo",
+                url: "https://example.com/editorial-workflow/legacy-demo",
+                kind: "demo",
+              },
+            },
+          ],
+        },
+      },
+      {
+        sys: makeSys("project-performance-baseline", "project"),
+        fields: {
+          internalName: "Performance Baseline Program",
+          name: "Performance Baseline Program",
+          tagline: "Clear metrics and predictable performance across releases",
+          summary:
+            "Established practical performance budgets and CI checks to keep critical user journeys fast as the site scaled.",
+          role: "Web Platform",
+          period: "2022 — 2023",
+          thumbnail: mediaAssets[2],
+          highlights: [
+            "Added release-time performance budgets and alerts",
+            "Improved median LCP across core pages by double digits",
+          ],
+          techStack: ["Lighthouse CI", "Vite", "TypeScript"],
+          links: [
+            {
+              sys: makeSys("project-performance-baseline-link-code", "projectLink"),
+              fields: {
+                label: "Repository",
+                href: "https://example.com/performance-baseline/code",
+                url: "https://example.com/performance-baseline/legacy-code",
+                kind: "code",
+                openInNewTab: true,
+              },
+            },
+          ],
+        },
+      },
+    ],
+  },
+};
+
 const skillsSection: SectionSkills = {
   sys: makeSys("section-skills", "sectionSkills"),
   fields: {
@@ -290,6 +424,14 @@ const navLinks: NavigationLinkData[] = [
     mobileBehavior: "link",
   },
   {
+    id: "nav-projects",
+    label: "Projects",
+    href: "#projects",
+    isExternal: false,
+    isCta: false,
+    mobileBehavior: "link",
+  },
+  {
     id: "nav-skills",
     label: "Skills",
     href: "#skills",
@@ -318,5 +460,5 @@ export const staticLandingPage: LandingPageData = {
   metaTitle: "Gilberto Haro — Personal Site",
   metaDescription:
     "Frontend and content systems engineer delivering resilient, content-driven experiences.",
-  sections: [heroSection, timelineSection, skillsSection],
+  sections: [heroSection, timelineSection, projectsSection, skillsSection],
 };

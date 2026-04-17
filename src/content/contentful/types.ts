@@ -18,6 +18,7 @@ export type ProjectLinkKind =
   | "case-study"
   | "article"
   | "other";
+export type ProjectLinkVariant = "primary" | "secondary" | "text";
 export type LearningStatus = "exploring" | "practicing" | "shipping";
 export type NavMobileBehavior = "link" | "drawerAccordion";
 export type NavPanelAlign = "center" | "left";
@@ -283,9 +284,14 @@ export type Article = Entry<
 export type ProjectLink = Entry<
   "projectLink",
   {
+    internalName?: string;
     label: string;
+    href?: string;
     url?: string;
     kind?: ProjectLinkKind;
+    variant?: ProjectLinkVariant;
+    openInNewTab?: boolean;
+    ariaLabel?: string;
     article?: Article;
     analyticsLabel?: string;
   }
@@ -294,11 +300,16 @@ export type ProjectLink = Entry<
 export type Project = Entry<
   "project",
   {
+    internalName?: string;
     name: string;
     tagline?: string;
     summary?: string;
     role?: string;
     period?: string;
+    featured?: boolean;
+    thumbnail?: Asset;
+    thumbnailAlt?: string;
+    highlights?: string[];
     techStack?: string[];
     links?: ProjectLink[];
   }
@@ -309,8 +320,10 @@ export type SectionProjects = Entry<
   {
     internalName: string;
     anchorId: string;
+    eyebrow?: string;
     title: string;
-    projects: Project[];
+    intro?: string;
+    projects?: Project[];
   }
 >;
 

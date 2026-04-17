@@ -9,7 +9,9 @@ import type {
   NavigationMenuData,
   NavigationLinkData,
   PagePersonalLanding,
+  Project,
   ProjectLink,
+  SectionProjects,
   SectionEntry,
   SectionTimeline,
   TimelineItem,
@@ -27,17 +29,31 @@ export function mapLandingPage(page: PagePersonalLanding): LandingPageData {
 export function resolveProjectLink(link: ProjectLink): {
   href: string;
   label: string;
+  kind?: ProjectLink["fields"]["kind"];
+  variant?: ProjectLink["fields"]["variant"];
+  openInNewTab: boolean;
+  ariaLabel?: string;
   analyticsLabel?: string;
 } {
   const prefix = env.articlePrefix;
+  const articleSlug = link.fields.article?.fields.slug?.trim();
+  const hrefValue = link.fields.href?.trim();
+  const urlValue = link.fields.url?.trim();
 
   // internal article reference wins
-  const slug = link.fields.article?.fields.slug;
-  const href = slug ? `${prefix}/${slug}` : (link.fields.url ?? "#");
+  const href =
+    articleSlug && articleSlug.length
+      ? `${prefix}/${articleSlug}`
+      : (hrefValue || urlValue || "#");
+  const isExternal = /^https?:\/\//i.test(href);
 
   return {
     href,
     label: link.fields.label,
+    kind: link.fields.kind,
+    variant: link.fields.variant,
+    openInNewTab: link.fields.openInNewTab ?? isExternal,
+    ariaLabel: link.fields.ariaLabel,
     analyticsLabel: link.fields.analyticsLabel ?? link.fields.label,
   };
 }
@@ -210,10 +226,71 @@ function mapTimelineSection(section: SectionTimeline): SectionTimeline {
   };
 }
 
+function mapProjectLink(link: ProjectLink): ProjectLink {
+  const fields = link.fields;
+
+  return {
+    sys: link.sys,
+    fields: {
+      internalName: fields.internalName,
+      label: fields.label,
+      href: fields.href,
+      url: fields.url,
+      kind: fields.kind,
+      variant: fields.variant,
+      openInNewTab: fields.openInNewTab,
+      ariaLabel: fields.ariaLabel,
+      analyticsLabel: fields.analyticsLabel,
+      article: fields.article,
+    },
+  };
+}
+
+function mapProject(project: Project): Project {
+  const fields = project.fields;
+
+  return {
+    sys: project.sys,
+    fields: {
+      internalName: fields.internalName,
+      name: fields.name,
+      tagline: fields.tagline,
+      summary: fields.summary,
+      role: fields.role,
+      period: fields.period,
+      featured: fields.featured,
+      thumbnail: fields.thumbnail,
+      thumbnailAlt: fields.thumbnailAlt,
+      highlights: safeArray(fields.highlights),
+      techStack: safeArray(fields.techStack),
+      links: safeArray(fields.links).map(mapProjectLink),
+    },
+  };
+}
+
+function mapProjectsSection(section: SectionProjects): SectionProjects {
+  const fields = section.fields;
+
+  return {
+    sys: section.sys,
+    fields: {
+      internalName: fields.internalName,
+      anchorId: fields.anchorId || section.sys.id,
+      eyebrow: fields.eyebrow,
+      title: fields.title,
+      intro: fields.intro,
+      projects: safeArray(fields.projects).map(mapProject),
+    },
+  };
+}
+
 function mapSection(section: SectionEntry): SectionEntry {
   const id = section.sys.contentType.sys.id;
   if (id === "sectionTimeline") {
     return mapTimelineSection(section as SectionTimeline);
+  }
+  if (id === "sectionProjects") {
+    return mapProjectsSection(section as SectionProjects);
   }
   return section;
 }

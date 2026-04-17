@@ -1,4 +1,8 @@
+import timelineSearch from "@/assets/timeline/timeline-search.svg";
+import timelineJourney from "@/assets/timeline/timeline-journey.svg";
+import timelineCreative from "@/assets/timeline/timeline-creative.svg";
 import type {
+  Asset,
   SectionContact,
   SectionLearning,
   SectionProjects,
@@ -9,6 +13,24 @@ const makeSys = <T extends string>(id: string, type: T) => ({
   id,
   contentType: { sys: { id: type } },
 });
+
+const makeAsset = (id: string, url: string, title: string): Asset => ({
+  sys: { id },
+  fields: {
+    title,
+    file: {
+      url,
+      fileName: `${id}.svg`,
+      contentType: "image/svg+xml",
+    },
+  },
+});
+
+const projectStoryMedia = [
+  makeAsset("project-story-media-1", timelineSearch, "Analytics and search visuals"),
+  makeAsset("project-story-media-2", timelineJourney, "Journey and process visuals"),
+  makeAsset("project-story-media-3", timelineCreative, "Creative engineering visuals"),
+];
 
 export const skillsStorySection: SectionSkills = {
   sys: makeSys("skills-story", "sectionSkills"),
@@ -90,28 +112,119 @@ export const projectsStorySection: SectionProjects = {
   fields: {
     internalName: "Projects Story",
     anchorId: "projects",
+    eyebrow: "Selected Work",
     title: "Featured Projects",
+    intro: "Recent platform and product projects that balance delivery quality with editorial clarity.",
     projects: [
       {
         sys: makeSys("project-story-1", "project"),
         fields: {
+          internalName: "Design System Migration",
           name: "Design System Migration",
           tagline: "Primitives-first rollout",
           summary: "Standardized component contracts and removed ad hoc styling.",
+          role: "Lead Engineer",
+          period: "2024 — 2025",
+          featured: true,
+          thumbnail: projectStoryMedia[0],
+          thumbnailAlt: "Design system dashboards and component previews",
+          highlights: [
+            "Consolidated cross-team UI patterns into shared primitives",
+            "Improved consistency and reduced duplicate implementations",
+          ],
           techStack: ["React", "TypeScript", "Storybook"],
           links: [
             {
               sys: makeSys("project-link-1", "projectLink"),
               fields: {
+                internalName: "Case Study Link",
                 label: "Case Study",
+                href: "https://example.com/case-study",
                 url: "https://example.com/case-study",
+                kind: "case-study",
+                analyticsLabel: "ds-migration-case-study",
               },
             },
             {
               sys: makeSys("project-link-2", "projectLink"),
               fields: {
+                label: "Demo",
+                url: "https://example.com/demo",
+                kind: "demo",
+                openInNewTab: false,
+              },
+            },
+            {
+              sys: makeSys("project-link-3", "projectLink"),
+              fields: {
                 label: "Source",
                 url: "https://example.com/source",
+                kind: "code",
+              },
+            },
+          ],
+        },
+      },
+      {
+        sys: makeSys("project-story-2", "project"),
+        fields: {
+          internalName: "Content Operations Platform",
+          name: "Content Operations Platform",
+          tagline: "Model-first editorial workflows",
+          summary: "Unified authoring flows and content QA around reusable entry patterns.",
+          role: "Content Systems Architect",
+          period: "2023 — 2024",
+          thumbnail: projectStoryMedia[1],
+          highlights: [
+            "Reduced editorial friction with reusable content blocks",
+            "Shipped governance checks without blocking publishing flow",
+          ],
+          techStack: ["Contentful", "TypeScript", "Automation"],
+          links: [
+            {
+              sys: makeSys("project-link-4", "projectLink"),
+              fields: {
+                label: "Read Story",
+                href: "https://example.com/article",
+                url: "https://example.com/legacy-article",
+                kind: "article",
+                variant: "primary",
+              },
+            },
+            {
+              sys: makeSys("project-link-5", "projectLink"),
+              fields: {
+                label: "Workflow Demo",
+                url: "https://example.com/workflow-demo",
+                kind: "demo",
+              },
+            },
+          ],
+        },
+      },
+      {
+        sys: makeSys("project-story-3", "project"),
+        fields: {
+          internalName: "Performance Baseline Program",
+          name: "Performance Baseline Program",
+          tagline: "Practical performance governance",
+          summary: "Introduced budgets, observability, and release checks to keep core journeys fast.",
+          role: "Web Platform",
+          period: "2022 — 2023",
+          thumbnail: projectStoryMedia[2],
+          highlights: [
+            "Added baseline budgets and CI gating for key user journeys",
+            "Improved release confidence with repeatable diagnostics",
+          ],
+          techStack: ["Lighthouse CI", "Vite", "Testing Library"],
+          links: [
+            {
+              sys: makeSys("project-link-6", "projectLink"),
+              fields: {
+                label: "Repository",
+                url: "https://example.com/perf-source",
+                kind: "code",
+                openInNewTab: true,
               },
             },
           ],

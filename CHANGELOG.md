@@ -9,11 +9,16 @@
 - Reworked `SkillsSection` into an editorial split-list layout: section header at top, two-column group layout on desktop/one-column on mobile, flat group blocks, row dividers, level pills, and muted keyword lines (`keywords.join(" · ")`) without card chrome or inline style usage. (`src/components/sections/SkillsSection.tsx`, `src/components/sections/SkillsSection.css`)
 - Updated static and Storybook fixtures to exercise richer additive Skills shapes while preserving migration compatibility for sparse/legacy entries. (`src/content/static/fixtures.ts`, `src/components/sections/sectionStoryFixtures.ts`, `src/components/sections/SkillsSection.stories.tsx`)
 - Expanded Skills normalizer tests to assert all enum compatibility mappings (`expert/core -> Core`, `strong/active -> Active`, `working/expanding/undefined -> Expanding`) plus fallback-key stability for missing IDs/arrays. (`src/components/sections/skills/normalizeSkillsSection.test.ts`)
+- Refactored Projects from a stacked card/grid presentation to a responsive horizontal scroll-snap slider with lightweight prev/next controls, reduced-motion-aware scrolling, and maintained keyboard/touch accessibility without introducing a third-party carousel dependency. (`src/components/sections/ProjectsSection.tsx`, `src/components/sections/ProjectsSection.css`)
+- Extended Projects normalization for slider-oriented view models: stable keys, safe array defaults, link destination filtering, article-aware href resolution, and `projectLink.kind`-based action variant mapping (`case-study/article -> primary`, `demo -> secondary`, `code/other -> text`). (`src/components/sections/projects/normalizeProjectsSection.ts`)
+- Implemented Phase 2 additive Projects support across frontend types, adapter mapping, normalizer output, and slider card rendering by adding section `eyebrow/intro`, project `featured/thumbnail/thumbnailAlt/highlights`, and richer `projectLink` semantics (`internalName`, `href`, `variant`, `openInNewTab`, `ariaLabel`, `analyticsLabel`) with backfill-safe fallbacks. (`src/content/contentful/types.ts`, `src/content/contentful/adapters.ts`, `src/components/sections/projects/normalizeProjectsSection.ts`, `src/components/sections/ProjectsSection.tsx`)
+- Updated Projects static fixtures and Storybook coverage to exercise richer slider cards (media, featured badge, highlights, metadata, varied action kinds/variants, and single-project fallback behavior) while preserving static and Contentful source compatibility. (`src/content/static/fixtures.ts`, `src/components/sections/sectionStoryFixtures.ts`, `src/components/sections/ProjectsSection.stories.tsx`)
+- Expanded Projects normalizer tests to cover additive field normalization, protocol-relative thumbnail URL handling, thumbnail alt fallback order (`thumbnailAlt -> asset title -> project name`), link resolution order (`article -> href -> url`), open-in-new-tab defaults, variant fallback semantics, and invalid-link filtering. (`src/components/sections/projects/normalizeProjectsSection.test.ts`)
 
 ### Verification
 
 - `npm run lint` (passes)
-- `npm run test` (passes: Vitest 11/11 tests)
+- `npm run test` (passes: Vitest 12/12 tests)
 - `npm run build` (passes: `tsc -b` + `vite build`; local Node warning persists on `v22.2.0` vs recommended `>=22.12.0`)
 - `npm run build-storybook` (blocked locally by Node runtime requirement: Storybook requires `>=20.19` or `>=22.12`)
 

@@ -1,8 +1,139 @@
-.projects-card {
+@import "../../styles/tokens.css";
+
+.projects-section {
+  width: 100%;
+  display: grid;
+  gap: var(--space-6);
+}
+
+.projects-section__header {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.projects-section__header-content {
+  min-width: min(100%, 34rem);
+}
+
+.projects-section__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.projects-section__intro {
+  margin: 0;
+  max-width: var(--lede-max);
+}
+
+.projects-section__controls {
+  flex-shrink: 0;
+}
+
+.projects-section__viewport {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.projects-section__track {
+  display: flex;
+  gap: var(--space-4);
+  align-items: stretch;
+  width: max-content;
+  min-width: 100%;
+}
+
+.projects-section__slide {
+  --project-slide-width: clamp(17rem, 86vw, 22rem);
+
+  flex: 0 0 var(--project-slide-width);
+  scroll-snap-align: start;
+}
+
+.projects-section__card {
+  height: 100%;
+}
+
+.projects-section__media-frame {
+  width: 100%;
+  border-radius: calc(var(--radius-lg) + 2px);
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.projects-section__media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.projects-section__featured {
+  display: inline-flex;
+}
+
+.projects-section__title {
+  margin: 0;
+}
+
+.projects-section__tagline {
+  line-height: 1.45;
+}
+
+.projects-section__summary {
+  margin: 0;
+  max-width: 64ch;
+}
+
+.projects-section__highlights {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.projects-section__meta {
+  width: 100%;
+  margin-top: var(--space-1);
+}
+
+.projects-section__chips,
+.projects-section__actions {
   width: 100%;
 }
 
-.projects-tech,
-.projects-links {
-  width: 100%;
+.projects-section__actions {
+  margin-top: var(--space-1);
+}
+
+.projects-section__actions .ui-button--text {
+  font-weight: 600;
+}
+
+@media (min-width: 640px) {
+  .projects-section__slide {
+    --project-slide-width: clamp(21rem, 72vw, 27rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .projects-section__slide {
+    --project-slide-width: clamp(22rem, 48vw, 31rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projects-section__viewport {
+    scroll-behavior: auto;
+  }
 }
