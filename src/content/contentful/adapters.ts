@@ -2,6 +2,7 @@ import type {
   Article,
   ArticlePageData,
   LandingPageData,
+  LearningItem,
   NavCard,
   NavLink,
   NavPanel,
@@ -13,6 +14,7 @@ import type {
   ProjectLink,
   SectionProjects,
   SectionEntry,
+  SectionLearning,
   SectionTimeline,
   TimelineItem,
 } from "./types";
@@ -284,6 +286,39 @@ function mapProjectsSection(section: SectionProjects): SectionProjects {
   };
 }
 
+function mapLearningItem(item: LearningItem): LearningItem {
+  const fields = item.fields;
+
+  return {
+    sys: item.sys,
+    fields: {
+      internalName: fields.internalName,
+      topic: fields.topic,
+      description: fields.description,
+      status: fields.status,
+      focusAreas: safeArray(fields.focusAreas),
+      linkLabel: fields.linkLabel,
+      linkUrl: fields.linkUrl,
+    },
+  };
+}
+
+function mapLearningSection(section: SectionLearning): SectionLearning {
+  const fields = section.fields;
+
+  return {
+    sys: section.sys,
+    fields: {
+      internalName: fields.internalName,
+      anchorId: fields.anchorId || section.sys.id,
+      eyebrow: fields.eyebrow,
+      title: fields.title,
+      intro: fields.intro,
+      items: safeArray(fields.items).map(mapLearningItem),
+    },
+  };
+}
+
 function mapSection(section: SectionEntry): SectionEntry {
   const id = section.sys.contentType.sys.id;
   if (id === "sectionTimeline") {
@@ -291,6 +326,9 @@ function mapSection(section: SectionEntry): SectionEntry {
   }
   if (id === "sectionProjects") {
     return mapProjectsSection(section as SectionProjects);
+  }
+  if (id === "sectionLearning") {
+    return mapLearningSection(section as SectionLearning);
   }
   return section;
 }

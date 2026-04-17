@@ -1,0 +1,128 @@
+@import "../../../styles/tokens.css";
+
+.learning-roadmap {
+  width: 100%;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.learning-roadmap__step {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: stretch;
+}
+
+.learning-roadmap__rail {
+  width: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.learning-roadmap__marker {
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.learning-roadmap__line {
+  width: 2px;
+  min-height: var(--space-10);
+  flex: 1;
+  border-radius: var(--radius-pill);
+  background: var(--color-border-subtle);
+}
+
+.learning-roadmap__step--exploring .learning-roadmap__marker {
+  background: color-mix(in srgb, var(--color-surface-2) 90%, transparent);
+  color: var(--color-text-muted);
+}
+
+.learning-roadmap__step--practicing .learning-roadmap__marker {
+  background: var(--color-warn-bg);
+  color: var(--color-warn-text);
+  border-color: color-mix(in srgb, var(--color-warn-border) 68%, transparent);
+}
+
+.learning-roadmap__step--shipping .learning-roadmap__marker {
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
+  border-color: color-mix(in srgb, var(--color-success-border) 68%, transparent);
+}
+
+.learning-roadmap__step--practicing .learning-roadmap__line {
+  background: color-mix(in srgb, var(--color-warn-border) 55%, transparent);
+}
+
+.learning-roadmap__step--shipping .learning-roadmap__line {
+  background: color-mix(in srgb, var(--color-success-border) 60%, transparent);
+}
+
+.learning-roadmap__card {
+  height: 100%;
+}
+
+.learning-roadmap__card-content {
+  width: 100%;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.learning-roadmap__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.learning-roadmap__description {
+  margin: 0;
+}
+
+.learning-roadmap__focus-areas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.learning-roadmap__action {
+  width: fit-content;
+}
+
+@media (min-width: 900px) {
+  .learning-roadmap {
+    display: flex;
+    gap: var(--space-3);
+    align-items: stretch;
+  }
+
+  .learning-roadmap__step {
+    flex: 1 1 0;
+    min-width: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .learning-roadmap__rail {
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .learning-roadmap__line {
+    width: auto;
+    min-height: 0;
+    min-width: var(--space-6);
+    height: 2px;
+  }
+}

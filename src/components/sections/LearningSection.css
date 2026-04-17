@@ -1,3 +1,15 @@
-.learning-card {
+@import "../../styles/tokens.css";
+
+.learning-layout,
+.learning-header {
   width: 100%;
+}
+
+.learning-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.learning-intro {
+  max-width: var(--lede-max);
 }

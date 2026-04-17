@@ -330,9 +330,11 @@ export type SectionProjects = Entry<
 export type LearningItem = Entry<
   "learningItem",
   {
+    internalName?: string;
     topic: string;
     description?: string;
     status?: LearningStatus;
+    focusAreas?: string[];
     linkLabel?: string;
     linkUrl?: string;
   }
@@ -343,8 +345,10 @@ export type SectionLearning = Entry<
   {
     internalName: string;
     anchorId: string;
+    eyebrow?: string;
     title: string;
-    items: LearningItem[];
+    intro?: string;
+    items?: LearningItem[];
   }
 >;
 

@@ -7,6 +7,7 @@ import type {
   NavigationLinkData,
   EntryTypeId,
   SectionHero,
+  SectionLearning,
   SectionProjects,
   SectionSkills,
   SectionTimeline,
@@ -406,6 +407,64 @@ const skillsSection: SectionSkills = {
   },
 };
 
+const learningSection: SectionLearning = {
+  sys: makeSys("section-learning", "sectionLearning"),
+  fields: {
+    internalName: "Learning",
+    anchorId: "learning",
+    eyebrow: "Learning",
+    title: "Learning in Public",
+    intro: "Current topics I am actively exploring, practicing, and shipping in production.",
+    items: [
+      {
+        sys: makeSys("learning-systems-audits", "learningItem"),
+        fields: {
+          internalName: "System Discovery",
+          topic: "System Discovery and Baseline Audits",
+          description: "Documenting component, content, and accessibility constraints before rollout.",
+          focusAreas: ["A11y Audits", "Component Inventory", "Content Contracts"],
+          linkLabel: "View audit journal",
+          linkUrl: "https://example.com/learning/system-audits",
+        },
+      },
+      {
+        sys: makeSys("learning-storybook-contracts", "learningItem"),
+        fields: {
+          internalName: "Storybook Contracts",
+          topic: "Storybook Contract Enforcement",
+          description: "Turning stories into repeatable contract checks for section behavior.",
+          status: "practicing",
+          focusAreas: ["Storybook", "Testing", "DX"],
+          linkLabel: "Read Storybook playbook",
+          linkUrl: "https://example.com/learning/storybook-contracts",
+        },
+      },
+      {
+        sys: makeSys("learning-accessibility", "learningItem"),
+        fields: {
+          internalName: "Accessibility Patterns",
+          topic: "Accessibility Patterns",
+          description: "Improving keyboard support, semantic structure, and focus clarity.",
+          status: "shipping",
+          focusAreas: ["Keyboard UX", "Semantic HTML", "WCAG"],
+          linkLabel: "Read accessibility notes",
+          linkUrl: "https://example.com/learning/accessibility-notes",
+        },
+      },
+      {
+        sys: makeSys("learning-content-modeling", "learningItem"),
+        fields: {
+          topic: "Content Modeling for Additive Migrations",
+          description: "Planning the next additive shape while preserving current editor workflows.",
+          status: "exploring",
+          focusAreas: [],
+          linkLabel: "Migration checklist",
+        },
+      },
+    ],
+  },
+};
+
 const navLinks: NavigationLinkData[] = [
   {
     id: "nav-hero",
@@ -439,6 +498,14 @@ const navLinks: NavigationLinkData[] = [
     isCta: false,
     mobileBehavior: "link",
   },
+  {
+    id: "nav-learning",
+    label: "Learning",
+    href: "#learning",
+    isExternal: false,
+    isCta: false,
+    mobileBehavior: "link",
+  },
 ];
 
 export const staticNavigation: NavigationMenuData = {
@@ -460,5 +527,5 @@ export const staticLandingPage: LandingPageData = {
   metaTitle: "Gilberto Haro — Personal Site",
   metaDescription:
     "Frontend and content systems engineer delivering resilient, content-driven experiences.",
-  sections: [heroSection, timelineSection, projectsSection, skillsSection],
+  sections: [heroSection, timelineSection, projectsSection, skillsSection, learningSection],
 };

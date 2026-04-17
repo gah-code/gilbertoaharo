@@ -14,11 +14,13 @@
 - Implemented Phase 2 additive Projects support across frontend types, adapter mapping, normalizer output, and slider card rendering by adding section `eyebrow/intro`, project `featured/thumbnail/thumbnailAlt/highlights`, and richer `projectLink` semantics (`internalName`, `href`, `variant`, `openInNewTab`, `ariaLabel`, `analyticsLabel`) with backfill-safe fallbacks. (`src/content/contentful/types.ts`, `src/content/contentful/adapters.ts`, `src/components/sections/projects/normalizeProjectsSection.ts`, `src/components/sections/ProjectsSection.tsx`)
 - Updated Projects static fixtures and Storybook coverage to exercise richer slider cards (media, featured badge, highlights, metadata, varied action kinds/variants, and single-project fallback behavior) while preserving static and Contentful source compatibility. (`src/content/static/fixtures.ts`, `src/components/sections/sectionStoryFixtures.ts`, `src/components/sections/ProjectsSection.stories.tsx`)
 - Expanded Projects normalizer tests to cover additive field normalization, protocol-relative thumbnail URL handling, thumbnail alt fallback order (`thumbnailAlt -> asset title -> project name`), link resolution order (`article -> href -> url`), open-in-new-tab defaults, variant fallback semantics, and invalid-link filtering. (`src/components/sections/projects/normalizeProjectsSection.test.ts`)
+- Implemented Learning Phase 2 additive support end-to-end: expanded Learning raw types (`eyebrow`, `intro`, item `internalName`, `focusAreas`), added defensive Contentful adapter mapping, rewrote Learning normalizer for safe defaults (`items -> []`, `status -> exploring`, `focusAreas -> []`), explicit status labels (`Exploring`, `Practicing`, `Shipping`), stable keys (`internalName ?? topic`), and strict legacy action gating (`linkLabel` + `linkUrl` required). (`src/content/contentful/types.ts`, `src/content/contentful/adapters.ts`, `src/components/sections/learning/normalizeLearningSection.ts`)
+- Refreshed Learning UI and coverage to render section eyebrow/title/intro plus richer cards (status treatment, focus-area badges, optional action link) using shared primitives and colocated CSS only; updated static/story fixtures and Storybook/testing scenarios for sparse/backfill data compatibility. (`src/components/sections/LearningSection.tsx`, `src/components/sections/LearningSection.css`, `src/content/static/fixtures.ts`, `src/components/sections/sectionStoryFixtures.ts`, `src/components/sections/LearningSection.stories.tsx`, `src/components/sections/learning/normalizeLearningSection.test.ts`)
 
 ### Verification
 
 - `npm run lint` (passes)
-- `npm run test` (passes: Vitest 12/12 tests)
+- `npm run test` (passes: Vitest 13/13 tests)
 - `npm run build` (passes: `tsc -b` + `vite build`; local Node warning persists on `v22.2.0` vs recommended `>=22.12.0`)
 - `npm run build-storybook` (blocked locally by Node runtime requirement: Storybook requires `>=20.19` or `>=22.12`)
 
