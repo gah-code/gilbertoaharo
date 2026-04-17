@@ -1,5 +1,22 @@
 # Changelog
 
+## [2026-04-17]
+
+### Changed
+
+- Expanded Skills content types for additive migration compatibility by supporting optional section/group metadata (`eyebrow`, `intro`, `description`, `iconKey`, `internalName`) and legacy+new skill level unions (`working|strong|expert` and `expanding|active|core`). (`src/content/contentful/types.ts`)
+- Refactored Skills normalization into a stable view-model pipeline with safe array defaults, trimmed/fallback text handling, stable key generation, and explicit level normalization to render-only labels (`Core`, `Active`, `Expanding`). (`src/components/sections/skills/normalizeSkillsSection.ts`)
+- Reworked `SkillsSection` into an editorial split-list layout: section header at top, two-column group layout on desktop/one-column on mobile, flat group blocks, row dividers, level pills, and muted keyword lines (`keywords.join(" · ")`) without card chrome or inline style usage. (`src/components/sections/SkillsSection.tsx`, `src/components/sections/SkillsSection.css`)
+- Updated static and Storybook fixtures to exercise richer additive Skills shapes while preserving migration compatibility for sparse/legacy entries. (`src/content/static/fixtures.ts`, `src/components/sections/sectionStoryFixtures.ts`, `src/components/sections/SkillsSection.stories.tsx`)
+- Expanded Skills normalizer tests to assert all enum compatibility mappings (`expert/core -> Core`, `strong/active -> Active`, `working/expanding/undefined -> Expanding`) plus fallback-key stability for missing IDs/arrays. (`src/components/sections/skills/normalizeSkillsSection.test.ts`)
+
+### Verification
+
+- `npm run lint` (passes)
+- `npm run test` (passes: Vitest 11/11 tests)
+- `npm run build` (passes: `tsc -b` + `vite build`; local Node warning persists on `v22.2.0` vs recommended `>=22.12.0`)
+- `npm run build-storybook` (blocked locally by Node runtime requirement: Storybook requires `>=20.19` or `>=22.12`)
+
 ## [2026-04-16]
 
 ### Changed
