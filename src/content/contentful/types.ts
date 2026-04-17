@@ -8,7 +8,9 @@ export type SocialLinkKind =
   | "portfolio"
   | "other";
 export type TimelineItemKind = "role" | "education" | "milestone";
-export type SkillLevel = "working" | "strong" | "expert";
+export type LegacySkillLevel = "working" | "strong" | "expert";
+export type AdditiveSkillLevel = "expanding" | "active" | "core";
+export type SkillLevel = LegacySkillLevel | AdditiveSkillLevel;
 export type HeroStyle = "typographic" | "avatar" | "image";
 export type ProjectLinkKind =
   | "code"
@@ -229,6 +231,7 @@ export type SectionTimeline = Entry<
 export type Skill = Entry<
   "skill",
   {
+    internalName?: string;
     name: string;
     level?: SkillLevel;
     keywords?: string[];
@@ -238,18 +241,23 @@ export type Skill = Entry<
 export type SkillGroup = Entry<
   "skillGroup",
   {
+    internalName?: string;
     label: string;
-    skills: Skill[];
+    description?: string;
+    iconKey?: string;
+    skills?: Skill[];
   }
 >;
 
 export type SectionSkills = Entry<
   "sectionSkills",
   {
-    internalName: string;
+    internalName?: string;
     anchorId: string;
+    eyebrow?: string;
     title: string;
-    groups: SkillGroup[];
+    intro?: string;
+    groups?: SkillGroup[];
   }
 >;
 

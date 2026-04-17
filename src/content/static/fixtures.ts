@@ -7,6 +7,7 @@ import type {
   NavigationLinkData,
   EntryTypeId,
   SectionHero,
+  SectionSkills,
   SectionTimeline,
   TimelineItem,
   Asset,
@@ -206,6 +207,71 @@ const timelineSection: SectionTimeline = {
   },
 };
 
+const skillsSection: SectionSkills = {
+  sys: makeSys("section-skills", "sectionSkills"),
+  fields: {
+    internalName: "Skills",
+    anchorId: "skills",
+    eyebrow: "Capabilities",
+    title: "Skills Snapshot",
+    intro: "A practical view of where I drive the most impact right now.",
+    groups: [
+      {
+        sys: makeSys("skills-group-frontend", "skillGroup"),
+        fields: {
+          internalName: "Frontend Group",
+          label: "Frontend Architecture",
+          description: "Design-system execution, component contracts, and UX polish.",
+          iconKey: "frontend",
+          skills: [
+            {
+              sys: makeSys("skills-react", "skill"),
+              fields: {
+                internalName: "React Skill",
+                name: "React",
+                level: "expert",
+                keywords: ["hooks", "composition", "state"],
+              },
+            },
+            {
+              sys: makeSys("skills-ts", "skill"),
+              fields: {
+                name: "TypeScript",
+                level: "active",
+                keywords: ["type safety", "contracts"],
+              },
+            },
+          ],
+        },
+      },
+      {
+        sys: makeSys("skills-group-content", "skillGroup"),
+        fields: {
+          label: "Content Systems",
+          description: "Content modeling and editorial workflows for scalable delivery.",
+          iconKey: "content",
+          skills: [
+            {
+              sys: makeSys("skills-modeling", "skill"),
+              fields: {
+                name: "Content Modeling",
+                level: "core",
+                keywords: ["schema design", "governance"],
+              },
+            },
+            {
+              sys: makeSys("skills-ai-workflows", "skill"),
+              fields: {
+                name: "AI Workflow Design",
+              },
+            },
+          ],
+        },
+      },
+    ],
+  },
+};
+
 const navLinks: NavigationLinkData[] = [
   {
     id: "nav-hero",
@@ -219,6 +285,14 @@ const navLinks: NavigationLinkData[] = [
     id: "nav-timeline",
     label: "Experience",
     href: "#timeline",
+    isExternal: false,
+    isCta: false,
+    mobileBehavior: "link",
+  },
+  {
+    id: "nav-skills",
+    label: "Skills",
+    href: "#skills",
     isExternal: false,
     isCta: false,
     mobileBehavior: "link",
@@ -244,5 +318,5 @@ export const staticLandingPage: LandingPageData = {
   metaTitle: "Gilberto Haro — Personal Site",
   metaDescription:
     "Frontend and content systems engineer delivering resilient, content-driven experiences.",
-  sections: [heroSection, timelineSection],
+  sections: [heroSection, timelineSection, skillsSection],
 };

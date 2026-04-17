@@ -15,43 +15,74 @@ export function SkillsSection({ section }: { section: SectionSkills }) {
 
   return (
     <SectionShell anchorId={skills.anchorId} className="section-skills">
-      <Stack gap="var(--space-6)">
-        <Heading level={2}>{skills.title}</Heading>
-        <Grid className="skills-grid" columns="auto-fit" minItemWidth="280" gap="6">
-          {skills.groups.map((group) => (
-            <Stack key={group.id} className="skills-group" gap="var(--space-3)">
-              <Text as="div" className="skills-group__label" size="sm" weight="semibold">
-                {group.label}
-              </Text>
-              <Stack className="skills-group__rows" gap="0">
-                {group.skills.map((skill, index) => {
-                  const divider = index < group.skills.length - 1;
+      <Stack className="skills-layout" gap="var(--space-8)">
+        <Stack className="skills-header" gap="var(--space-3)">
+          {skills.eyebrow ? (
+            <Text
+              as="div"
+              className="skills-eyebrow"
+              tone="muted"
+              size="sm"
+              weight="medium"
+            >
+              {skills.eyebrow}
+            </Text>
+          ) : null}
+          <Heading level={2}>{skills.title}</Heading>
+          {skills.intro ? (
+            <Text className="skills-intro" tone="muted">
+              {skills.intro}
+            </Text>
+          ) : null}
+        </Stack>
 
-                  return (
-                    <div
-                      key={skill.id}
-                      className={`skills-item${divider ? " skills-item--divider" : ""}`}
-                    >
-                      <Inline className="skills-item__header" justify="between" align="center" gap="3">
-                        <Text as="div" className="skills-item__name" weight="semibold">
+        <Grid className="skills-grid" columns={2} gap="8" align="start">
+          {skills.groups.map((group) => (
+            <div key={group.key} className="skills-group">
+              <Stack gap="var(--space-3)">
+                <Text
+                  as="h3"
+                  className="skills-group__label"
+                  size="sm"
+                  weight="semibold"
+                  tracking="tight"
+                >
+                  {group.label}
+                </Text>
+
+                {group.description ? (
+                  <Text className="skills-group__description" tone="muted">
+                    {group.description}
+                  </Text>
+                ) : null}
+
+                <div className="skills-group__rows">
+                  {group.skills.map((skill) => (
+                    <div key={skill.key} className="skills-row">
+                      <Inline
+                        className="skills-row__header"
+                        align="center"
+                        justify="between"
+                        gap="2"
+                      >
+                        <Text as="span" className="skills-row__name" size="sm" weight="semibold">
                           {skill.name}
                         </Text>
-                        {skill.levelLabel ? (
-                          <Badge className="skills-item__level" size="sm" tone="default">
-                            {skill.levelLabel}
-                          </Badge>
-                        ) : null}
+                        <Badge className="skills-row__level" size="sm" tone="default">
+                          {skill.levelLabel}
+                        </Badge>
                       </Inline>
+
                       {skill.keywords.length ? (
-                        <Text className="skills-item__keywords" size="sm" tone="muted">
-                          {skill.keywords.join(" / ")}
+                        <Text className="skills-row__keywords" size="sm" tone="muted">
+                          {skill.keywords.join(" · ")}
                         </Text>
                       ) : null}
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
               </Stack>
-            </Stack>
+            </div>
           ))}
         </Grid>
       </Stack>

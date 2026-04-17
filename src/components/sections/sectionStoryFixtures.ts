@@ -15,16 +15,22 @@ export const skillsStorySection: SectionSkills = {
   fields: {
     internalName: "Skills Story",
     anchorId: "skills",
-    title: "Core Skills",
+    eyebrow: "Capabilities",
+    title: "Skills Snapshot",
+    intro: "Grouped strengths across implementation, architecture, and content systems.",
     groups: [
       {
         sys: makeSys("group-frontend", "skillGroup"),
         fields: {
+          internalName: "Frontend Group",
           label: "Frontend",
+          description: "UI implementation, component architecture, and interaction quality.",
+          iconKey: "frontend",
           skills: [
             {
               sys: makeSys("skill-react", "skill"),
               fields: {
+                internalName: "React Skill",
                 name: "React",
                 level: "expert",
                 keywords: ["hooks", "composition"],
@@ -33,6 +39,7 @@ export const skillsStorySection: SectionSkills = {
             {
               sys: makeSys("skill-ts", "skill"),
               fields: {
+                internalName: "TypeScript Skill",
                 name: "TypeScript",
                 level: "strong",
                 keywords: ["types", "contracts"],
@@ -44,14 +51,31 @@ export const skillsStorySection: SectionSkills = {
       {
         sys: makeSys("group-content", "skillGroup"),
         fields: {
+          internalName: "Content Group",
           label: "Content Systems",
+          description: "Content modeling, governance, and authoring workflows.",
+          iconKey: "content",
           skills: [
             {
               sys: makeSys("skill-modeling", "skill"),
               fields: {
+                internalName: "Modeling Skill",
                 name: "Content Modeling",
-                level: "strong",
+                level: "core",
                 keywords: ["schemas", "governance"],
+              },
+            },
+            {
+              sys: makeSys("skill-editorial", "skill"),
+              fields: {
+                name: "Editorial Operations",
+                level: "active",
+              },
+            },
+            {
+              sys: makeSys("skill-ai", "skill"),
+              fields: {
+                name: "AI Workflow Design",
               },
             },
           ],
