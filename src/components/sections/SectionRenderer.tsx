@@ -7,6 +7,7 @@ import { SkillsSection } from "./SkillsSection";
 import { ProjectsSection } from "./ProjectsSection";
 import { LearningSection } from "./LearningSection";
 import { ContactSection } from "./ContactSection";
+import { FooterSection } from "./FooterSection";
 
 type SectionTypeId = SectionEntry["sys"]["contentType"]["sys"]["id"];
 type SectionById<TId extends SectionTypeId> = Extract<
@@ -25,6 +26,7 @@ const sectionRenderers = {
   sectionProjects: (section) => <ProjectsSection section={section} />,
   sectionLearning: (section) => <LearningSection section={section} />,
   sectionContact: (section) => <ContactSection section={section} />,
+  sectionFooter: (section) => <FooterSection section={section} />,
 } satisfies SectionRendererMap;
 
 function isSectionById<TId extends SectionTypeId>(
@@ -52,6 +54,9 @@ export function SectionRenderer({ section }: { section: SectionEntry }) {
   }
   if (isSectionById(section, "sectionContact")) {
     return sectionRenderers.sectionContact(section);
+  }
+  if (isSectionById(section, "sectionFooter")) {
+    return sectionRenderers.sectionFooter(section);
   }
   return null;
 }

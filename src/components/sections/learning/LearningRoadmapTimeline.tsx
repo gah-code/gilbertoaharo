@@ -29,9 +29,24 @@ export function LearningRoadmapTimeline({ items }: LearningRoadmapTimelineProps)
         <article
           key={item.key}
           role="listitem"
-          className={`learning-roadmap__step learning-roadmap__step--${item.status}`}
+          className={[
+            "learning-roadmap__step",
+            `learning-roadmap__step--${item.status}`,
+            item.isNextUp ? "learning-roadmap__step--next-up" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
         >
-          <div className="learning-roadmap__rail" aria-hidden>
+          <div className="learning-roadmap__rail">
+            <Text
+              as="span"
+              className="learning-roadmap__label"
+              size="sm"
+              tone="muted"
+              weight="medium"
+            >
+              {item.roadmapLabel}
+            </Text>
             <span className="learning-roadmap__marker">{item.roadmapIndex + 1}</span>
             {item.isLast ? null : <span className="learning-roadmap__line" />}
           </div>
@@ -40,9 +55,16 @@ export function LearningRoadmapTimeline({ items }: LearningRoadmapTimelineProps)
             <div className="learning-roadmap__card-content">
               <div className="learning-roadmap__header">
                 <Heading level={4}>{item.topic}</Heading>
-                <Badge tone={statusToBadgeTone(item.status)} size="sm">
-                  {item.statusLabel}
-                </Badge>
+                <div className="learning-roadmap__header-badges">
+                  {item.isNextUp ? (
+                    <Badge tone="warning" size="sm">
+                      Next Up
+                    </Badge>
+                  ) : null}
+                  <Badge tone={statusToBadgeTone(item.status)} size="sm">
+                    {item.statusLabel}
+                  </Badge>
+                </div>
               </div>
 
               {item.description ? (

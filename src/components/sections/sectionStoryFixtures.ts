@@ -4,6 +4,7 @@ import timelineCreative from "@/assets/timeline/timeline-creative.svg";
 import type {
   Asset,
   SectionContact,
+  SectionFooter,
   SectionLearning,
   SectionProjects,
   SectionSkills,
@@ -250,6 +251,9 @@ export const learningStorySection: SectionLearning = {
           topic: "Discovery Baseline",
           description: "Mapping current section behavior and missing contracts.",
           focusAreas: ["Audit", "Structure", "Risk Mapping"],
+          roadmapLabel: "Phase A",
+          sortOrder: 10,
+          isNextUp: false,
           linkLabel: "View discovery notes",
           linkUrl: "https://example.com/discovery-notes",
         },
@@ -262,6 +266,9 @@ export const learningStorySection: SectionLearning = {
           description: "Building contract coverage in stories and interaction tests.",
           status: "practicing",
           focusAreas: ["Contract Tests", "Component APIs", "QA"],
+          roadmapLabel: "Phase C",
+          sortOrder: 30,
+          isNextUp: false,
           linkLabel: "Read Storybook strategy",
           linkUrl: "https://example.com/storybook-strategy",
         },
@@ -274,6 +281,9 @@ export const learningStorySection: SectionLearning = {
           description: "Rolling proven keyboard and focus patterns into production screens.",
           status: "shipping",
           focusAreas: ["Keyboard UX", "A11y Audits", "Semantic HTML"],
+          roadmapLabel: "Phase B",
+          sortOrder: 20,
+          isNextUp: false,
           linkLabel: "Read notes",
           linkUrl: "https://example.com/notes",
         },
@@ -285,6 +295,9 @@ export const learningStorySection: SectionLearning = {
           description: "Testing additive fields while preserving legacy compatibility.",
           status: "exploring",
           focusAreas: ["Contentful", "Migrations", "Backfill Strategy"],
+          roadmapLabel: "Phase D",
+          sortOrder: 40,
+          isNextUp: true,
           linkLabel: "Migration checklist",
         },
       },
@@ -316,5 +329,120 @@ export const contactStorySection: SectionContact = {
         },
       },
     ],
+  },
+};
+
+export const footerStorySection: SectionFooter = {
+  sys: makeSys("footer-story", "sectionFooter"),
+  fields: {
+    internalName: "Footer Story",
+    brandTitle: "Gilberto Haro",
+    brandSubtitle: "Web Engineer · Content Systems",
+    summary:
+      "A calm editorial footer that closes the page with clear navigation and simple social links.",
+    navigationGroups: [
+      {
+        sys: makeSys("footer-story-group-site", "footerLinkGroup"),
+        fields: {
+          label: "Site",
+          links: [
+            {
+              sys: makeSys("footer-story-link-about", "footerLink"),
+              fields: {
+                label: "About",
+                href: "#top",
+                kind: "nav",
+                iconKey: "arrow",
+              },
+            },
+            {
+              sys: makeSys("footer-story-link-experience", "footerLink"),
+              fields: {
+                label: "Experience",
+                href: "#timeline",
+                kind: "nav",
+                iconKey: "arrow",
+              },
+            },
+            {
+              sys: makeSys("footer-story-link-projects", "footerLink"),
+              fields: {
+                label: "Projects",
+                href: "#projects",
+                kind: "nav",
+                iconKey: "arrow",
+              },
+            },
+            {
+              sys: makeSys("footer-story-link-learning", "footerLink"),
+              fields: {
+                label: "Learning",
+                href: "#learning",
+                kind: "nav",
+                iconKey: "arrow",
+              },
+            },
+          ],
+        },
+      },
+      {
+        sys: makeSys("footer-story-group-links", "footerLinkGroup"),
+        fields: {
+          label: "More",
+          links: [
+            {
+              sys: makeSys("footer-story-link-resume", "footerLink"),
+              fields: {
+                label: "Resume",
+                href: "https://example.com/resume",
+                kind: "cta",
+              },
+            },
+            {
+              sys: makeSys("footer-story-link-contact", "footerLink"),
+              fields: {
+                label: "Contact",
+                href: "mailto:hello@example.com",
+                kind: "nav",
+                iconKey: "arrow",
+                openInNewTab: false,
+              },
+            },
+          ],
+        },
+      },
+    ],
+    socialLinks: [
+      {
+        sys: makeSys("footer-story-social-github", "footerLink"),
+        fields: {
+          label: "GitHub",
+          href: "https://github.com/example",
+          kind: "social",
+          iconKey: "github",
+        },
+      },
+      {
+        sys: makeSys("footer-story-social-linkedin", "footerLink"),
+        fields: {
+          label: "LinkedIn",
+          href: "https://linkedin.com/in/example",
+          kind: "social",
+          iconKey: "linkedin",
+        },
+      },
+      {
+        sys: makeSys("footer-story-social-email", "footerLink"),
+        fields: {
+          label: "Email",
+          href: "mailto:hello@example.com",
+          kind: "email",
+          iconKey: "email",
+          openInNewTab: false,
+        },
+      },
+    ],
+    legalText: "© 2026 Gilberto Haro. All rights reserved.",
+    builtWithText: "Built with React, TypeScript, and Storybook.",
   },
 };

@@ -19,6 +19,9 @@ export type NormalizedLearningItem = {
   status: LearningStatus;
   statusLabel: NormalizedLearningStatusLabel;
   focusAreas: string[];
+  roadmapLabel: string;
+  sortOrder: number;
+  isNextUp: boolean;
   action?: NormalizedLearningAction;
   roadmapIndex: number;
   isLast: boolean;
@@ -87,16 +90,28 @@ function normalizeAction(
   };
 }
 
+function normalizeSortOrder(sortOrder: number | undefined, index: number): number {
+  if (typeof sortOrder === "number" && Number.isFinite(sortOrder)) {
+    return sortOrder;
+  }
+  return index + 1;
+}
+
 function normalizeLearningItem(
   sectionId: string,
   item: LearningItem,
   index: number,
-  totalItems: number,
-): NormalizedLearningItem {
+): Omit<NormalizedLearningItem, "roadmapIndex" | "isLast"> & {
+  sourceIndex: number;
+  hasExplicitSortOrder: boolean;
+} {
   const topic = compactText(item.fields.topic) ?? "Untitled topic";
   const keyBase = compactText(item.fields.internalName) ?? topic;
   const key = makeStableKey([sectionId, keyBase], `${sectionId}-learning-item-${index}`);
   const status = normalizeStatus(item.fields.status);
+  const sortOrder = normalizeSortOrder(item.fields.sortOrder, index);
+  const hasExplicitSortOrder =
+    typeof item.fields.sortOrder === "number" && Number.isFinite(item.fields.sortOrder);
 
   return {
     id: compactText(item.sys.id) ?? key,
@@ -106,9 +121,12 @@ function normalizeLearningItem(
     status,
     statusLabel: LEARNING_STATUS_LABELS[status],
     focusAreas: normalizeStringList(item.fields.focusAreas),
+    roadmapLabel: compactText(item.fields.roadmapLabel) ?? `Step ${sortOrder}`,
+    sortOrder,
+    isNextUp: Boolean(item.fields.isNextUp),
     action: normalizeAction(item.fields.linkLabel, item.fields.linkUrl),
-    roadmapIndex: index,
-    isLast: index === totalItems - 1,
+    sourceIndex: index,
+    hasExplicitSortOrder,
   };
 }
 
@@ -126,8 +144,24 @@ export function normalizeLearningSection(
     eyebrow: compactText(fields.eyebrow),
     title: compactText(fields.title) ?? "Learning",
     intro: compactText(fields.intro),
-    items: items.map((item, index) =>
-      normalizeLearningItem(sectionId, item, index, items.length),
-    ),
+    items: items
+      .map((item, index) => normalizeLearningItem(sectionId, item, index))
+      .sort((a, b) => {
+        if (a.sortOrder !== b.sortOrder) return a.sortOrder - b.sortOrder;
+        if (a.hasExplicitSortOrder !== b.hasExplicitSortOrder) {
+          return a.hasExplicitSortOrder ? -1 : 1;
+        }
+        return a.sourceIndex - b.sourceIndex;
+      })
+      .map((item, roadmapIndex, sortedItems) => {
+        const { sourceIndex, hasExplicitSortOrder, ...normalizedItem } = item;
+        void sourceIndex;
+        void hasExplicitSortOrder;
+        return {
+          ...normalizedItem,
+          roadmapIndex,
+          isLast: roadmapIndex === sortedItems.length - 1,
+        };
+      }),
   };
 }

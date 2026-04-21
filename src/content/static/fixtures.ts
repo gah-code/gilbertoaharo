@@ -2,12 +2,14 @@ import timelineSearch from "@/assets/timeline/timeline-search.svg";
 import timelineJourney from "@/assets/timeline/timeline-journey.svg";
 import timelineCreative from "@/assets/timeline/timeline-creative.svg";
 import type {
+  Article,
   LandingPageData,
   NavigationMenuData,
   NavigationLinkData,
   EntryTypeId,
   SectionHero,
   SectionLearning,
+  SectionFooter,
   SectionProjects,
   SectionSkills,
   SectionTimeline,
@@ -53,6 +55,88 @@ const mediaAssets: Asset[] = [
         contentType: "image/svg+xml",
       },
       title: "Creative technology",
+    },
+  },
+];
+
+const staticArticleAuthor = {
+  sys: makeSys("person-author-gilberto", "personProfile"),
+  fields: {
+    name: "Gilberto Haro",
+    title: "Web Engineer",
+  },
+};
+
+function makeArticleBody(paragraph: string) {
+  return {
+    nodeType: "document",
+    data: {},
+    content: [
+      {
+        nodeType: "paragraph",
+        data: {},
+        content: [{ nodeType: "text", value: paragraph, marks: [], data: {} }],
+      },
+    ],
+  };
+}
+
+export const staticArticles: Article[] = [
+  {
+    sys: makeSys("article-resilient-content-systems", "article"),
+    fields: {
+      internalName: "Resilient Content Systems",
+      slug: "resilient-content-systems",
+      title: "Designing Resilient Content Systems for Fast Teams",
+      excerpt:
+        "How section contracts and additive models reduce regressions without slowing editorial teams.",
+      author: staticArticleAuthor,
+      publishedAt: "2026-03-10T09:00:00.000Z",
+      updatedAt: "2026-03-12T08:30:00.000Z",
+      body: makeArticleBody(
+        "Resilient systems come from clear section contracts, predictable defaults, and steady migration paths.",
+      ),
+      heroImage: mediaAssets[0],
+      metaTitle: "Designing Resilient Content Systems",
+      metaDescription:
+        "A practical approach to content modeling and section contracts for product teams.",
+    },
+  },
+  {
+    sys: makeSys("article-editorial-frontend-partnership", "article"),
+    fields: {
+      internalName: "Editorial + Frontend Partnership",
+      slug: "editorial-frontend-partnership",
+      title: "Editorial and Frontend: A Better Operating Rhythm",
+      excerpt:
+        "A lightweight operating model for engineering and content teams shipping the same surfaces.",
+      author: staticArticleAuthor,
+      updatedAt: "2026-02-02T15:15:00.000Z",
+      body: makeArticleBody(
+        "When teams share a language for sections and states, quality rises while delivery friction drops.",
+      ),
+      heroImage: mediaAssets[1],
+      metaTitle: "Editorial and Frontend Operating Rhythm",
+      metaDescription:
+        "Operating agreements and implementation patterns for editorial and frontend collaboration.",
+    },
+  },
+  {
+    sys: makeSys("article-thoughtful-interface-work", "article"),
+    fields: {
+      internalName: "Thoughtful Interface Work",
+      slug: "thoughtful-interface-work",
+      title: "Thoughtful Interface Work at Production Speed",
+      excerpt:
+        "Balancing craft, accessibility, and delivery pressure in modern frontend systems.",
+      publishedAt: "2025-11-15T12:00:00.000Z",
+      body: makeArticleBody(
+        "Thoughtful interfaces are built through constraints, not decoration: strong hierarchy, calm interaction, and clear intent.",
+      ),
+      heroImage: mediaAssets[2],
+      metaTitle: "Thoughtful Interface Work",
+      metaDescription:
+        "Principles for maintaining interface quality while shipping quickly.",
     },
   },
 ];
@@ -414,54 +498,190 @@ const learningSection: SectionLearning = {
     anchorId: "learning",
     eyebrow: "Learning",
     title: "Learning in Public",
-    intro: "Current topics I am actively exploring, practicing, and shipping in production.",
+    intro: "Roadmap milestones reflecting the current Contentful learning timeline and priorities.",
     items: [
       {
-        sys: makeSys("learning-systems-audits", "learningItem"),
+        sys: makeSys("learning-search-native-content-modeling", "learningItem"),
         fields: {
-          internalName: "System Discovery",
-          topic: "System Discovery and Baseline Audits",
-          description: "Documenting component, content, and accessibility constraints before rollout.",
-          focusAreas: ["A11y Audits", "Component Inventory", "Content Contracts"],
-          linkLabel: "View audit journal",
-          linkUrl: "https://example.com/learning/system-audits",
-        },
-      },
-      {
-        sys: makeSys("learning-storybook-contracts", "learningItem"),
-        fields: {
-          internalName: "Storybook Contracts",
-          topic: "Storybook Contract Enforcement",
-          description: "Turning stories into repeatable contract checks for section behavior.",
-          status: "practicing",
-          focusAreas: ["Storybook", "Testing", "DX"],
-          linkLabel: "Read Storybook playbook",
-          linkUrl: "https://example.com/learning/storybook-contracts",
-        },
-      },
-      {
-        sys: makeSys("learning-accessibility", "learningItem"),
-        fields: {
-          internalName: "Accessibility Patterns",
-          topic: "Accessibility Patterns",
-          description: "Improving keyboard support, semantic structure, and focus clarity.",
+          internalName: "Search-native Content Modeling",
+          topic: "Search-native content modeling",
+          description:
+            "Modeling content for retrieval quality, reusable taxonomy, and query-friendly section structures.",
           status: "shipping",
-          focusAreas: ["Keyboard UX", "Semantic HTML", "WCAG"],
-          linkLabel: "Read accessibility notes",
-          linkUrl: "https://example.com/learning/accessibility-notes",
+          focusAreas: ["Content Architecture", "Search Semantics", "Taxonomy"],
+          roadmapLabel: "Q2 2025",
+          sortOrder: 1,
+          isNextUp: false,
+          linkLabel: "Read modeling notes",
+          linkUrl: "https://example.com/learning/search-native-content-modeling",
         },
       },
       {
-        sys: makeSys("learning-content-modeling", "learningItem"),
+        sys: makeSys("learning-design-system-foundations", "learningItem"),
         fields: {
-          topic: "Content Modeling for Additive Migrations",
-          description: "Planning the next additive shape while preserving current editor workflows.",
+          internalName: "Design System Foundations",
+          topic: "Design system foundations",
+          description:
+            "Hardening primitive contracts, tokens, and section composition rules for long-term consistency.",
+          status: "practicing",
+          focusAreas: ["Tokens", "Primitives", "Section Contracts"],
+          roadmapLabel: "Q3 2025",
+          sortOrder: 2,
+          isNextUp: false,
+          linkLabel: "View system checklist",
+          linkUrl: "https://example.com/learning/design-system-foundations",
+        },
+      },
+      {
+        sys: makeSys("learning-storybook-workflow", "learningItem"),
+        fields: {
+          internalName: "Storybook Workflow",
+          topic: "Storybook workflow",
+          description:
+            "Standardizing stories, interaction tests, and review flows to improve UI delivery quality.",
+          status: "practicing",
+          focusAreas: ["Storybook", "Interaction Tests", "Review Workflow"],
+          roadmapLabel: "Q4 2025",
+          sortOrder: 3,
+          isNextUp: false,
+          linkLabel: "Read Storybook workflow notes",
+          linkUrl: "https://example.com/learning/storybook-workflow",
+        },
+      },
+      {
+        sys: makeSys("learning-advanced-typescript-patterns", "learningItem"),
+        fields: {
+          internalName: "Advanced TypeScript Patterns",
+          topic: "Advanced TypeScript patterns",
+          description:
+            "Applying advanced type patterns to strengthen section boundaries and migration safety.",
           status: "exploring",
-          focusAreas: [],
-          linkLabel: "Migration checklist",
+          focusAreas: ["Type Inference", "Discriminated Unions", "Type-Level Utilities"],
+          roadmapLabel: "Q1 2026",
+          sortOrder: 4,
+          isNextUp: true,
+          linkLabel: "Track TypeScript roadmap",
+          linkUrl: "https://example.com/learning/advanced-typescript-patterns",
         },
       },
     ],
+  },
+};
+
+const footerSection: SectionFooter = {
+  sys: makeSys("section-footer", "sectionFooter"),
+  fields: {
+    internalName: "Footer",
+    brandTitle: "Gilberto Haro",
+    brandSubtitle: "Web Engineer · Content Systems",
+    summary:
+      "Building resilient web experiences with clear section contracts and editorially calm design.",
+    navigationGroups: [
+      {
+        sys: makeSys("footer-group-site", "footerLinkGroup"),
+        fields: {
+          internalName: "Footer Site Links",
+          label: "Site",
+          links: [
+            {
+              sys: makeSys("footer-link-about", "footerLink"),
+              fields: {
+                label: "About",
+                href: "#top",
+                kind: "nav",
+                iconKey: "arrow",
+              },
+            },
+            {
+              sys: makeSys("footer-link-experience", "footerLink"),
+              fields: {
+                label: "Experience",
+                href: "#timeline",
+                kind: "nav",
+                iconKey: "arrow",
+              },
+            },
+            {
+              sys: makeSys("footer-link-projects", "footerLink"),
+              fields: {
+                label: "Projects",
+                href: "#projects",
+                kind: "nav",
+                iconKey: "arrow",
+              },
+            },
+            {
+              sys: makeSys("footer-link-learning", "footerLink"),
+              fields: {
+                label: "Learning",
+                href: "#learning",
+                kind: "nav",
+                iconKey: "arrow",
+              },
+            },
+          ],
+        },
+      },
+      {
+        sys: makeSys("footer-group-connect", "footerLinkGroup"),
+        fields: {
+          internalName: "Footer Connect Links",
+          label: "Connect",
+          links: [
+            {
+              sys: makeSys("footer-link-contact", "footerLink"),
+              fields: {
+                label: "Contact",
+                href: "mailto:hello@example.com",
+                kind: "nav",
+                iconKey: "arrow",
+                openInNewTab: false,
+              },
+            },
+            {
+              sys: makeSys("footer-link-resume", "footerLink"),
+              fields: {
+                label: "Resume",
+                href: "https://example.com/resume",
+                kind: "cta",
+              },
+            },
+          ],
+        },
+      },
+    ],
+    socialLinks: [
+      {
+        sys: makeSys("footer-social-github", "footerLink"),
+        fields: {
+          label: "GitHub",
+          href: "https://github.com/example",
+          kind: "social",
+          iconKey: "github",
+        },
+      },
+      {
+        sys: makeSys("footer-social-linkedin", "footerLink"),
+        fields: {
+          label: "LinkedIn",
+          href: "https://www.linkedin.com/in/example",
+          kind: "social",
+          iconKey: "linkedin",
+        },
+      },
+      {
+        sys: makeSys("footer-social-email", "footerLink"),
+        fields: {
+          label: "Email",
+          href: "mailto:hello@example.com",
+          kind: "email",
+          iconKey: "email",
+          openInNewTab: false,
+        },
+      },
+    ],
+    legalText: "© 2026 Gilberto Haro. All rights reserved.",
+    builtWithText: "Built with React, TypeScript, and Contentful.",
   },
 };
 
@@ -528,4 +748,5 @@ export const staticLandingPage: LandingPageData = {
   metaDescription:
     "Frontend and content systems engineer delivering resilient, content-driven experiences.",
   sections: [heroSection, timelineSection, projectsSection, skillsSection, learningSection],
+  footer: footerSection,
 };

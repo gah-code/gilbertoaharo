@@ -1,6 +1,7 @@
 import type {
   LandingPageData,
   ArticlePageData,
+  ArticleListItem,
   NavigationMenuData,
 } from "./contentful/types";
 import { contentfulSource } from "./contentful/contentfulSource";
@@ -10,6 +11,7 @@ import { env } from "@/env";
 export interface ContentSource {
   getLandingPage(): Promise<LandingPageData>;
   getArticleBySlug(slug: string): Promise<ArticlePageData | null>;
+  getAllArticles(): Promise<ArticleListItem[]>;
   getNavigationMenu(): Promise<NavigationMenuData>;
 }
 

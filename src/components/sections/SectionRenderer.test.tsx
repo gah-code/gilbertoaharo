@@ -69,6 +69,18 @@ const sections: SectionEntry[] = [
       links: [],
     },
   },
+  {
+    sys: { id: "footer", contentType: { sys: { id: "sectionFooter" } } },
+    fields: {
+      internalName: "Footer",
+      brandTitle: "Footer Title",
+      summary: "Footer summary text.",
+      navigationGroups: [],
+      socialLinks: [],
+      legalText: "Copyright 2026",
+      builtWithText: "Built with React and TypeScript",
+    },
+  },
 ];
 
 describe("SectionRenderer", () => {
@@ -83,5 +95,6 @@ describe("SectionRenderer", () => {
     expect(screen.getByText("Projects Title")).toBeInTheDocument();
     expect(screen.getByText("Learning Title")).toBeInTheDocument();
     expect(screen.getByText("Contact Title")).toBeInTheDocument();
+    expect(screen.getByText("Footer Title")).toBeInTheDocument();
   });
 });

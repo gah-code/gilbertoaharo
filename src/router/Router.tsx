@@ -2,6 +2,7 @@ import React from "react";
 import { parsePathname } from "@/router/routes";
 
 import { LandingPage } from "@/pages/LandingPage";
+import { ArticlesPage } from "@/pages/ArticlesPage";
 import { ArticlePage } from "@/pages/ArticlePage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { DebugPage } from "@/pages/DebugPage";
@@ -20,6 +21,9 @@ export function Router() {
   switch (route.name) {
     case "landing":
       return <LandingPage />;
+
+    case "articles":
+      return <ArticlesPage />;
 
     case "debug":
       return <DebugPage />;

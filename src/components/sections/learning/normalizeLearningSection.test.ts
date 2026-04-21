@@ -8,105 +8,189 @@ const section: SectionLearning = {
     internalName: "Learning",
     anchorId: "learning",
     eyebrow: "Learning",
-    title: "Learning",
-    intro: "In-progress topics and practical experiments.",
+    title: "Learning Roadmap",
+    intro: "Current roadmap priorities.",
     items: [
       {
-        sys: { id: "learning-item-1", contentType: { sys: { id: "learningItem" } } },
+        sys: { id: "learning-item-a", contentType: { sys: { id: "learningItem" } } },
         fields: {
-          internalName: "Accessibility Patterns",
-          topic: "Accessibility",
-          description: "Improving keyboard workflows",
+          internalName: "Search Modeling Program",
+          topic: "Search-native content modeling",
+          description: "Modeling entries for retrieval quality and taxonomy reuse.",
           status: "shipping",
-          focusAreas: [" Keyboard UX ", "A11y", ""],
-          linkLabel: "Read notes",
-          linkUrl: "https://example.com/notes",
+          focusAreas: [" Retrieval ", "", "Taxonomy", "   "],
+          roadmapLabel: "Q2 2025",
+          sortOrder: 2,
+          linkLabel: "Read modeling notes",
+          linkUrl: " https://example.com/learning/search-modeling ",
         },
       },
       {
-        sys: { id: "learning-item-2", contentType: { sys: { id: "learningItem" } } },
+        sys: { id: "learning-item-b", contentType: { sys: { id: "learningItem" } } },
         fields: {
-          topic: "Experimentation Playbooks",
-          linkLabel: "Read draft",
+          topic: "Design system foundations",
+          description: "Refining primitives and section-level contracts.",
+          roadmapLabel: "Q3 2025",
+          sortOrder: 1,
+          linkLabel: "Checklist",
         },
       },
       {
-        sys: { id: "learning-item-3", contentType: { sys: { id: "learningItem" } } },
+        sys: { id: "learning-item-c", contentType: { sys: { id: "learningItem" } } },
         fields: {
-          topic: "Storybook Contracts",
+          topic: "Storybook workflow",
           status: "practicing",
-          focusAreas: [],
-          linkUrl: "https://example.com/storybook",
+          focusAreas: ["Storybook"],
+          linkUrl: "https://example.com/learning/storybook-workflow",
+        },
+      },
+      {
+        sys: { id: "learning-item-d", contentType: { sys: { id: "learningItem" } } },
+        fields: {
+          internalName: "Advanced TypeScript Patterns",
+          topic: "Advanced TypeScript patterns",
+          status: "exploring",
+          focusAreas: ["Type Inference", "Unions"],
+          roadmapLabel: "Q1 2026",
+          sortOrder: 4,
+          isNextUp: true,
+          linkLabel: "Track roadmap",
+          linkUrl: "https://example.com/learning/typescript-roadmap",
         },
       },
     ],
   },
 };
 
-const fallbackSection: SectionLearning = {
-  sys: { id: "learning-fallback", contentType: { sys: { id: "sectionLearning" } } },
+const missingItemsSection: SectionLearning = {
+  sys: { id: "learning-empty", contentType: { sys: { id: "sectionLearning" } } },
   fields: {
-    internalName: "Learning Fallback",
+    internalName: "Learning Empty",
     anchorId: "",
     title: "",
     items: undefined,
   },
 };
 
-describe("normalizeLearningSection", () => {
-  it("normalizes additive fields, status labels, and action gating", () => {
-    const normalized = normalizeLearningSection(section);
-    const firstItem = normalized.items[0];
-    const secondItem = normalized.items[1];
-    const thirdItem = normalized.items[2];
+const sortOrderCollisionSection: SectionLearning = {
+  sys: { id: "learning-collision", contentType: { sys: { id: "sectionLearning" } } },
+  fields: {
+    internalName: "Learning Collision",
+    anchorId: "learning-collision",
+    title: "Learning Collision",
+    items: [
+      {
+        sys: { id: "learning-collision-1", contentType: { sys: { id: "learningItem" } } },
+        fields: {
+          topic: "Fallback First",
+          roadmapLabel: "Fallback",
+        },
+      },
+      {
+        sys: { id: "learning-collision-2", contentType: { sys: { id: "learningItem" } } },
+        fields: {
+          topic: "Explicit First",
+          roadmapLabel: "Explicit",
+          sortOrder: 1,
+        },
+      },
+      {
+        sys: { id: "learning-collision-3", contentType: { sys: { id: "learningItem" } } },
+        fields: {
+          topic: "Explicit Second",
+          roadmapLabel: "Explicit",
+          sortOrder: 2,
+        },
+      },
+    ],
+  },
+};
 
+describe("normalizeLearningSection", () => {
+  it("normalizes section and roadmap item fields with expected defaults", () => {
+    const normalized = normalizeLearningSection(section);
+    const [firstItem, secondItem, thirdItem, fourthItem] = normalized.items;
+
+    // section-level fields
     expect(normalized.anchorId).toBe("learning");
     expect(normalized.eyebrow).toBe("Learning");
-    expect(normalized.intro).toBe("In-progress topics and practical experiments.");
+    expect(normalized.title).toBe("Learning Roadmap");
+    expect(normalized.intro).toBe("Current roadmap priorities.");
 
-    expect(firstItem?.key).toBe("learning-section-accessibility-patterns");
-    expect(firstItem?.status).toBe("shipping");
-    expect(firstItem?.statusLabel).toBe("Shipping");
-    expect(firstItem?.focusAreas).toEqual(["Keyboard UX", "A11y"]);
-    expect(firstItem?.action).toEqual({
-      href: "https://example.com/notes",
-      label: "Read notes",
-    });
-    expect(firstItem?.roadmapIndex).toBe(0);
-    expect(firstItem?.isLast).toBe(false);
+    // item ordering and sortOrder behavior
+    expect(normalized.items.map((item) => item.topic)).toEqual([
+      "Design system foundations",
+      "Search-native content modeling",
+      "Storybook workflow",
+      "Advanced TypeScript patterns",
+    ]);
+    expect(normalized.items.map((item) => item.sortOrder)).toEqual([1, 2, 3, 4]);
+    expect(normalized.items.map((item) => item.roadmapIndex)).toEqual([0, 1, 2, 3]);
+    expect(normalized.items.map((item) => item.isLast)).toEqual([
+      false,
+      false,
+      false,
+      true,
+    ]);
 
-    expect(secondItem?.status).toBe("exploring");
-    expect(secondItem?.statusLabel).toBe("Exploring");
-    expect(secondItem?.focusAreas).toEqual([]);
-    expect(secondItem?.action).toBeUndefined();
-    expect(secondItem?.roadmapIndex).toBe(1);
-    expect(secondItem?.isLast).toBe(false);
+    // key behavior: fallback to topic and prefer internalName when present
+    expect(firstItem?.key).toBe("learning-section-design-system-foundations");
+    expect(secondItem?.key).toBe("learning-section-search-modeling-program");
 
-    expect(thirdItem?.key).toBe("learning-section-storybook-contracts");
+    // status defaults and labels
+    expect(firstItem?.status).toBe("exploring");
+    expect(firstItem?.statusLabel).toBe("Exploring");
+    expect(secondItem?.status).toBe("shipping");
+    expect(secondItem?.statusLabel).toBe("Shipping");
     expect(thirdItem?.status).toBe("practicing");
     expect(thirdItem?.statusLabel).toBe("Practicing");
+
+    // roadmap metadata
+    expect(firstItem?.roadmapLabel).toBe("Q3 2025");
+    expect(secondItem?.roadmapLabel).toBe("Q2 2025");
+    expect(thirdItem?.roadmapLabel).toBe("Step 3");
+    expect(fourthItem?.roadmapLabel).toBe("Q1 2026");
+    expect(fourthItem?.isNextUp).toBe(true);
+    expect(firstItem?.isNextUp).toBe(false);
+
+    // focusAreas defaults + falsey filtering
+    expect(firstItem?.focusAreas).toEqual([]);
+    expect(secondItem?.focusAreas).toEqual(["Retrieval", "Taxonomy"]);
+
+    // action gating
+    expect(secondItem?.action).toEqual({
+      label: "Read modeling notes",
+      href: "https://example.com/learning/search-modeling",
+    });
+    expect(firstItem?.action).toBeUndefined();
     expect(thirdItem?.action).toBeUndefined();
-    expect(thirdItem?.roadmapIndex).toBe(2);
-    expect(thirdItem?.isLast).toBe(true);
   });
 
-  it("defaults missing arrays and fallback values safely", () => {
-    const normalized = normalizeLearningSection(fallbackSection);
+  it("defaults items to an empty list and uses section fallbacks safely", () => {
+    const normalized = normalizeLearningSection(missingItemsSection);
 
-    expect(normalized.id).toBe("learning-fallback");
-    expect(normalized.anchorId).toBe("learning-fallback");
+    expect(normalized.id).toBe("learning-empty");
+    expect(normalized.anchorId).toBe("learning-empty");
     expect(normalized.title).toBe("Learning");
     expect(normalized.items).toEqual([]);
   });
 
-  it("preserves item order as roadmap order", () => {
+  it("uses index+1 as sortOrder fallback for missing values", () => {
     const normalized = normalizeLearningSection(section);
+    const item = normalized.items.find((entry) => entry.topic === "Storybook workflow");
+
+    expect(item?.sortOrder).toBe(3);
+    expect(item?.roadmapLabel).toBe("Step 3");
+  });
+
+  it("sorts explicit sortOrder entries ahead of fallback entries when values collide", () => {
+    const normalized = normalizeLearningSection(sortOrderCollisionSection);
 
     expect(normalized.items.map((item) => item.topic)).toEqual([
-      "Accessibility",
-      "Experimentation Playbooks",
-      "Storybook Contracts",
+      "Explicit First",
+      "Fallback First",
+      "Explicit Second",
     ]);
-    expect(normalized.items.map((item) => item.roadmapIndex)).toEqual([0, 1, 2]);
+    expect(normalized.items.map((item) => item.sortOrder)).toEqual([1, 1, 2]);
   });
 });

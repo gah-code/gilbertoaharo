@@ -1,14 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { staticLandingPage } from "@/content/static/fixtures";
 import type { SectionLearning } from "@/content/contentful/types";
 import { LearningSection } from "./LearningSection";
-import { learningStorySection } from "./sectionStoryFixtures";
+
+const learningSection = staticLandingPage.sections.find(
+  (section): section is SectionLearning =>
+    section.sys.contentType.sys.id === "sectionLearning",
+);
+
+if (!learningSection) {
+  throw new Error("Learning section fixture is required for storybook.");
+}
 
 const meta: Meta<typeof LearningSection> = {
   title: "Sections/LearningSection",
   component: LearningSection,
   tags: ["autodocs"],
   args: {
-    section: learningStorySection,
+    section: learningSection,
   },
 };
 
@@ -19,8 +28,8 @@ export const Default: Story = {};
 export const RoadmapTimeline: Story = {};
 
 const sparseLearningSection: SectionLearning = {
-  ...learningStorySection,
-  sys: { ...learningStorySection.sys, id: "learning-story-sparse" },
+  ...learningSection,
+  sys: { ...learningSection.sys, id: "learning-story-sparse" },
   fields: {
     internalName: "Learning Sparse Story",
     anchorId: "learning",

@@ -1,5 +1,25 @@
 # Changelog
 
+## [2026-04-21]
+
+### Changed
+
+- Introduced global footer content modeling in raw frontend types, including `sectionFooter`, `footerLinkGroup`, and `footerLink` fields (`kind`, `iconKey`, `openInNewTab`, link metadata), plus `LandingPageData.footer` support. (`src/content/contentful/types.ts`)
+- Updated Contentful landing data flow to fetch a global footer entry, map footer links/groups defensively, and preserve fallback compatibility when a footer section is embedded in page sections. (`src/content/contentful/api.ts`, `src/content/contentful/adapters.ts`, `src/content/contentful/contentfulSource.ts`)
+- Implemented footer normalization with stable defaults (`navigationGroups`/`socialLinks` arrays), invalid-link filtering (`href` required), key fallbacks (`internalName ?? label`), icon key passthrough, and open-in-new-tab heuristics (external `http/https` defaults true; anchors/relative/mailto defaults false). (`src/components/sections/footer/normalizeFooterSection.ts`)
+- Built the editorial `FooterSection` UI with top and bottom dividers, brand block (title/subtitle/summary), inline social links, right-side nav groups, understated legal/meta row, and centralized SVG icon rendering from `iconKey` (`github`, `linkedin`, `email`, `external`, `arrow`, `none`). (`src/components/sections/FooterSection.tsx`, `src/components/sections/FooterSection.css`, `src/components/sections/footer/FooterLinkIcon.tsx`)
+- Mounted the global footer from landing-page data through the page shell so footer rendering is explicit and outside normal section flow while keeping section-renderer compatibility. (`src/pages/LandingPage.tsx`, `src/components/layout/PageShell.tsx`)
+- Added footer fixture/story/test coverage for static mode and rendering/normalization safety (link filtering, key fallback behavior, target defaults). (`src/content/static/fixtures.ts`, `src/components/sections/sectionStoryFixtures.ts`, `src/components/sections/footer/FooterSection.stories.tsx`, `src/components/sections/footer/normalizeFooterSection.test.ts`, `src/components/sections/SectionRenderer.test.tsx`)
+- Added a production `/articles` index page using only the existing Article model (no `pageArticlesIndex` dependency), with loading/error/empty/success states, normalization, invalid-item filtering, and deterministic sort (`publishedAt` desc, fallback `updatedAt` desc, fallback title asc). (`src/pages/ArticlesPage.tsx`, `src/pages/ArticlesPage.css`)
+- Added reusable article cards with optional hero media, metadata/date handling, excerpt, and detail CTA linking to the existing single-article route. (`src/components/articles/ArticleCard.tsx`, `src/components/articles/ArticleCard.css`)
+- Extended content-source contracts with `getAllArticles()` and implemented both static and Contentful paths (including paginated Contentful article fetching and list-item mapping), then wired `/articles` route handling while preserving `/articles/:slug` detail routing. (`src/content/source.ts`, `src/content/static/staticSource.ts`, `src/content/static/fixtures.ts`, `src/content/contentful/api.ts`, `src/content/contentful/adapters.ts`, `src/content/contentful/contentfulSource.ts`, `src/router/routes.ts`, `src/router/Router.tsx`, `src/content/contentful/types.ts`)
+
+### Verification
+
+- `npm run lint` (passes)
+- `npm run test` (passes: Vitest 17/17 tests)
+- `npm run build` (passes: `tsc -b` + `vite build`; local Node warning persists on `v22.2.0` vs recommended `>=22.12.0`)
+
 ## [2026-04-17]
 
 ### Changed

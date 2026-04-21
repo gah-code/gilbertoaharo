@@ -55,6 +55,7 @@ export const ARTICLE_ROUTE_PREFIX = normalizePrefix(
 
 export type RouteMatch =
   | { name: "landing" }
+  | { name: "articles" }
   | { name: "debug" }
   | { name: "article"; slug: string }
   | { name: "not-found" };
@@ -69,6 +70,10 @@ export function parsePathname(pathname: string): RouteMatch {
 
   if (normalizedPath === "/") {
     return { name: "landing" };
+  }
+
+  if (normalizedPath === normalizedPrefix) {
+    return { name: "articles" };
   }
 
   if (normalizedPath === "/debug") {

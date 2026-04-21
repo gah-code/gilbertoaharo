@@ -19,6 +19,21 @@ export type ProjectLinkKind =
   | "article"
   | "other";
 export type ProjectLinkVariant = "primary" | "secondary" | "text";
+export type FooterLinkKind =
+  | "nav"
+  | "social"
+  | "email"
+  | "legal"
+  | "cta"
+  | "other";
+export type FooterLinkIconKey =
+  | "github"
+  | "linkedin"
+  | "email"
+  | "external"
+  | "arrow"
+  | "none";
+export type FooterLinkVariant = "primary" | "secondary" | "text";
 export type LearningStatus = "exploring" | "practicing" | "shipping";
 export type NavMobileBehavior = "link" | "drawerAccordion";
 export type NavPanelAlign = "center" | "left";
@@ -43,6 +58,9 @@ export type EntryTypeId =
   | "sectionLearning"
   | "learningItem"
   | "sectionContact"
+  | "sectionFooter"
+  | "footerLinkGroup"
+  | "footerLink"
   | "article"
   | "navigationMenu"
   | "navLink"
@@ -335,6 +353,9 @@ export type LearningItem = Entry<
     description?: string;
     status?: LearningStatus;
     focusAreas?: string[];
+    roadmapLabel?: string;
+    sortOrder?: number;
+    isNextUp?: boolean;
     linkLabel?: string;
     linkUrl?: string;
   }
@@ -364,13 +385,53 @@ export type SectionContact = Entry<
   }
 >;
 
+export type FooterLink = Entry<
+  "footerLink",
+  {
+    internalName?: string;
+    label: string;
+    href?: string;
+    kind?: FooterLinkKind;
+    iconKey?: FooterLinkIconKey;
+    variant?: FooterLinkVariant;
+    openInNewTab?: boolean;
+    ariaLabel?: string;
+    analyticsLabel?: string;
+  }
+>;
+
+export type FooterLinkGroup = Entry<
+  "footerLinkGroup",
+  {
+    internalName?: string;
+    label: string;
+    links?: FooterLink[];
+  }
+>;
+
+export type SectionFooter = Entry<
+  "sectionFooter",
+  {
+    internalName: string;
+    eyebrow?: string;
+    brandTitle: string;
+    brandSubtitle?: string;
+    summary?: string;
+    navigationGroups?: FooterLinkGroup[];
+    socialLinks?: FooterLink[];
+    legalText?: string;
+    builtWithText?: string;
+  }
+>;
+
 export type SectionEntry =
   | SectionHero
   | SectionTimeline
   | SectionSkills
   | SectionProjects
   | SectionLearning
-  | SectionContact;
+  | SectionContact
+  | SectionFooter;
 
 export type PagePersonalLanding = Entry<
   "pagePersonalLanding",
@@ -389,6 +450,7 @@ export type LandingPageData = {
   metaTitle: string;
   metaDescription?: string;
   sections: SectionEntry[];
+  footer?: SectionFooter;
 };
 
 export type ArticlePageData = {
@@ -402,6 +464,16 @@ export type ArticlePageData = {
   body: RichTextDocument;
   attachments: Array<{ url: string; fileName?: string; contentType?: string }>;
   seo: { title: string; description?: string; canonicalUrl?: string };
+};
+
+export type ArticleListItem = {
+  slug: string;
+  title: string;
+  excerpt?: string;
+  authorName?: string;
+  publishedAt?: string;
+  updatedAt?: string;
+  heroImageUrl?: string;
 };
 
 export type NavigationCardData = {

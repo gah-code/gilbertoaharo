@@ -1,0 +1,106 @@
+@import "../../styles/tokens.css";
+
+.article-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  overflow: clip;
+  min-height: 100%;
+  transition:
+    border-color var(--motion-duration-fast) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.article-card:hover {
+  border-color: color-mix(in srgb, var(--color-border) 28%, transparent);
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
+}
+
+.article-card__media {
+  aspect-ratio: 16 / 9;
+  display: block;
+  background: var(--color-surface-2);
+  overflow: hidden;
+}
+
+.article-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.article-card__body {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.article-card__title {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.3vw, 1.25rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.article-card__title-link {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.article-card__title-link:hover {
+  color: var(--color-accent);
+}
+
+.article-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.article-card__meta > *:not(:last-child)::after {
+  content: "·";
+  margin-left: var(--space-2);
+}
+
+.article-card__excerpt {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.65;
+}
+
+.article-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.article-card__cta::after {
+  content: "→";
+  transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.article-card__cta:hover {
+  color: var(--color-accent-hover);
+}
+
+.article-card__cta:hover::after {
+  transform: translateX(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .article-card,
+  .article-card__cta::after {
+    transition: none;
+  }
+}

@@ -1,6 +1,9 @@
 import type {
   Article,
+  ArticleListItem,
   ArticlePageData,
+  FooterLink,
+  FooterLinkGroup,
   LandingPageData,
   LearningItem,
   NavCard,
@@ -14,17 +17,30 @@ import type {
   ProjectLink,
   SectionProjects,
   SectionEntry,
+  SectionFooter,
   SectionLearning,
   SectionTimeline,
   TimelineItem,
 } from "./types";
 import { env } from "@/env";
 
-export function mapLandingPage(page: PagePersonalLanding): LandingPageData {
+export function mapLandingPage(
+  page: PagePersonalLanding,
+  fallbackFooter?: SectionFooter | null,
+): LandingPageData {
+  const mappedSections = page.fields.sections.map(mapSection);
+  const mappedFooterFromSections = mappedSections.find(
+    (section): section is SectionFooter =>
+      section.sys.contentType.sys.id === "sectionFooter",
+  );
+
   return {
     metaTitle: page.fields.metaTitle,
     metaDescription: page.fields.metaDescription,
-    sections: page.fields.sections.map(mapSection),
+    sections: mappedSections.filter(
+      (section) => section.sys.contentType.sys.id !== "sectionFooter",
+    ),
+    footer: fallbackFooter ? mapFooterSection(fallbackFooter) : mappedFooterFromSections,
   };
 }
 
@@ -102,6 +118,18 @@ export function mapArticlePage(article: Article): ArticlePageData {
       description: seoDesc,
       canonicalUrl: article.fields.canonicalUrl ?? canonicalFallback,
     },
+  };
+}
+
+export function mapArticleListItem(article: Article): ArticleListItem {
+  return {
+    slug: article.fields.slug,
+    title: article.fields.title,
+    excerpt: article.fields.excerpt,
+    authorName: article.fields.author?.fields.name,
+    publishedAt: article.fields.publishedAt,
+    updatedAt: article.fields.updatedAt,
+    heroImageUrl: normalizeAssetUrl(article.fields.heroImage?.fields.file?.url),
   };
 }
 
@@ -297,6 +325,9 @@ function mapLearningItem(item: LearningItem): LearningItem {
       description: fields.description,
       status: fields.status,
       focusAreas: safeArray(fields.focusAreas),
+      roadmapLabel: fields.roadmapLabel,
+      sortOrder: fields.sortOrder,
+      isNextUp: fields.isNextUp,
       linkLabel: fields.linkLabel,
       linkUrl: fields.linkUrl,
     },
@@ -319,6 +350,57 @@ function mapLearningSection(section: SectionLearning): SectionLearning {
   };
 }
 
+function mapFooterLink(link: FooterLink): FooterLink {
+  const fields = link.fields;
+
+  return {
+    sys: link.sys,
+    fields: {
+      internalName: fields.internalName,
+      label: fields.label,
+      href: fields.href,
+      kind: fields.kind,
+      iconKey: fields.iconKey,
+      variant: fields.variant,
+      openInNewTab: fields.openInNewTab,
+      ariaLabel: fields.ariaLabel,
+      analyticsLabel: fields.analyticsLabel,
+    },
+  };
+}
+
+function mapFooterLinkGroup(group: FooterLinkGroup): FooterLinkGroup {
+  const fields = group.fields;
+
+  return {
+    sys: group.sys,
+    fields: {
+      internalName: fields.internalName,
+      label: fields.label,
+      links: safeArray(fields.links).map(mapFooterLink),
+    },
+  };
+}
+
+function mapFooterSection(section: SectionFooter): SectionFooter {
+  const fields = section.fields;
+
+  return {
+    sys: section.sys,
+    fields: {
+      internalName: fields.internalName,
+      eyebrow: fields.eyebrow,
+      brandTitle: fields.brandTitle,
+      brandSubtitle: fields.brandSubtitle,
+      summary: fields.summary,
+      navigationGroups: safeArray(fields.navigationGroups).map(mapFooterLinkGroup),
+      socialLinks: safeArray(fields.socialLinks).map(mapFooterLink),
+      legalText: fields.legalText,
+      builtWithText: fields.builtWithText,
+    },
+  };
+}
+
 function mapSection(section: SectionEntry): SectionEntry {
   const id = section.sys.contentType.sys.id;
   if (id === "sectionTimeline") {
@@ -329,6 +411,9 @@ function mapSection(section: SectionEntry): SectionEntry {
   }
   if (id === "sectionLearning") {
     return mapLearningSection(section as SectionLearning);
+  }
+  if (id === "sectionFooter") {
+    return mapFooterSection(section as SectionFooter);
   }
   return section;
 }
