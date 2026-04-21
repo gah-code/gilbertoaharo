@@ -2,13 +2,13 @@ import React from "react";
 import { SeoHead } from "./SeoHead";
 import { Container } from "../ui/Container";
 import { Header } from "./Header";
+import { Footer } from "./Footer";
 
 type PageShellProps = {
   title?: string;
   description?: string;
   canonicalUrl?: string;
   children: React.ReactNode;
-  footer?: React.ReactNode;
 };
 
 export function PageShell({
@@ -16,7 +16,6 @@ export function PageShell({
   description,
   canonicalUrl,
   children,
-  footer,
 }: PageShellProps) {
   return (
     <div className="page-shell">
@@ -25,7 +24,7 @@ export function PageShell({
       <Container as="main" id="main-content">
         {children}
       </Container>
-      {footer}
+      <Footer />
     </div>
   );
 }

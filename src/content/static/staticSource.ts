@@ -17,4 +17,7 @@ export const staticSource: ContentSource = {
   async getNavigationMenu() {
     return staticNavigation;
   },
+  async getFooter() {
+    return staticLandingPage.footer ?? null;
+  },
 };

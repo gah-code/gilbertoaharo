@@ -11,6 +11,7 @@ import {
   mapArticlePage,
   mapArticleListItem,
   mapNavigationMenu,
+  mapFooterSection,
 } from "./adapters";
 
 export const contentfulSource: ContentSource = {
@@ -32,5 +33,9 @@ export const contentfulSource: ContentSource = {
   async getNavigationMenu() {
     const menu = await fetchNavigationMenu();
     return mapNavigationMenu(menu);
+  },
+  async getFooter() {
+    const footer = await fetchGlobalFooter();
+    return footer ? mapFooterSection(footer) : null;
   },
 };

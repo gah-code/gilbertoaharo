@@ -1,5 +1,29 @@
 # Changelog
 
+## [2026-04-21 - Update 2]
+
+### Added
+
+- Added a global layout `Footer` wrapper that fetches footer content through the active content source and renders `FooterSection` only when footer data is present, while safely rendering nothing during loading/error/empty states. (`src/components/layout/Footer.tsx`)
+- Added Contentful adapter tests that lock navigation/footer mapping to CMS-provided data (no auto-injected Articles links) and verify fallback footer passthrough behavior. (`src/content/contentful/adapters.test.ts`)
+- Added Storybook coverage for `ArticleCard` with realistic states (`Default`, `NoImage`, `NoExcerpt`, `MinimalMeta`, `UpdatedOnly`, `LongTitle`) plus story framing styles for visual QA. (`src/components/articles/ArticleCard.stories.tsx`, `src/components/articles/ArticleCard.stories.css`)
+- Added reusable article list fixtures for Storybook and tests. (`src/components/articles/__fixtures__/articleList.fixture.ts`)
+- Added unit and rendering tests for article list helpers, `ArticleCard`, and `ArticlesPage` loading/error/empty/populated states. (`src/pages/articles/articlesPageUtils.test.ts`, `src/components/articles/ArticleCard.test.tsx`, `src/pages/ArticlesPage.test.tsx`)
+
+### Changed
+
+- Updated `PageShell` to mount footer globally and removed per-page footer prop usage from the shell contract. (`src/components/layout/PageShell.tsx`)
+- Simplified `LandingPage` to render landing sections only; footer mounting now comes from the shared shell path. (`src/pages/LandingPage.tsx`)
+- Extended the shared `ContentSource` contract with `getFooter()` and implemented it for both static and Contentful sources. (`src/content/source.ts`, `src/content/static/staticSource.ts`, `src/content/contentful/contentfulSource.ts`)
+- Exported `mapFooterSection` for direct use in `contentfulSource.getFooter()` mapping. (`src/content/contentful/adapters.ts`)
+- Extracted Articles page sorting/normalization logic into a dedicated helper module and updated `ArticlesPage` to consume it without runtime behavior changes. (`src/pages/articles/articlesPageUtils.ts`, `src/pages/ArticlesPage.tsx`)
+
+### Verification
+
+- `npm run test -- src/content/contentful/adapters.test.ts` (passes)
+- `npm run test -- src/pages/ArticlesPage.test.tsx src/components/articles/ArticleCard.test.tsx src/pages/articles/articlesPageUtils.test.ts` (passes: Vitest 19/19 tests)
+- `npm run build` (passes: `tsc -b` + `vite build`; local Node warning persists on `v22.2.0` vs recommended `>=22.12.0`)
+
 ## [2026-04-21]
 
 ### Changed

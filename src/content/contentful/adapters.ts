@@ -382,8 +382,11 @@ function mapFooterLinkGroup(group: FooterLinkGroup): FooterLinkGroup {
   };
 }
 
-function mapFooterSection(section: SectionFooter): SectionFooter {
+export function mapFooterSection(section: SectionFooter): SectionFooter {
   const fields = section.fields;
+  const navigationGroups = safeArray(fields.navigationGroups).map(
+    mapFooterLinkGroup,
+  );
 
   return {
     sys: section.sys,
@@ -393,7 +396,7 @@ function mapFooterSection(section: SectionFooter): SectionFooter {
       brandTitle: fields.brandTitle,
       brandSubtitle: fields.brandSubtitle,
       summary: fields.summary,
-      navigationGroups: safeArray(fields.navigationGroups).map(mapFooterLinkGroup),
+      navigationGroups,
       socialLinks: safeArray(fields.socialLinks).map(mapFooterLink),
       legalText: fields.legalText,
       builtWithText: fields.builtWithText,

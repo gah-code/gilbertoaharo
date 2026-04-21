@@ -3,6 +3,7 @@ import type {
   ArticlePageData,
   ArticleListItem,
   NavigationMenuData,
+  SectionFooter,
 } from "./contentful/types";
 import { contentfulSource } from "./contentful/contentfulSource";
 import { staticSource } from "./static/staticSource";
@@ -13,6 +14,7 @@ export interface ContentSource {
   getArticleBySlug(slug: string): Promise<ArticlePageData | null>;
   getAllArticles(): Promise<ArticleListItem[]>;
   getNavigationMenu(): Promise<NavigationMenuData>;
+  getFooter(): Promise<SectionFooter | null>;
 }
 
 export function getContentSource(): ContentSource {
