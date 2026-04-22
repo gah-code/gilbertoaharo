@@ -27,7 +27,6 @@ export const env = {
     spaceId: must("VITE_CONTENTFUL_SPACE_ID"),
     environment: readEnv("VITE_CONTENTFUL_ENVIRONMENT") || "master",
     deliveryToken: readEnv("VITE_CONTENTFUL_DELIVERY_TOKEN") || "",
-    previewToken: readEnv("VITE_CONTENTFUL_PREVIEW_TOKEN") || "",
     includeCSM:
       (readEnv("VITE_CONTENTFUL_INCLUDE_CONTENT_SOURCE_MAPS") || "false") ===
       "true",

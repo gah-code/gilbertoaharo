@@ -1,5 +1,20 @@
 # Changelog
 
+## [2026-04-21 - Update 3]
+
+### Changed
+
+- Sanitized environment templates to placeholder-only values and removed unused preview-token wiring from client env parsing. (`.env.example`, `src/env.ts`)
+- Removed committed Storybook build artifacts that embedded prior runtime env values and added an ignore rule to keep generated Storybook output out of git. (`storybook-static/`, `.gitignore`)
+- Pinned Netlify Node runtime to `22.12.0` for Vite/Storybook compatibility. (`netlify.toml`)
+- Updated docs with Netlify deployment env boundaries (client-exposed vs never committed) and redeploy guidance after sanitization. (`README.md`)
+
+### Verification
+
+- `npm run build` (passes)
+- `npm run test` (passes)
+- Repo scan confirms no preview-token env wiring remains in tracked source.
+
 ## [2026-04-21 - Update 2]
 
 ### Added
@@ -8,7 +23,7 @@
 - Added Contentful adapter tests that lock navigation/footer mapping to CMS-provided data (no auto-injected Articles links) and verify fallback footer passthrough behavior. (`src/content/contentful/adapters.test.ts`)
 - Added Storybook coverage for `ArticleCard` with realistic states (`Default`, `NoImage`, `NoExcerpt`, `MinimalMeta`, `UpdatedOnly`, `LongTitle`) plus story framing styles for visual QA. (`src/components/articles/ArticleCard.stories.tsx`, `src/components/articles/ArticleCard.stories.css`)
 - Added reusable article list fixtures for Storybook and tests. (`src/components/articles/__fixtures__/articleList.fixture.ts`)
-- Added unit and rendering tests for article list helpers, `ArticleCard`, and `ArticlesPage` loading/error/empty/populated states. (`src/pages/articles/articlesPageUtils.test.ts`, `src/components/articles/ArticleCard.test.tsx`, `src/pages/ArticlesPage.test.tsx`)
+- Added unit and rendering tests for article list helpers, `ArticleCard`, and `ArticlesPage` loading/error/empty/populated states. (`src/pages/articles/articlesPageUtils.test.ts`, `src/components/articles/ArticleCard.test.tsx`, `src/pages/articles/ArticlesPage.test.tsx`)
 
 ### Changed
 
@@ -16,12 +31,12 @@
 - Simplified `LandingPage` to render landing sections only; footer mounting now comes from the shared shell path. (`src/pages/LandingPage.tsx`)
 - Extended the shared `ContentSource` contract with `getFooter()` and implemented it for both static and Contentful sources. (`src/content/source.ts`, `src/content/static/staticSource.ts`, `src/content/contentful/contentfulSource.ts`)
 - Exported `mapFooterSection` for direct use in `contentfulSource.getFooter()` mapping. (`src/content/contentful/adapters.ts`)
-- Extracted Articles page sorting/normalization logic into a dedicated helper module and updated `ArticlesPage` to consume it without runtime behavior changes. (`src/pages/articles/articlesPageUtils.ts`, `src/pages/ArticlesPage.tsx`)
+- Extracted Articles page sorting/normalization logic into a dedicated helper module and updated `ArticlesPage` to consume it without runtime behavior changes. (`src/pages/articles/articlesPageUtils.ts`, `src/pages/articles/ArticlesPage.tsx`)
 
 ### Verification
 
 - `npm run test -- src/content/contentful/adapters.test.ts` (passes)
-- `npm run test -- src/pages/ArticlesPage.test.tsx src/components/articles/ArticleCard.test.tsx src/pages/articles/articlesPageUtils.test.ts` (passes: Vitest 19/19 tests)
+- `npm run test -- src/pages/articles/ArticlesPage.test.tsx src/components/articles/ArticleCard.test.tsx src/pages/articles/articlesPageUtils.test.ts` (passes: Vitest 19/19 tests)
 - `npm run build` (passes: `tsc -b` + `vite build`; local Node warning persists on `v22.2.0` vs recommended `>=22.12.0`)
 
 ## [2026-04-21]
@@ -34,7 +49,7 @@
 - Built the editorial `FooterSection` UI with top and bottom dividers, brand block (title/subtitle/summary), inline social links, right-side nav groups, understated legal/meta row, and centralized SVG icon rendering from `iconKey` (`github`, `linkedin`, `email`, `external`, `arrow`, `none`). (`src/components/sections/FooterSection.tsx`, `src/components/sections/FooterSection.css`, `src/components/sections/footer/FooterLinkIcon.tsx`)
 - Mounted the global footer from landing-page data through the page shell so footer rendering is explicit and outside normal section flow while keeping section-renderer compatibility. (`src/pages/LandingPage.tsx`, `src/components/layout/PageShell.tsx`)
 - Added footer fixture/story/test coverage for static mode and rendering/normalization safety (link filtering, key fallback behavior, target defaults). (`src/content/static/fixtures.ts`, `src/components/sections/sectionStoryFixtures.ts`, `src/components/sections/footer/FooterSection.stories.tsx`, `src/components/sections/footer/normalizeFooterSection.test.ts`, `src/components/sections/SectionRenderer.test.tsx`)
-- Added a production `/articles` index page using only the existing Article model (no `pageArticlesIndex` dependency), with loading/error/empty/success states, normalization, invalid-item filtering, and deterministic sort (`publishedAt` desc, fallback `updatedAt` desc, fallback title asc). (`src/pages/ArticlesPage.tsx`, `src/pages/ArticlesPage.css`)
+- Added a production `/articles` index page using only the existing Article model (no `pageArticlesIndex` dependency), with loading/error/empty/success states, normalization, invalid-item filtering, and deterministic sort (`publishedAt` desc, fallback `updatedAt` desc, fallback title asc). (`src/pages/articles/ArticlesPage.tsx`, `src/pages/articles/ArticlesPage.css`)
 - Added reusable article cards with optional hero media, metadata/date handling, excerpt, and detail CTA linking to the existing single-article route. (`src/components/articles/ArticleCard.tsx`, `src/components/articles/ArticleCard.css`)
 - Extended content-source contracts with `getAllArticles()` and implemented both static and Contentful paths (including paginated Contentful article fetching and list-item mapping), then wired `/articles` route handling while preserving `/articles/:slug` detail routing. (`src/content/source.ts`, `src/content/static/staticSource.ts`, `src/content/static/fixtures.ts`, `src/content/contentful/api.ts`, `src/content/contentful/adapters.ts`, `src/content/contentful/contentfulSource.ts`, `src/router/routes.ts`, `src/router/Router.tsx`, `src/content/contentful/types.ts`)
 

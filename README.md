@@ -12,6 +12,7 @@
 - [Storybook / Design System](#storybook--design-system)
 - [Testing / Quality](#testing--quality)
 - [Local Development](#local-development)
+- [Deployment (Netlify)](#deployment-netlify)
 - [Notable Project Decisions](#notable-project-decisions)
 - [Recruiter / Hiring Manager Signals](#recruiter--hiring-manager-signals)
 - [Roadmap / Next Steps](#roadmap--next-steps)
@@ -307,7 +308,12 @@ Core env vars:
 - `VITE_CONTENTFUL_ENVIRONMENT` (default `master`)
 - `VITE_CONTENT_SOURCE` (`contentful` or `static`)
 - `VITE_SITE_URL`
-- `VITE_ARTICLE_ROUTE_PREFIX` (default `/articles`)
+
+Optional env vars:
+
+- `VITE_ARTICLE_ROUTE_PREFIX` (defaults internally to `/articles`)
+- `VITE_BUILD_TARGET` (`prod` by default; use `preview` only for preview-mode testing)
+- `VITE_CONTENTFUL_INCLUDE_CONTENT_SOURCE_MAPS` (`false` by default)
 
 ### Run app
 
@@ -338,6 +344,42 @@ npm run build
 ```bash
 npm run build-storybook
 ```
+
+## Deployment (Netlify)
+
+This project deploys to Netlify as a Vite SPA.
+
+- Build command: `npm run build`
+- Publish directory: `dist`
+- SPA redirect: configured in `netlify.toml` (`/* -> /index.html`)
+
+### Required Netlify Environment Variables
+
+- `VITE_CONTENTFUL_SPACE_ID`
+- `VITE_CONTENTFUL_DELIVERY_TOKEN`
+- `VITE_CONTENTFUL_ENVIRONMENT` (usually `master`)
+- `VITE_CONTENT_SOURCE` (`contentful` for CMS-backed deploys, `static` for fixture-backed deploys)
+- `VITE_SITE_URL` (public site URL)
+
+### Optional Netlify Environment Variables
+
+- `VITE_ARTICLE_ROUTE_PREFIX` (only set when overriding `/articles`)
+- `VITE_BUILD_TARGET` (use `preview` only when intentionally enabling preview-mode behavior)
+- `VITE_CONTENTFUL_INCLUDE_CONTENT_SOURCE_MAPS` (`true`/`false`)
+
+### Exposure and Secret Handling
+
+- `VITE_*` variables are compiled into client bundles by Vite and should be treated as public-at-runtime configuration.
+- Never commit real values in `.env.example`, `.env.preview.example`, docs, changelog entries, or generated build artifacts.
+- Do not commit generated output directories (`dist/`, `storybook-static/`) because they can embed resolved environment values.
+- If Netlify secrets scanning flags `VITE_ARTICLE_ROUTE_PREFIX`, remove that variable from Netlify unless you are truly overriding the route prefix.
+
+### Redeploy After Sanitizing
+
+1. Rotate any token that was previously exposed in committed/generated files.
+2. Update the rotated values in Netlify environment variables.
+3. Trigger a fresh deploy from the sanitized commit.
+4. Verify `/`, `/articles`, and `/articles/:slug` render correctly after deploy.
 
 ## Notable Project Decisions
 
