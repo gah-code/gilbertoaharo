@@ -1,6 +1,7 @@
 # Gilberto A. Haro — Content-Driven Frontend Architecture (React + TypeScript + Contentful)
 
 ## Table of Contents
+
 - [Overview](#overview)
 - [Why This Project Matters](#why-this-project-matters)
 - [Key Highlights](#key-highlights)
@@ -18,9 +19,11 @@
 - [Author](#author)
 
 ## Overview
+
 This repository is a personal site and architecture-focused frontend project that demonstrates how to build a maintainable, content-rich React application with clear boundaries between UI, routing, CMS integration, and design-system primitives.
 
 It currently powers:
+
 - `/` for a modular, CMS-driven landing page
 - `/articles` for article index rendering
 - `/articles/:slug` for article detail pages
@@ -29,9 +32,11 @@ It currently powers:
 The project is designed to show practical frontend engineering patterns for teams working with Contentful, Storybook, and component systems over time.
 
 ## Why This Project Matters
+
 Most CMS-backed frontends degrade when raw content shapes leak into components or when UI and content concerns are tightly coupled. This project focuses on avoiding that failure mode.
 
 It demonstrates:
+
 - a source abstraction that supports both Contentful and static fixtures
 - typed adapters that map CMS entries into render-safe view models
 - section normalization before rendering
@@ -41,6 +46,7 @@ It demonstrates:
 This mirrors real-world workflows in product marketing sites, editorial platforms, and content operations-heavy teams.
 
 ## Key Highlights
+
 - React + TypeScript architecture with explicit routing and page boundaries
 - Contentful integration with typed entry models, API layer, and adapters
 - Content source abstraction (`contentful` or `static`) via `src/content/source.ts`
@@ -52,6 +58,7 @@ This mirrors real-world workflows in product marketing sites, editorial platform
 - Accessible shell patterns such as skip links and focus-visible behavior
 
 ## Tech Stack
+
 - Framework/runtime: React 19
 - Language: TypeScript 5
 - Build/dev tooling: Vite 7
@@ -63,7 +70,9 @@ This mirrors real-world workflows in product marketing sites, editorial platform
 - CI: GitHub Actions (`lint`, `build`, `test`, `build-storybook`)
 
 ## Repository Structure
+
 ### High-level File Tree
+
 ```text
 .
 ├── src/
@@ -87,6 +96,7 @@ This mirrors real-world workflows in product marketing sites, editorial platform
 ```
 
 ### Detailed Tree (Expandable)
+
 <details>
 <summary>Open detailed structure with key modules</summary>
 
@@ -186,44 +196,54 @@ src/
 </details>
 
 ## Architecture Summary
+
 ### Layout / Shell
+
 - `PageShell` composes global chrome (`SeoHead`, `Header`, `Footer`) and main content container.
 - Global concerns (navigation, footer, SEO) stay in `src/components/layout`.
 
 ### Content Source Abstraction
+
 - `src/content/source.ts` defines a `ContentSource` contract.
 - Runtime source is selected by env (`contentful` or `static`).
 
 ### Contentful Types + Adapters
+
 - `src/content/contentful/types.ts` defines entry and UI-ready shapes.
 - `api.ts` handles raw Contentful fetches.
 - `adapters.ts` performs mapping and defensive normalization.
 - `contentfulSource.ts` composes API + adapters into the `ContentSource` contract.
 
 ### Static Fixtures for UI-First Work
+
 - `src/content/static/fixtures.ts` provides canonical static content.
 - `src/content/static/staticSource.ts` mirrors CMS source behavior for local iteration.
 
 ### Section Rendering + Normalization
+
 - `SectionRenderer` dispatches by content type id.
 - Each section has a normalizer under `src/components/sections/*/normalize*.ts`.
 - Components consume normalized view models, not raw CMS payloads.
 
 ### UI Primitives + Tokens
+
 - Reusable primitives under `src/components/ui` (`Button`, `Link`, `Card`, `Badge`, `Text`, `Heading`).
 - Layout primitives (`Container`, `Stack`, `Inline`, `Cluster`, `Grid`) support consistent composition.
 - Tokens in `src/styles/tokens.css` provide shared spacing, color, typography, motion, and control values.
 
 ## Content Modeling / CMS Integration
+
 The Contentful model supports section-driven page composition and editorial content operations.
 
 Examples of modeled entities in code:
+
 - `pagePersonalLanding`
 - section entries (`sectionHero`, `sectionTimeline`, `sectionSkills`, `sectionProjects`, `sectionLearning`, `sectionContact`, `sectionFooter`)
 - `article`
 - navigation models (`navigationMenu`, `navLink`, `navPanel`, `navCard`)
 
 Frontend CMS strategy:
+
 - fetch raw entries from Contentful
 - map through typed adapters
 - normalize for component-safe rendering
@@ -232,9 +252,11 @@ Frontend CMS strategy:
 Static mode (`VITE_CONTENT_SOURCE=static`) uses equivalent contracts for local development speed without requiring CMS connectivity. This enables faster UI iteration while keeping integration behavior realistic.
 
 ## Storybook / Design System
+
 Storybook is used as a working architecture workspace, not only as a component gallery.
 
 Current coverage includes:
+
 - UI primitives and variants (`src/components/ui/*.stories.tsx`)
 - section components (`src/components/sections/**/*.stories.tsx`)
 - article card scenarios (`src/components/articles/ArticleCard.stories.tsx`)
@@ -243,7 +265,9 @@ Current coverage includes:
 Design-system docs live under `docs/design-system/` and align implementation, audits, and checklists.
 
 ## Testing / Quality
+
 Testing is focused on reliability of content-rich UI behavior:
+
 - normalizer tests for section data shaping
 - adapter tests for Contentful mapping behavior
 - UI primitive tests for interaction contracts
@@ -251,27 +275,33 @@ Testing is focused on reliability of content-rich UI behavior:
 - typed section renderer coverage (`SectionRenderer.test.tsx`)
 
 Quality expectations:
+
 - `npm run lint`
 - `npm run build`
 - `npm run test`
 - `npm run build-storybook`
 
 ## Local Development
+
 ### Prerequisites
+
 - Node.js `>=20.19.0 <21` or `>=22.12.0`
 - npm
 
 ### Install
+
 ```bash
 npm install
 ```
 
 ### Environment setup
+
 ```bash
 cp .env.example .env.local
 ```
 
 Core env vars:
+
 - `VITE_CONTENTFUL_SPACE_ID`
 - `VITE_CONTENTFUL_DELIVERY_TOKEN`
 - `VITE_CONTENTFUL_ENVIRONMENT` (default `master`)
@@ -280,31 +310,37 @@ Core env vars:
 - `VITE_ARTICLE_ROUTE_PREFIX` (default `/articles`)
 
 ### Run app
+
 ```bash
 npm run dev
 ```
 
 ### Run Storybook
+
 ```bash
 npm run storybook
 ```
 
 ### Run tests
+
 ```bash
 npm run test
 ```
 
 ### Build app
+
 ```bash
 npm run build
 ```
 
 ### Build Storybook
+
 ```bash
 npm run build-storybook
 ```
 
 ## Notable Project Decisions
+
 - Typed adapter boundary between raw CMS data and render-layer components
 - Normalized section view models per section domain
 - Shared page shell for consistent global chrome and SEO concerns
@@ -313,33 +349,31 @@ npm run build-storybook
 - CMS-safe architecture that keeps routing and layout concerns out of content models
 - Route-local organization for article index page logic under `src/pages/articles`
 
-## Recruiter / Hiring Manager Signals
-This repo is intended as evidence of:
-- scalable React + TypeScript component architecture
-- practical CMS-driven frontend engineering (Contentful)
-- strong boundary design between data acquisition, adaptation, and rendering
-- design-system readiness via primitives, tokens, and Storybook coverage
-- maintainable iteration patterns backed by tests and CI quality gates
-
 ## Roadmap / Next Steps
+
 - Expand Storybook interaction coverage (`test:storybook`) for critical UX paths
 - Continue tightening documentation-to-implementation parity in `docs/design-system`
 - Add repo-managed Contentful import/model artifacts when model governance requires it
 - Evolve preview-mode wiring and environment strategy as integration needs mature
 
 ## Screenshots / Demo
+
 ### Content model reference
+
 ![Content Model](./docs/architecture/contentful-cm-view.png)
 
 ### App screenshots
+
 - Landing page: _placeholder_
 - Articles index: _placeholder_
 - Article detail: _placeholder_
 
 ### Storybook
+
 - Storybook workspace screenshot: _placeholder_
 
 ## Author
+
 **Gilberto A. Haro**  
 Frontend Engineer focused on React, TypeScript, content systems, and design-system architecture.
 
