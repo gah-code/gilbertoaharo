@@ -4,7 +4,7 @@ import { ArticleCard } from "@/components/articles/ArticleCard";
 import { getContentSource } from "@/content/source";
 import type { ArticleListItem } from "@/content/contentful/types";
 import { getErrorMessage } from "@/lib/errors";
-import { normalizeArticles } from "./articles/articlesPageUtils";
+import { normalizeArticles } from "./articlesPageUtils";
 import "./ArticlesPage.css";
 
 type ArticlesState =

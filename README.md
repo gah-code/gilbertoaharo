@@ -1,120 +1,69 @@
-# Gilberto A. Haro — My Personal Site
-
-A personal site built with **React + TypeScript + Vite + Contentful**.
-It is designed around a strict CMS boundary, typed section view models, and a design-system workflow validated through Storybook and CI.
-It exists as a maintainable portfolio/content platform where content operations and frontend architecture can evolve independently.
-
-![Content Model](./docs/architecture/contentful-cm-view.png)
+# Gilberto A. Haro — Content-Driven Frontend Architecture (React + TypeScript + Contentful)
 
 ## Table of Contents
-
 - [Overview](#overview)
-- [Core Features](#core-features)
+- [Why This Project Matters](#why-this-project-matters)
+- [Key Highlights](#key-highlights)
 - [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Scripts](#scripts)
 - [Repository Structure](#repository-structure)
-- [Architecture Notes](#architecture-notes)
-- [Quality Gates](#quality-gates)
-- [Troubleshooting](#troubleshooting)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
-- [License](#license)
+- [Architecture Summary](#architecture-summary)
+- [Content Modeling / CMS Integration](#content-modeling--cms-integration)
+- [Storybook / Design System](#storybook--design-system)
+- [Testing / Quality](#testing--quality)
+- [Local Development](#local-development)
+- [Notable Project Decisions](#notable-project-decisions)
+- [Recruiter / Hiring Manager Signals](#recruiter--hiring-manager-signals)
+- [Roadmap / Next Steps](#roadmap--next-steps)
+- [Screenshots / Demo](#screenshots--demo)
+- [Author](#author)
 
 ## Overview
+This repository is a personal site and architecture-focused frontend project that demonstrates how to build a maintainable, content-rich React application with clear boundaries between UI, routing, CMS integration, and design-system primitives.
 
-This repo powers:
+It currently powers:
+- `/` for a modular, CMS-driven landing page
+- `/articles` for article index rendering
+- `/articles/:slug` for article detail pages
+- `/debug` for Contentful model visibility checks
 
-- `/` — modular landing page from Contentful section entries
-- `/articles/:slug` — article pages with SEO fallback behavior
-- `/debug` — diagnostics for content and model visibility
+The project is designed to show practical frontend engineering patterns for teams working with Contentful, Storybook, and component systems over time.
 
-## Core Features
+## Why This Project Matters
+Most CMS-backed frontends degrade when raw content shapes leak into components or when UI and content concerns are tightly coupled. This project focuses on avoiding that failure mode.
 
-- Typed section renderer with content-type keyed mapping
-- Section normalization layer before rendering
-- Reusable UI primitives with explicit variant/size/state contracts
-- Layout primitives (`Stack`, `Inline`, `Cluster`, `Grid`, `Container`)
-- Storybook 10 integrated as architecture workspace
-- CI gates for lint, build, tests, and Storybook build
+It demonstrates:
+- a source abstraction that supports both Contentful and static fixtures
+- typed adapters that map CMS entries into render-safe view models
+- section normalization before rendering
+- reusable UI primitives and layout primitives for consistency
+- Storybook and tests as architecture guardrails, not just polish
+
+This mirrors real-world workflows in product marketing sites, editorial platforms, and content operations-heavy teams.
+
+## Key Highlights
+- React + TypeScript architecture with explicit routing and page boundaries
+- Contentful integration with typed entry models, API layer, and adapters
+- Content source abstraction (`contentful` or `static`) via `src/content/source.ts`
+- Section normalization layer for safer rendering of CMS data
+- Storybook 10 coverage for UI primitives and section-level composition
+- Token-driven styling with global foundations plus colocated component CSS
+- Static + CMS parity for UI-first development and CMS-independent iteration
+- Test coverage across normalizers, routing-facing pages, UI primitives, and adapters
+- Accessible shell patterns such as skip links and focus-visible behavior
 
 ## Tech Stack
-
-- React 19 + TypeScript
-- Vite 7 (`@` alias to `src`)
-- Contentful Delivery SDK
-- Vitest + Testing Library
-- Storybook 10
-
-## Getting Started
-
-### Prerequisites
-
-- Node: **20.19+** or **22.12+**
-- npm
-
-If using Homebrew:
-
-```bash
-brew upgrade node
-hash -r
-node -v
-```
-
-If `node -v` is unexpected, verify path resolution:
-
-```bash
-which node
-which -a node
-```
-
-### Install and Run
-
-```bash
-npm install
-cp .env.example .env.local
-npm run dev
-```
-
-Open `http://localhost:5173`.
-
-## Environment Variables
-
-Required:
-
-- `VITE_CONTENTFUL_SPACE_ID`
-- `VITE_CONTENTFUL_DELIVERY_TOKEN`
-
-Recommended:
-
-- `VITE_CONTENTFUL_ENVIRONMENT`
-- `VITE_SITE_URL`
-- `VITE_ARTICLE_ROUTE_PREFIX`
-
-Mode/source:
-
-- `VITE_BUILD_TARGET` (`prod` or `preview`)
-- `VITE_CONTENT_SOURCE` (`contentful` or `static`)
-
-## Scripts
-
-```bash
-npm run dev                # local dev server
-npm run build              # type-check + production build
-npm run preview            # preview production build
-npm run lint               # eslint
-npm run test               # vitest run
-npm run test:watch         # vitest watch mode
-npm run storybook          # storybook dev --port 6006
-npm run build-storybook    # static storybook output
-npm run test:storybook     # storybook test runner
-```
+- Framework/runtime: React 19
+- Language: TypeScript 5
+- Build/dev tooling: Vite 7
+- CMS: Contentful Delivery SDK (`contentful`)
+- Styling: CSS tokens (`src/styles/tokens.css`), global base styles, colocated component CSS
+- Component/dev docs: Storybook 10 (`@storybook/react-vite`, docs + a11y addons)
+- Testing: Vitest + Testing Library + `@testing-library/jest-dom`
+- Lint/format: ESLint (flat config) + Prettier
+- CI: GitHub Actions (`lint`, `build`, `test`, `build-storybook`)
 
 ## Repository Structure
-
 ### High-level File Tree
-
 ```text
 .
 ├── src/
@@ -137,31 +86,7 @@ npm run test:storybook     # storybook test runner
 └── README.md
 ```
 
-### Major Folders and Files
-
-- `src/components/`  
-  UI system and feature composition. `ui/` holds reusable primitives, `sections/` holds CMS-driven sections, `layout/` holds page shell/navigation chrome.
-
-- `src/content/`  
-  Content boundary layer. Defines the source contract and isolates Contentful mapping/normalization from rendering concerns.
-
-- `src/pages/` and `src/router/`  
-  Route-level pages and lightweight SPA navigation logic. Keeps routing simple without adding router framework overhead.
-
-- `src/styles/`  
-  Global design tokens and base styles. Component and section-specific visuals are colocated with their implementation.
-
-- `src/stories/` and `.storybook/`  
-  Storybook foundation stories plus workspace config for component architecture proofing.
-
-- `docs/`  
-  Architecture, planning, and design-system references used to keep implementation and docs aligned.
-
-- `.github/workflows/ci.yml`  
-  CI quality gate entrypoint for lint/build/test/storybook checks.
-
 ### Detailed Tree (Expandable)
-
 <details>
 <summary>Open detailed structure with key modules</summary>
 
@@ -173,8 +98,14 @@ src/
 ├── assets/
 │   └── timeline/
 ├── components/
+│   ├── articles/
+│   │   ├── ArticleCard.tsx / ArticleCard.css
+│   │   ├── ArticleCard.stories.tsx
+│   │   ├── ArticleCard.test.tsx
+│   │   └── __fixtures__/articleList.fixture.ts
 │   ├── layout/
 │   │   ├── Header.tsx
+│   │   ├── Footer.tsx
 │   │   ├── PageShell.tsx
 │   │   └── SeoHead.tsx
 │   ├── navigation/
@@ -191,12 +122,15 @@ src/
 │   │   ├── ProjectsSection.tsx
 │   │   ├── LearningSection.tsx
 │   │   ├── ContactSection.tsx
+│   │   ├── FooterSection.tsx
 │   │   ├── hero/
 │   │   ├── timeline/
 │   │   ├── skills/
 │   │   ├── projects/
 │   │   ├── learning/
-│   │   └── contact/
+│   │   ├── contact/
+│   │   ├── footer/
+│   │   └── primitives/
 │   └── ui/
 │       ├── Button.tsx / Button.css
 │       ├── Link.tsx / Link.css
@@ -215,7 +149,6 @@ src/
 │   │   ├── client.ts
 │   │   ├── api.ts
 │   │   ├── adapters.ts
-│   │   ├── includes.ts
 │   │   ├── contentfulSource.ts
 │   │   └── types.ts
 │   └── static/
@@ -224,10 +157,17 @@ src/
 ├── lib/
 │   └── errors.ts
 ├── pages/
-│   ├── LandingPage.tsx
 │   ├── ArticlePage.tsx
+│   ├── ArticlePage.css
+│   ├── LandingPage.tsx
 │   ├── NotFoundPage.tsx
-│   └── DebugPage.tsx
+│   ├── DebugPage.tsx
+│   └── articles/
+│       ├── ArticlesPage.tsx
+│       ├── ArticlesPage.css
+│       ├── ArticlesPage.test.tsx
+│       ├── articlesPageUtils.ts
+│       └── articlesPageUtils.test.ts
 ├── preview/
 │   ├── previewMode.ts
 │   └── PreviewBanner.tsx
@@ -245,54 +185,163 @@ src/
 
 </details>
 
-## Architecture Notes
+## Architecture Summary
+### Layout / Shell
+- `PageShell` composes global chrome (`SeoHead`, `Header`, `Footer`) and main content container.
+- Global concerns (navigation, footer, SEO) stay in `src/components/layout`.
 
-- `src/content/source.ts` defines the runtime content contract.
-- UI renders normalized view models, not raw CMS payloads.
-- Section dispatch is keyed by typed content type IDs.
-- Internal project linking prefers reference-driven routing over hardcoded URLs.
+### Content Source Abstraction
+- `src/content/source.ts` defines a `ContentSource` contract.
+- Runtime source is selected by env (`contentful` or `static`).
 
-## Quality Gates
+### Contentful Types + Adapters
+- `src/content/contentful/types.ts` defines entry and UI-ready shapes.
+- `api.ts` handles raw Contentful fetches.
+- `adapters.ts` performs mapping and defensive normalization.
+- `contentfulSource.ts` composes API + adapters into the `ContentSource` contract.
 
-CI currently runs:
+### Static Fixtures for UI-First Work
+- `src/content/static/fixtures.ts` provides canonical static content.
+- `src/content/static/staticSource.ts` mirrors CMS source behavior for local iteration.
 
+### Section Rendering + Normalization
+- `SectionRenderer` dispatches by content type id.
+- Each section has a normalizer under `src/components/sections/*/normalize*.ts`.
+- Components consume normalized view models, not raw CMS payloads.
+
+### UI Primitives + Tokens
+- Reusable primitives under `src/components/ui` (`Button`, `Link`, `Card`, `Badge`, `Text`, `Heading`).
+- Layout primitives (`Container`, `Stack`, `Inline`, `Cluster`, `Grid`) support consistent composition.
+- Tokens in `src/styles/tokens.css` provide shared spacing, color, typography, motion, and control values.
+
+## Content Modeling / CMS Integration
+The Contentful model supports section-driven page composition and editorial content operations.
+
+Examples of modeled entities in code:
+- `pagePersonalLanding`
+- section entries (`sectionHero`, `sectionTimeline`, `sectionSkills`, `sectionProjects`, `sectionLearning`, `sectionContact`, `sectionFooter`)
+- `article`
+- navigation models (`navigationMenu`, `navLink`, `navPanel`, `navCard`)
+
+Frontend CMS strategy:
+- fetch raw entries from Contentful
+- map through typed adapters
+- normalize for component-safe rendering
+- preserve route-level and shell-level ownership boundaries
+
+Static mode (`VITE_CONTENT_SOURCE=static`) uses equivalent contracts for local development speed without requiring CMS connectivity. This enables faster UI iteration while keeping integration behavior realistic.
+
+## Storybook / Design System
+Storybook is used as a working architecture workspace, not only as a component gallery.
+
+Current coverage includes:
+- UI primitives and variants (`src/components/ui/*.stories.tsx`)
+- section components (`src/components/sections/**/*.stories.tsx`)
+- article card scenarios (`src/components/articles/ArticleCard.stories.tsx`)
+- foundation stories (`src/stories/Layout.stories.tsx`, `src/stories/Tokens.stories.tsx`)
+
+Design-system docs live under `docs/design-system/` and align implementation, audits, and checklists.
+
+## Testing / Quality
+Testing is focused on reliability of content-rich UI behavior:
+- normalizer tests for section data shaping
+- adapter tests for Contentful mapping behavior
+- UI primitive tests for interaction contracts
+- page tests for route-level rendering behavior (`ArticlesPage`, article utilities)
+- typed section renderer coverage (`SectionRenderer.test.tsx`)
+
+Quality expectations:
 - `npm run lint`
 - `npm run build`
 - `npm run test`
 - `npm run build-storybook`
 
-## Troubleshooting
+## Local Development
+### Prerequisites
+- Node.js `>=20.19.0 <21` or `>=22.12.0`
+- npm
 
-### Storybook Node runtime error
+### Install
+```bash
+npm install
+```
 
-- Ensure `node -v` is `>=20.19` or `>=22.12` in the same terminal.
-- Recheck shell PATH ordering if multiple Node installs are present.
+### Environment setup
+```bash
+cp .env.example .env.local
+```
 
-### Missing content
+Core env vars:
+- `VITE_CONTENTFUL_SPACE_ID`
+- `VITE_CONTENTFUL_DELIVERY_TOKEN`
+- `VITE_CONTENTFUL_ENVIRONMENT` (default `master`)
+- `VITE_CONTENT_SOURCE` (`contentful` or `static`)
+- `VITE_SITE_URL`
+- `VITE_ARTICLE_ROUTE_PREFIX` (default `/articles`)
 
-- Confirm `VITE_CONTENT_SOURCE` and Contentful token/env values.
-- Ensure referenced entries are published.
+### Run app
+```bash
+npm run dev
+```
 
-### Article route not found in static mode
+### Run Storybook
+```bash
+npm run storybook
+```
 
-- Static source currently does not provide article bodies.
-- Use `VITE_CONTENT_SOURCE=contentful` for article testing.
+### Run tests
+```bash
+npm run test
+```
 
-## Documentation
+### Build app
+```bash
+npm run build
+```
 
-- `docs/architecture/ia.md`
-- `docs/design-system/design-system.md`
-- `docs/design-system/audit/2026-04-15-senior-readiness-context.md`
-- `docs/planning/storybook-migration-plan.md`
-- `docs/planning/ROADMAP.md`
+### Build Storybook
+```bash
+npm run build-storybook
+```
 
-## Contributing
+## Notable Project Decisions
+- Typed adapter boundary between raw CMS data and render-layer components
+- Normalized section view models per section domain
+- Shared page shell for consistent global chrome and SEO concerns
+- Static fixtures to support UI-first development without blocking on CMS state
+- Token-driven styling plus colocated CSS for scalable ownership
+- CMS-safe architecture that keeps routing and layout concerns out of content models
+- Route-local organization for article index page logic under `src/pages/articles`
 
-- `CONTRIBUTING.md`
-- `CODE_OF_CONDUCT.md`
-- `SECURITY.md`
-- `SUPPORT.md`
+## Recruiter / Hiring Manager Signals
+This repo is intended as evidence of:
+- scalable React + TypeScript component architecture
+- practical CMS-driven frontend engineering (Contentful)
+- strong boundary design between data acquisition, adaptation, and rendering
+- design-system readiness via primitives, tokens, and Storybook coverage
+- maintainable iteration patterns backed by tests and CI quality gates
 
-## License
+## Roadmap / Next Steps
+- Expand Storybook interaction coverage (`test:storybook`) for critical UX paths
+- Continue tightening documentation-to-implementation parity in `docs/design-system`
+- Add repo-managed Contentful import/model artifacts when model governance requires it
+- Evolve preview-mode wiring and environment strategy as integration needs mature
 
-MIT (see `LICENSE`).
+## Screenshots / Demo
+### Content model reference
+![Content Model](./docs/architecture/contentful-cm-view.png)
+
+### App screenshots
+- Landing page: _placeholder_
+- Articles index: _placeholder_
+- Article detail: _placeholder_
+
+### Storybook
+- Storybook workspace screenshot: _placeholder_
+
+## Author
+**Gilberto A. Haro**  
+Frontend Engineer focused on React, TypeScript, content systems, and design-system architecture.
+
+- GitHub: `gilbertoaharo`
+- Project docs: `docs/architecture/`, `docs/design-system/`, `docs/planning/`

@@ -2,7 +2,7 @@ import React from "react";
 import { parsePathname } from "@/router/routes";
 
 import { LandingPage } from "@/pages/LandingPage";
-import { ArticlesPage } from "@/pages/ArticlesPage";
+import { ArticlesPage } from "@/pages/articles/ArticlesPage";
 import { ArticlePage } from "@/pages/ArticlePage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { DebugPage } from "@/pages/DebugPage";
