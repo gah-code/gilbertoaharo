@@ -13,8 +13,11 @@ dist-ssr
 storybook-static
 *.local
 .env
+.env.local
+.env.production.local
+.env.development.local
+.env.test.local
 .env.*
-env.local
 !.env.example
 tsconfig.tsbuildinfo
 .CHANGELOG.md

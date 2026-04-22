@@ -6,7 +6,7 @@
 
 - Sanitized environment templates to placeholder-only values and removed unused preview-token wiring from client env parsing. (`.env.example`, `src/env.ts`)
 - Removed committed Storybook build artifacts that embedded prior runtime env values and added an ignore rule to keep generated Storybook output out of git. (`storybook-static/`, `.gitignore`)
-- Pinned Netlify Node runtime to `22.12.0` for Vite/Storybook compatibility. (`netlify.toml`)
+- Pinned Netlify Node runtime to the Node 22 baseline for Vite/Storybook compatibility. (`netlify.toml`)
 - Updated docs with Netlify deployment env boundaries (client-exposed vs never committed) and redeploy guidance after sanitization. (`README.md`)
 
 ### Verification
@@ -37,7 +37,7 @@
 
 - `npm run test -- src/content/contentful/adapters.test.ts` (passes)
 - `npm run test -- src/pages/articles/ArticlesPage.test.tsx src/components/articles/ArticleCard.test.tsx src/pages/articles/articlesPageUtils.test.ts` (passes: Vitest 19/19 tests)
-- `npm run build` (passes: `tsc -b` + `vite build`; local Node warning persists on `v22.2.0` vs recommended `>=22.12.0`)
+- `npm run build` (passes: `tsc -b` + `vite build`; local Node warning persists when runtime is below the Node 22 baseline)
 
 ## [2026-04-21]
 
@@ -57,7 +57,7 @@
 
 - `npm run lint` (passes)
 - `npm run test` (passes: Vitest 17/17 tests)
-- `npm run build` (passes: `tsc -b` + `vite build`; local Node warning persists on `v22.2.0` vs recommended `>=22.12.0`)
+- `npm run build` (passes: `tsc -b` + `vite build`; local Node warning persists when runtime is below the Node 22 baseline)
 
 ## [2026-04-17]
 
@@ -80,20 +80,20 @@
 
 - `npm run lint` (passes)
 - `npm run test` (passes: Vitest 13/13 tests)
-- `npm run build` (passes: `tsc -b` + `vite build`; local Node warning persists on `v22.2.0` vs recommended `>=22.12.0`)
+- `npm run build` (passes: `tsc -b` + `vite build`; local Node warning persists when runtime is below the Node 22 baseline)
 - `npm run build-storybook` (blocked locally by Node runtime requirement: Storybook requires `>=20.19` or `>=22.12`)
 
 ## [2026-04-16]
 
 ### Changed
 
-- Added explicit Node engine constraints to enforce Storybook/Vite-compatible runtimes (`>=20.19.0 <21 || >=22.12.0`). (`package.json`)
+- Added explicit Node engine constraints to enforce a Storybook/Vite-compatible Node 22 runtime baseline. (`package.json`)
 - Updated local setup docs to prioritize Homebrew-based Node upgrades and include shell cache/path guidance after upgrading. (`README.md`)
 - Standardized Storybook dev script to explicit long-form port flag (`storybook dev --port 6006`) for clearer runtime invocation. (`package.json`, `docs/planning/storybook-migration-plan.md`)
 
 ### Verification
 
-- `node -v` resolves to `v22.12.0` in workspace shell.
+- `node -v` resolves to a Node 22 runtime in the workspace shell.
 - `npm run storybook -- --help` runs and prints Storybook CLI usage.
 
 ## [2026-04-15]
@@ -249,7 +249,7 @@
 - Synced `TODO-UI.md` to reflect completed header/navigation tasks and added senior-level design system enhancement checklist items (state/motion/focus tokens, API standards, responsive tokens).
 - Added semantic state tokens (success/warn/error text, bg, border) in `src/styles/tokens.css` and global focus-visible styling using tokens in `src/styles/base.css`.
 - Timeline data model extended with optional media/CTA fields on timeline items; `TimelineSection` now renders media and CTA when present, and checklist doc updated.
-- Added static content source + fixtures with timeline media/CTA populated from local assets, and `getContentSource` now honors `VITE_CONTENT_SOURCE` (`static` vs `contentful`).
+- Added static content source + fixtures with timeline media/CTA populated from local assets, and `getContentSource` now honors the `VITE_CONTENT_SOURCE` selector.
 - Timeline renderer already wires `sectionTimeline` through `SectionRenderer`; checklist updated with anchor note.
 - Timeline media strategy implemented: per-item media preferred; otherwise rotates local SVGs with sensible alt text fallback; checklist updated.
 - Timeline checklist items for styling/responsive/QA/accessibility moved into `TODO-UI.md` under the Timeline section for active tracking.

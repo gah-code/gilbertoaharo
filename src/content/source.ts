@@ -18,6 +18,7 @@ export interface ContentSource {
 }
 
 export function getContentSource(): ContentSource {
+  // Source selection stays client-side for now via public `VITE_CONTENT_SOURCE`.
   return env.contentSource === "static" ? staticSource : contentfulSource;
 }
 

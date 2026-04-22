@@ -315,6 +315,10 @@ Optional env vars:
 - `VITE_BUILD_TARGET` (`prod` by default; use `preview` only for preview-mode testing)
 - `VITE_CONTENTFUL_INCLUDE_CONTENT_SOURCE_MAPS` (`false` by default)
 
+Environment boundary note:
+
+- Variable classification and the Phase 4 migration options are documented in [`docs/env-classification.md`](docs/env-classification.md).
+
 ### Run app
 
 ```bash
@@ -349,9 +353,17 @@ npm run build-storybook
 
 This project deploys to Netlify as a Vite SPA.
 
+### Deployment Baseline
+
 - Build command: `npm run build`
 - Publish directory: `dist`
+- Node version: `22`
+- Real environment variable values must be configured outside git (for example, in Netlify site settings).
+- `.env.example` should contain placeholder values only.
+- Local env files (for example, `.env.local` variants) are git-ignored and must stay untracked.
+- Deployed values belong in Netlify environment variable settings.
 - SPA redirect: configured in `netlify.toml` (`/* -> /index.html`)
+- Env boundary classification and migration options are documented in [`docs/env-classification.md`](docs/env-classification.md).
 
 ### Required Netlify Environment Variables
 
