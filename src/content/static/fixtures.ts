@@ -244,26 +244,27 @@ const heroSection: SectionHero = {
   fields: {
     internalName: "Hero",
     anchorId: "top",
-    title: "Gilberto Alejandro Haro",
+    title: "I build scalable interfaces and content systems for modern web experiences.",
     name: "Gilberto Haro",
-    eyebrow: "Web Engineer · Creative Technologist",
+    eyebrow: "WEB ENGINEER · CONTENT SYSTEMS · FRONTEND ARCHITECTURE",
     heroStyle: "image",
     heroImage: mediaAssets[0],
-    heroImageAlt: "Illustration representing discovery and research",
-    lead: "Building resilient web systems with CMS-first foundations.",
+    heroImageAlt: "Editorial-style visual representing structured content and frontend systems",
+    lead:
+      "I help teams turn structured content, component design, and frontend engineering into maintainable digital products.",
     body:
-      "I combine engineering, content modeling, and technical marketing ops to deliver scalable, content-driven experiences.",
+      "My work combines React UI development, content modeling, and delivery workflows to create systems that are easier to scale, easier to manage, and clearer for both users and teams.",
     proofPoints: [
-      "UI-first, CMS-second",
-      "TypeScript + strong contracts",
-      "Content modeling as code",
+      "Design systems and component architecture",
+      "Contentful, AEM, and structured content workflows",
+      "Frontend systems built for scale and clarity",
     ],
     actions: [
       {
         sys: makeSys("hero-action-primary", "linkAction"),
         fields: {
-          label: "Read more",
-          href: "#timeline",
+          label: "View Projects",
+          href: "#projects",
           variant: "primary",
           openInNewTab: false,
         },
@@ -271,8 +272,8 @@ const heroSection: SectionHero = {
       {
         sys: makeSys("hero-action-secondary", "linkAction"),
         fields: {
-          label: "View projects",
-          href: "#projects",
+          label: "About Me",
+          href: "#timeline",
           variant: "secondary",
           openInNewTab: false,
         },

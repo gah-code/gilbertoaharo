@@ -207,6 +207,22 @@ export type SectionHero = Entry<
     body?: string;
     proofPoints?: string[];
     actions?: LinkAction[];
+    // Legacy transitional fields kept for migration compatibility.
+    tagline?: string;
+    intro?: string;
+    highlights?: string[];
+    primaryCtaLabel?: string;
+    primaryCtaHref?: string;
+    primaryCtaVariant?: "primary" | "secondary" | "text";
+    primaryCtaOpenInNewTab?: boolean;
+    primaryCtaAriaLabel?: string;
+    secondaryCtaLabel?: string;
+    secondaryCtaHref?: string;
+    secondaryCtaVariant?: "primary" | "secondary" | "text";
+    secondaryCtaOpenInNewTab?: boolean;
+    secondaryCtaAriaLabel?: string;
+    ctaLabel?: string;
+    ctaHref?: string;
   }
 >;
 

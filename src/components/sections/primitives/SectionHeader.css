@@ -1,7 +1,67 @@
 @import "../../../styles/tokens.css";
 
-.section-header__title,
-.section-header__lead,
+.section-header {
+  width: 100%;
+  max-width: 42rem;
+}
+
+.section-header__eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.section-header__name {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: color-mix(in srgb, var(--color-accent) 72%, var(--color-text));
+}
+
+.section-header__title {
+  margin: 0;
+  max-width: 36rem;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+}
+
+.section-header__lead {
+  margin: 0;
+  max-width: 39rem;
+  line-height: 1.48;
+  color: color-mix(in srgb, var(--color-text) 90%, var(--color-accent));
+}
+
 .section-header__body {
-  max-width: var(--lede-max);
+  margin: 0;
+  max-width: 40rem;
+  line-height: 1.65;
+}
+
+.section-header .section-action-group {
+  margin-top: var(--space-2);
+}
+
+@media (max-width: 900px) {
+  .section-header {
+    max-width: 100%;
+  }
+
+  .section-header__title {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .section-header__title {
+    font-size: clamp(1.7rem, 6.4vw, 2.35rem);
+    line-height: 1.12;
+  }
+
+  .section-header__lead {
+    font-size: var(--font-size-base);
+  }
 }

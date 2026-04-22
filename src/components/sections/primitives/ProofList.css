@@ -2,8 +2,35 @@
 
 .proof-list {
   margin: 0;
-  padding-left: 20px;
+  padding: 0;
+  list-style: none;
   display: grid;
   gap: var(--space-2);
+  max-width: 40rem;
+}
+
+.proof-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-2) 0;
+  border-top: 1px solid color-mix(in srgb, var(--color-border-subtle) 80%, transparent);
   color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: 1.45;
+}
+
+.proof-list li:first-child {
+  border-top: 0;
+}
+
+.proof-list li::before {
+  content: "";
+  width: 0.42rem;
+  height: 0.42rem;
+  margin-top: 0.38rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-accent) 70%, transparent);
 }

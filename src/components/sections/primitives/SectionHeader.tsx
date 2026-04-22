@@ -1,5 +1,4 @@
 import React from "react";
-import { Badge } from "../../ui/Badge";
 import { Heading } from "../../ui/Heading";
 import { Text } from "../../ui/Text";
 import { Stack } from "../../ui/Stack";
@@ -25,9 +24,19 @@ export function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <Stack className="section-header" gap="var(--space-4)">
-      {eyebrow ? <Badge className="section-header__eyebrow">{eyebrow}</Badge> : null}
+      {eyebrow ? (
+        <Text
+          as="div"
+          className="section-header__eyebrow"
+          size="sm"
+          weight="semibold"
+          tracking="tight"
+        >
+          {eyebrow}
+        </Text>
+      ) : null}
       {name ? (
-        <Text tone="muted" tracking="tight" className="section-header__name">
+        <Text as="div" tone="muted" tracking="tight" className="section-header__name">
           {name}
         </Text>
       ) : null}
@@ -35,11 +44,16 @@ export function SectionHeader({
         {title}
       </Heading>
       {lead ? (
-        <Heading level={3} weight="semibold" tone="muted" className="section-header__lead">
+        <Text
+          as="p"
+          size="lg"
+          weight="medium"
+          className="section-header__lead"
+        >
           {lead}
-        </Heading>
+        </Text>
       ) : null}
-      {body ? <Text className="section-header__body">{body}</Text> : null}
+      {body ? <Text tone="muted" className="section-header__body">{body}</Text> : null}
       {actions && actions.length ? <ActionGroup actions={actions} /> : null}
     </Stack>
   );

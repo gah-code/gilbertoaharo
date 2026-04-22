@@ -18,6 +18,7 @@ import type {
   SectionProjects,
   SectionEntry,
   SectionFooter,
+  SectionHero,
   SectionLearning,
   SectionTimeline,
   TimelineItem,
@@ -256,6 +257,46 @@ function mapTimelineSection(section: SectionTimeline): SectionTimeline {
   };
 }
 
+function mapHeroSection(section: SectionHero): SectionHero {
+  const fields = section.fields;
+
+  return {
+    sys: section.sys,
+    fields: {
+      internalName: fields.internalName,
+      anchorId: fields.anchorId || section.sys.id,
+      title: fields.title,
+      name: fields.name,
+      eyebrow: fields.eyebrow,
+      heroStyle: fields.heroStyle,
+      avatarImage: fields.avatarImage,
+      avatarImageAlt: fields.avatarImageAlt,
+      heroImage: fields.heroImage,
+      heroImageAlt: fields.heroImageAlt,
+      lead: fields.lead,
+      body: fields.body,
+      proofPoints: safeArray(fields.proofPoints),
+      actions: safeArray(fields.actions),
+      // Legacy fields retained for partial migration compatibility.
+      tagline: fields.tagline,
+      intro: fields.intro,
+      highlights: safeArray(fields.highlights),
+      primaryCtaLabel: fields.primaryCtaLabel,
+      primaryCtaHref: fields.primaryCtaHref,
+      primaryCtaVariant: fields.primaryCtaVariant,
+      primaryCtaOpenInNewTab: fields.primaryCtaOpenInNewTab,
+      primaryCtaAriaLabel: fields.primaryCtaAriaLabel,
+      secondaryCtaLabel: fields.secondaryCtaLabel,
+      secondaryCtaHref: fields.secondaryCtaHref,
+      secondaryCtaVariant: fields.secondaryCtaVariant,
+      secondaryCtaOpenInNewTab: fields.secondaryCtaOpenInNewTab,
+      secondaryCtaAriaLabel: fields.secondaryCtaAriaLabel,
+      ctaLabel: fields.ctaLabel,
+      ctaHref: fields.ctaHref,
+    },
+  };
+}
+
 function mapProjectLink(link: ProjectLink): ProjectLink {
   const fields = link.fields;
 
@@ -406,6 +447,9 @@ export function mapFooterSection(section: SectionFooter): SectionFooter {
 
 function mapSection(section: SectionEntry): SectionEntry {
   const id = section.sys.contentType.sys.id;
+  if (id === "sectionHero") {
+    return mapHeroSection(section as SectionHero);
+  }
   if (id === "sectionTimeline") {
     return mapTimelineSection(section as SectionTimeline);
   }
