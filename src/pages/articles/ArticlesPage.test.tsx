@@ -10,8 +10,25 @@ vi.mock("@/content/source", () => ({
 }));
 
 vi.mock("@/components/layout/PageShell", () => ({
-  PageShell: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="page-shell">{children}</div>
+  PageShell: ({
+    title,
+    description,
+    canonicalUrl,
+    children,
+  }: {
+    title?: string;
+    description?: string;
+    canonicalUrl?: string;
+    children: React.ReactNode;
+  }) => (
+    <div
+      data-testid="page-shell"
+      data-title={title ?? ""}
+      data-description={description ?? ""}
+      data-canonical-url={canonicalUrl ?? ""}
+    >
+      {children}
+    </div>
   ),
 }));
 
@@ -52,7 +69,7 @@ describe("ArticlesPage", () => {
     );
 
     render(<ArticlesPage />);
-    expect(screen.getByText("Loading articles…")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Loading articles…");
   });
 
   it("shows error state when getAllArticles rejects", async () => {
@@ -62,7 +79,7 @@ describe("ArticlesPage", () => {
 
     render(<ArticlesPage />);
 
-    expect(await screen.findByText("Error: Fetch failed")).toBeInTheDocument();
+    expect(await screen.findByRole("alert")).toHaveTextContent("Error: Fetch failed");
   });
 
   it("shows empty state when getAllArticles returns []", async () => {
@@ -70,13 +87,16 @@ describe("ArticlesPage", () => {
 
     render(<ArticlesPage />);
 
-    expect(await screen.findByText("No articles found.")).toBeInTheDocument();
+    const emptyState = await screen.findByText(/No articles found yet\./);
+    expect(emptyState).toHaveAttribute("role", "status");
   });
 
   it("renders page framing text", async () => {
     mockGetContentSource.mockReturnValue(makeSource(Promise.resolve([])));
 
     render(<ArticlesPage />);
+
+    const shell = screen.getByTestId("page-shell");
 
     expect(screen.getByText("Writing")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Articles", level: 1 })).toBeInTheDocument();
@@ -85,7 +105,21 @@ describe("ArticlesPage", () => {
         /Notes and long-form writing on web engineering, content systems, and thoughtful interface work\./,
       ),
     ).toBeInTheDocument();
-    expect(await screen.findByText("No articles found.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Back to homepage" })).toHaveAttribute(
+      "href",
+      "/",
+    );
+    expect(screen.getByRole("link", { name: "Explore projects" })).toHaveAttribute(
+      "href",
+      "/#projects",
+    );
+    expect(shell).toHaveAttribute("data-title", "Articles | Gilberto Haro");
+    expect(shell).toHaveAttribute(
+      "data-description",
+      "Writing on frontend engineering, content systems, and digital experience design.",
+    );
+    expect(shell.getAttribute("data-canonical-url")).toContain("/articles");
+    expect(await screen.findByText(/No articles found yet\./)).toBeInTheDocument();
   });
 
   it("renders article cards and applies sorted order", async () => {
@@ -123,6 +157,6 @@ describe("ArticlesPage", () => {
       .map((heading) => heading.textContent);
 
     expect(orderedCardHeadings).toEqual(["Newer Article", "Older Article"]);
-    expect(screen.getAllByRole("link", { name: "Read article" })).toHaveLength(2);
+    expect(screen.getAllByRole("link", { name: /Read article: / })).toHaveLength(2);
   });
 });

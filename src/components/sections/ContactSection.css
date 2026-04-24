@@ -1,3 +1,28 @@
+@import "../../styles/tokens.css";
+
+.contact-layout,
+.contact-header,
+.contact-actions,
 .contact-links {
   width: 100%;
+}
+
+.contact-intro {
+  margin: 0;
+  max-width: var(--lede-max);
+  color: var(--color-text-muted);
+}
+
+.contact-email {
+  width: fit-content;
+  font-weight: 600;
+}
+
+.contact-links__empty {
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
 }

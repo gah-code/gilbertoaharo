@@ -1,11 +1,15 @@
 import React from "react";
 
-type ContainerProps = React.HTMLAttributes<HTMLElement> & {
+export type ContainerProps = React.HTMLAttributes<HTMLElement> & {
   as?: keyof HTMLElementTagNameMap;
+  maxWidth?: string;
+  paddingX?: string;
 };
 
 export function Container({
   as: Component = "div",
+  maxWidth = "var(--content-max)",
+  paddingX = "var(--section-pad-x)",
   style,
   children,
   ...rest
@@ -14,10 +18,10 @@ export function Container({
   return (
     <Element
       style={{
-        maxWidth: "var(--content-max)",
+        maxWidth,
         width: "100%",
         margin: "0 auto",
-        padding: "0 var(--section-pad-x)",
+        padding: `0 ${paddingX}`,
         boxSizing: "border-box",
         ...style,
       }}

@@ -59,3 +59,48 @@ export const MigrationCompatibility: Story = {
     section: sparseLearningSection,
   },
 };
+
+const emptyLearningSection: SectionLearning = {
+  ...learningSection,
+  sys: { ...learningSection.sys, id: "learning-story-empty" },
+  fields: {
+    ...learningSection.fields,
+    title: "Learning (No Active Items)",
+    items: [],
+  },
+};
+
+export const EmptyState: Story = {
+  args: {
+    section: emptyLearningSection,
+  },
+};
+
+const longCopyLearningSection: SectionLearning = {
+  ...learningSection,
+  sys: { ...learningSection.sys, id: "learning-story-long-copy" },
+  fields: {
+    ...learningSection.fields,
+    items: (learningSection.fields.items ?? []).map((item, index) => ({
+      ...item,
+      sys: { ...item.sys, id: `${item.sys.id}-long-${index}` },
+      fields: {
+        ...item.fields,
+        topic:
+          index === 0
+            ? "Building resilient taxonomy-driven content models for mixed editorial and product surfaces"
+            : item.fields.topic,
+        description:
+          index === 0
+            ? "Documenting how additive schema migrations, editorial workflows, and section contracts stay aligned as teams ship frequent updates across multiple channels."
+            : item.fields.description,
+      },
+    })),
+  },
+};
+
+export const LongCopyStress: Story = {
+  args: {
+    section: longCopyLearningSection,
+  },
+};

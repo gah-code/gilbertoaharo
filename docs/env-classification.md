@@ -14,10 +14,15 @@ This document defines the current client/server environment boundary without cha
 | `VITE_CONTENTFUL_SPACE_ID` | `public-client` | Contentful space identifier used by client SDK (`src/env.ts`, `src/content/contentful/client.ts`). |
 | `VITE_CONTENTFUL_ENVIRONMENT` | `public-client` | Contentful environment selector (`src/env.ts`, `src/content/contentful/client.ts`). |
 | `VITE_CONTENTFUL_INCLUDE_CONTENT_SOURCE_MAPS` | `public-client` | Boolean Contentful CSM flag (`src/env.ts`). |
+| `VITE_GITHUB_OWNER` | `public-client` | Optional default GitHub owner for service-layer requests (`src/env.ts`, `src/lib/github/githubService.ts`). |
+| `VITE_GITHUB_REPO` | `public-client` | Optional default GitHub repository for service-layer requests (`src/env.ts`, `src/lib/github/githubService.ts`). |
+| `VITE_GITHUB_API_BASE` | `public-client` | Optional GitHub REST base URL override (defaults to `https://api.github.com`) (`src/env.ts`, `src/lib/github/client.ts`). |
 | `VITE_CONTENTFUL_DELIVERY_TOKEN` | `temporary-client-exposed` | Delivery token currently passed to browser-side Contentful client (`src/env.ts`, `src/content/contentful/client.ts`). |
+| `VITE_GITHUB_TOKEN` | `temporary-client-exposed` | Optional GitHub token used by browser-side GitHub service requests (`src/env.ts`, `src/lib/github/client.ts`). |
 | `CONTENTFUL_DELIVERY_TOKEN` | `server-only-target` | Intended server-side replacement for delivery access in a later phase (not wired yet). |
 | `CONTENTFUL_SPACE_ID` | `server-only-target` | Intended server-side Contentful space id in a later phase (not wired yet). |
 | `CONTENTFUL_ENVIRONMENT` | `server-only-target` | Intended server-side Contentful environment in a later phase (not wired yet). |
+| `GITHUB_TOKEN` | `server-only-target` | Intended server-side token for future private/sensitive GitHub access (not wired yet). |
 | `VITE_CONTENTFUL_USE_PREVIEW` | `unused-or-obsolete` | Not used by current source runtime. |
 | `VITE_CONTENTFUL_PREVIEW_TOKEN` | `unused-or-obsolete` | Not used by current source runtime. |
 
@@ -25,5 +30,7 @@ This document defines the current client/server environment boundary without cha
 
 - Option A: Keep `VITE_CONTENTFUL_DELIVERY_TOKEN` temporarily client-exposed for published read-only content while preserving current architecture.
 - Option B: Move delivery access server-side and remove browser token usage for a stricter security boundary.
+- GitHub Phase 1 decision: keep GitHub reads service-layered and public-read-first; do not use client-exposed token patterns for private/sensitive access.
+- Future GitHub private/sensitive access should move behind a serverless proxy.
 
 Phase 4 will choose and implement one of these paths.

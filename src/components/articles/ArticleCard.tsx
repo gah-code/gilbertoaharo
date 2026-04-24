@@ -35,7 +35,6 @@ export function ArticleCard({ article }: { article: ArticleListItem }) {
         <Link
           href={href}
           className="article-card__media"
-          aria-label={`Read article: ${article.title}`}
           variant="unstyled"
         >
           <img
@@ -45,7 +44,9 @@ export function ArticleCard({ article }: { article: ArticleListItem }) {
             decoding="async"
           />
         </Link>
-      ) : null}
+      ) : (
+        <div className="article-card__media-placeholder" aria-hidden="true" />
+      )}
 
       <div className="article-card__body">
         <h2 className="article-card__title">
@@ -56,7 +57,9 @@ export function ArticleCard({ article }: { article: ArticleListItem }) {
 
         {hasMeta ? (
           <div className="article-card__meta">
-            {article.authorName ? <span>{article.authorName}</span> : null}
+            {article.authorName ? (
+              <span className="article-card__author">By {article.authorName}</span>
+            ) : null}
             {dateLabel ? (
               <time dateTime={dateTime}>
                 {datePrefix} {dateLabel}
@@ -69,7 +72,12 @@ export function ArticleCard({ article }: { article: ArticleListItem }) {
           <p className="article-card__excerpt">{article.excerpt}</p>
         ) : null}
 
-        <Link href={href} variant="unstyled" className="article-card__cta">
+        <Link
+          href={href}
+          variant="unstyled"
+          className="article-card__cta"
+          aria-label={`Read article: ${article.title}`}
+        >
           Read article
         </Link>
       </div>

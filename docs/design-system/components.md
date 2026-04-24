@@ -4,13 +4,13 @@
 
 ## Primitives (`src/components/ui`)
 - **Button** (`Button.tsx`, `Button.css`): explicit `variant` (`primary|secondary|text`), `size` (`sm|md|lg`), `fullWidth`, disabled behavior for button/link modes, reduced-motion handling.
-- **Link** (`Link.tsx`, `Link.css`): explicit `variant` (`default|muted|unstyled`), `size` (`sm|md`), `disabled` contract (`aria-disabled`, tab exclusion, click guard), safe external rel handling.
+- **Link** (`Link.tsx`, `Link.css`): explicit `variant` (`default|muted|unstyled`), `size` (`sm|md|lg`), `disabled` contract (`aria-disabled`, tab exclusion, click guard), safe external rel handling.
 - **Card** (`Card.tsx`, `Card.css`): explicit `variant` (`default|subtle|elevated`), `density` (`sm|md|lg`), optional `interactive` state styles.
 - **Badge** (`Badge.tsx`, `Badge.css`): explicit `tone` (`default|muted|success|warning`) and `size` (`sm|md`).
-- **Text** (`Text.tsx`, `Text.css`): explicit `tone`, `size`, `weight`, `tracking`; supports semantic `as`.
-- **Heading** (`Heading.tsx`, `Heading.css`): semantic `level` + explicit `size`, `weight`, `tone`, `tracking` contracts.
-- **Stack** (`Stack.tsx`): vertical flow with tokenized gap.
-- **Container** (`Container.tsx`): content max-width + horizontal padding.
+- **Text** (`Text.tsx`, `Text.css`): semantic `kind` presets (`body`, `bodyLarge`, `bodySmall`, `meta`, `eyebrow`, `caption`) with explicit override props (`tone`, `size`, `weight`, `tracking`) and semantic `as`.
+- **Heading** (`Heading.tsx`, `Heading.css`): semantic `level` + explicit `size`, `weight`, `tone`, `tracking` contracts, including `size="display"` for high-emphasis hero/title contexts.
+- **Stack** (`Stack.tsx`): vertical flow with token-aware gap contract.
+- **Container** (`Container.tsx`): content max-width + horizontal padding with optional `maxWidth`/`paddingX` overrides.
 - **Inline / Cluster / Grid** (`Inline.tsx`, `Cluster.tsx`, `Grid.tsx` + colocated CSS): reusable horizontal/wrapping/grid layout primitives replacing repeated flex/grid snippets.
 
 ## Layout (`src/components/layout`)
@@ -48,6 +48,14 @@ Section components now render from stable normalized view models only.
 - Storybook scaffolded (`.storybook/main.ts`, `.storybook/preview.ts`) with hybrid layout:
   - Collocated stories: `src/components/**/*.stories.tsx`
   - Cross-cutting stories: `src/stories/*`
+- Foundation stories include:
+  - `Foundations/Tokens`
+  - `Foundations/Typography`
+  - `Foundations/Layout`
 - Primitive interaction tests: `src/components/ui/*.test.tsx`
 - Normalizer tests: `src/components/sections/**/normalize*.test.ts`
 - Renderer coverage test: `src/components/sections/SectionRenderer.test.tsx`
+
+## Deferred primitive cleanup (Phase 6)
+- Evaluate whether `Container`/`Stack` should move all structural defaults into dedicated CSS classes.
+- Review potential tokenized breakpoint helpers for layout primitives and section CSS once wider component refinement begins.

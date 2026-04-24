@@ -38,7 +38,7 @@ describe("ArticleCard", () => {
     render(<ArticleCard article={defaultArticleListItemFixture} />);
 
     expect(
-      screen.getByText(defaultArticleListItemFixture.authorName ?? ""),
+      screen.getByText(`By ${defaultArticleListItemFixture.authorName ?? ""}`),
     ).toBeInTheDocument();
     expect(screen.getByText(/Published /)).toBeInTheDocument();
   });
@@ -51,7 +51,7 @@ describe("ArticleCard", () => {
   });
 
   it("renders image when heroImageUrl exists and omits it otherwise", () => {
-    const { rerender } = render(<ArticleCard article={defaultArticleListItemFixture} />);
+    const { rerender, container } = render(<ArticleCard article={defaultArticleListItemFixture} />);
 
     expect(
       screen.getByRole("img", { name: defaultArticleListItemFixture.title }),
@@ -59,15 +59,20 @@ describe("ArticleCard", () => {
 
     rerender(<ArticleCard article={noImageArticleListItemFixture} />);
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(container.querySelector(".article-card__media-placeholder")).toBeInTheDocument();
   });
 
   it("links title and CTA to /articles/:slug", () => {
     render(<ArticleCard article={defaultArticleListItemFixture} />);
 
-    const titleLink = screen.getByRole("link", {
+    const titleHeading = screen.getByRole("heading", {
       name: defaultArticleListItemFixture.title,
+      level: 2,
     });
-    const ctaLink = screen.getByRole("link", { name: "Read article" });
+    const titleLink = titleHeading.querySelector("a");
+    const ctaLink = screen.getByRole("link", {
+      name: `Read article: ${defaultArticleListItemFixture.title}`,
+    });
 
     expect(titleLink).toHaveAttribute("href", `/articles/${defaultArticleListItemFixture.slug}`);
     expect(ctaLink).toHaveAttribute("href", `/articles/${defaultArticleListItemFixture.slug}`);

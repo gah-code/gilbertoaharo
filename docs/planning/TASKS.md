@@ -1,64 +1,106 @@
-# Growth-focused Structure Task List
+# TASKS
 
-This file tracks repo-wide tasks to align the project with growth-focused structure and GitHub community best practices.
+Phase-aligned execution tracker.  
+Canonical sequence and baseline are defined in:
 
-## 1) Repo Hygiene and Security
+- `docs/planning/PHASE-0-BASELINE.md`
+- `docs/planning/IMPLEMENTATION-ROADMAP.md`
 
-- [ ] Confirm repo visibility (public/private) and adjust policy files accordingly.
-- [ ] Remove tracked `.env` and `.env.local` from git history if present.
-- [ ] Ensure `.gitignore` includes `node_modules`, `dist`, `.env*`, and `tsconfig.tsbuildinfo`.
-- [ ] Stop ignoring `docs/` so documentation changes are reviewable.
-- [ ] Add a `.env.example` policy section in `README.md` or `docs/`.
+---
 
-## 2) Community Standards (GitHub Best Practices)
+## Now: Phase 7 — Testing + Governance + Docs
 
-- [ ] Add `CONTRIBUTING.md` with setup, workflow, and PR guidelines.
-- [ ] Add `CODE_OF_CONDUCT.md` (Contributor Covenant recommended).
-- [ ] Add `SECURITY.md` with reporting instructions.
-- [ ] Add `SUPPORT.md` with support channels and expectations.
-- [ ] Add `.github/ISSUE_TEMPLATE/` (bug + feature templates).
-- [ ] Add `.github/PULL_REQUEST_TEMPLATE.md`.
-- [ ] Add `.github/CODEOWNERS`.
+### Goal
 
-## 3) Automation and CI
+Lock quality gates, governance clarity, and canonical documentation for sustainable iteration after Phases 0-6.
 
-- [ ] Add `.github/workflows/ci.yml` for lint, typecheck, and build.
-- [ ] Add `.github/dependabot.yml` for npm dependency updates.
-- [ ] Add `build-storybook` to CI once Storybook is added.
+### Ordered execution queue
 
-## 4) Tooling and Quality Gates
+#### 1. Testing consolidation
 
-- [ ] Add `format` and `format:check` scripts (Prettier).
-- [ ] Add `typecheck` script (tsc -b or tsc --noEmit).
-- [ ] Add `test` script (Vitest) and a small smoke test.
-- [ ] Define Prettier config in `.prettierrc`.
-- [ ] Ensure ESLint config covers React + TS and is run in CI.
+- [x] Audit current test coverage across shell/layout, routes, SEO, GitHub service layer, navigation, sections, and primitives.
+- [x] Add focused regression tests for remaining high-value blind spots:
+  - `PageShell` shell-level contract
+  - route parser continuity (`parsePathname` / `buildArticlePath`)
+- [x] Keep test additions behavioral and non-brittle.
 
-## 5) Codebase Structure for Growth
+#### 2. Governance + quality workflow
 
-- [ ] Add `src/features/` for domain-specific UI (e.g., landing, articles).
-- [ ] Move `src/components/sections/*` into feature folders as appropriate.
-- [ ] Add `src/lib/` for shared utilities.
-- [ ] Add `src/config/` for runtime configuration and constants.
-- [ ] Update imports and index files to preserve public APIs.
+- [x] Align `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `SUPPORT.md` with actual repo scripts and architecture boundaries.
+- [x] Document explicit quality-check workflow (`lint`, `test`, `build`, `build-storybook`).
+- [x] Preserve Storybook Node floor mismatch as environment/tooling blocker, not architecture failure.
 
-## 6) Documentation and Architecture
+#### 3. Documentation canonicalization
 
-- [ ] Add `docs/architecture/` for decisions and system overview.
-- [ ] Add `docs/roadmap.md` for multi-phase plan.
-- [ ] Keep `docs/design-system.md` and `docs/storybook-migration-plan.md` in sync with code.
-- [ ] Update `README.md` structure map after refactors.
+- [x] Clarify canonical source ownership across README/planning/design-system docs.
+- [x] Keep legacy roadmap/history docs clearly labeled as non-canonical.
+- [x] Add Phase 7 closeout record with final deferred-item notes.
 
-## 7) Design System + Storybook
+#### 4. Planning hygiene
 
-- [ ] Add Storybook dependencies and scaffold `.storybook/` configs.
-- [ ] Create token, typography, and layout stories.
-- [ ] Create stories for all primitives in `src/components/ui`.
-- [ ] Add fixture data in `src/content/static/fixtures.ts` for section stories.
-- [ ] Add section stories in `src/components/sections`.
-- [ ] Add basic a11y checks and interactions tests for critical components.
+- [x] Mark Phase 6 complete in this tracker.
+- [x] Move active phase note to Phase 7 in `IMPLEMENTATION-ROADMAP.md`.
+- [x] Keep phase records (`PHASE-*.md`) intact as historical implementation references.
 
-## 8) Release Tracking
+---
 
-- [ ] Keep `CHANGELOG.md` updated for all user-facing changes.
-- [ ] Update `VERSION.md` whenever `package.json` version changes.
+## Phase 7 completion gate
+
+- [x] Phase 6 is marked complete in `TASKS.md`
+- [x] Phase 7 is the active queue in `TASKS.md`
+- [x] remaining high-value testing gaps are addressed or clearly documented
+- [x] governance/working-agreement guidance is clearer
+- [x] canonical docs are clearer and less ambiguous
+- [x] README is aligned with the final repo shape
+- [x] remaining blockers/deferred items are recorded honestly
+- [x] architecture guardrails remain intact
+- [x] Phase 6 is not reopened except for a true discovered regression
+
+---
+
+## Recently completed: Phase 6 — Component + Section Refinement
+
+- [x] Refined section rhythm/density across Hero, Timeline, Skills, Projects, Learning, and Contact.
+- [x] Hardened responsive behavior and sparse-content edge states.
+- [x] Improved section Storybook realism with sparse/empty/long-content variants.
+- [x] Added focused section edge-case tests.
+- [x] Documented Phase 6 outcomes in:
+  - `docs/planning/PHASE-6-COMPONENT-SECTION-REFINEMENT.md`
+
+### Phase 6 closure note
+
+Do not reopen Phase 6 unless Phase 7 QA/governance work finds a true regression in section behavior, responsive consistency, or content-edge handling.
+
+---
+
+## Guardrails
+
+- Keep `src/content` as the core content boundary.
+- Keep `src/components/ui` and `src/components/sections` ownership split.
+- Keep route-level organization under `src/pages/articles`.
+- Keep `PageShell` as shared shell owner for global layout chrome and SEO wiring.
+- Keep section normalizer-first rendering pattern.
+- Keep route-level SEO ownership introduced in Phase 2.
+- Keep GitHub integration under `src/lib/github/*`.
+- Avoid broad refactors unless a post-roadmap phase explicitly justifies them.
+
+---
+
+## Links
+
+- Baseline: `docs/planning/PHASE-0-BASELINE.md`
+- Canonical roadmap: `docs/planning/IMPLEMENTATION-ROADMAP.md`
+- Phase 2: `docs/planning/PHASE-2-SEO-FOUNDATION.md`
+- Phase 3: `docs/planning/PHASE-3-PERFORMANCE-ACCESSIBILITY.md`
+- Phase 4: `docs/planning/PHASE-4-UX-NAVIGATION.md`
+- Phase 5: `docs/planning/PHASE-5-DESIGN-SYSTEM-FOUNDATIONS.md`
+- Phase 6: `docs/planning/PHASE-6-COMPONENT-SECTION-REFINEMENT.md`
+- Phase 7: `docs/planning/PHASE-7-TESTING-GOVERNANCE-DOCS.md`
+- Legacy roadmap (history): `docs/planning/ROADMAP.md`
+
+---
+
+## Final wrap-up / known blockers
+
+- Local Storybook build remains blocked on Node `22.2.0`; Storybook requires `22.12+`.
+- This blocker is environment/tooling only and does not indicate architecture or implementation regression.

@@ -3,11 +3,19 @@ import { classNames } from "./classNames";
 import "./Heading.css";
 
 export type HeadingWeight = "regular" | "semibold" | "bold";
-export type HeadingSize = "auto" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
+export type HeadingSize =
+  | "auto"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "display";
 export type HeadingTone = "default" | "muted";
 export type HeadingTracking = "auto" | "normal" | "tight";
 
-type HeadingProps = Omit<React.HTMLAttributes<HTMLHeadingElement>, "style"> & {
+export type HeadingProps = Omit<React.HTMLAttributes<HTMLHeadingElement>, "style"> & {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
   size?: HeadingSize;
   weight?: HeadingWeight;

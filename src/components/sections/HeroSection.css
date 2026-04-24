@@ -27,11 +27,11 @@
 }
 
 .hero-media--avatarImage {
-  max-width: 340px;
+  max-width: 320px;
 }
 
 .hero-media--heroImage {
-  max-width: 560px;
+  max-width: 540px;
 }
 
 .section-hero .proof-list {
@@ -61,6 +61,7 @@
   .hero-media {
     justify-self: start;
     max-width: 100%;
+    margin-top: var(--space-2);
   }
 
   .hero-media--avatarImage {
@@ -78,6 +79,13 @@
   }
 
   .section-hero .section-action-group .ui-button {
+    width: fit-content;
     min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-hero .section-action-group .ui-button {
+    width: 100%;
   }
 }

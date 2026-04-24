@@ -57,6 +57,7 @@ export type RouteMatch =
   | { name: "landing" }
   | { name: "articles" }
   | { name: "debug" }
+  | { name: "debug-github" }
   | { name: "article"; slug: string }
   | { name: "not-found" };
 
@@ -74,6 +75,10 @@ export function parsePathname(pathname: string): RouteMatch {
 
   if (normalizedPath === normalizedPrefix) {
     return { name: "articles" };
+  }
+
+  if (normalizedPath === "/debug/github") {
+    return { name: "debug-github" };
   }
 
   if (normalizedPath === "/debug") {

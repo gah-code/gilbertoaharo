@@ -1,6 +1,20 @@
 :root {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Typography families */
+  --font-sans:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "SF Pro Display",
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+
+  /* Typography scale */
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -8,6 +22,30 @@
   --font-size-xl: 1.5rem;
   --font-size-2xl: 2rem;
   --font-size-3xl: 2.5rem;
+
+  /* Typography roles */
+  --font-size-display: clamp(2.5rem, 5vw, 3.25rem);
+  --font-size-heading-1: var(--font-size-3xl);
+  --font-size-heading-2: var(--font-size-2xl);
+  --font-size-heading-3: var(--font-size-xl);
+  --font-size-heading-4: var(--font-size-lg);
+  --font-size-heading-5: var(--font-size-base);
+  --font-size-heading-6: var(--font-size-sm);
+  --font-size-body-lg: var(--font-size-lg);
+  --font-size-body-md: var(--font-size-base);
+  --font-size-body-sm: var(--font-size-sm);
+  --font-size-caption: var(--font-size-xs);
+  --line-height-display: 1.08;
+  --line-height-heading: 1.12;
+  --line-height-heading-sm: 1.2;
+  --line-height-body: 1.55;
+  --line-height-body-loose: 1.7;
+  --line-height-meta: 1.4;
+  --tracking-tight: -0.02em;
+  --tracking-tight-sm: -0.01em;
+  --tracking-eyebrow: 0.08em;
+
+  /* Color palette + semantic aliases */
   --color-bg: #f7f3ea;
   --color-surface: #fffdf8;
   --color-surface-2: #f2ede2;
@@ -22,6 +60,8 @@
   --color-text-primary: var(--color-text);
   --color-text-muted: var(--color-muted);
   --color-focus-ring: #7aa2ff;
+
+  /* State colors */
   --color-success-text: #166534;
   --color-success-bg: #ecfdf3;
   --color-success-border: #34d399;
@@ -32,10 +72,12 @@
   --color-error-bg: #fef2f2;
   --color-error-border: #f87171;
 
+  /* Legacy aliases kept for compatibility */
   --text: var(--color-text);
   --muted: var(--color-muted);
   --bg: var(--color-bg);
 
+  /* Spacing scale */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -46,6 +88,7 @@
   --space-12: 3rem;
   --space-16: 4rem;
 
+  /* Layout + readable line length */
   --content-max: 1040px;
   --section-pad-y: clamp(var(--space-10), 6vw, var(--space-16));
   --section-pad-x: clamp(var(--space-4), 4vw, var(--space-12));
@@ -53,19 +96,37 @@
   --heading-gap: var(--space-3);
   --heading-mb: var(--space-6);
   --lede-max: 62ch;
+  --measure-body: 68ch;
 
+  /* Radius + borders */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 1rem;
   --radius-pill: 999px;
+  --border-width-thin: 1px;
+  --border-width-thick: 2px;
 
+  /* Elevation */
   --shadow-soft: 0 18px 40px rgba(17, 24, 39, 0.1);
   --shadow-soft-strong: 0 20px 60px rgba(17, 24, 39, 0.14);
 
+  /* Motion */
   --motion-duration-fast: 120ms;
   --motion-duration-base: 180ms;
   --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
 
+  /*
+    Breakpoint reference values.
+    Note: CSS custom properties are not reliable in media queries across browsers yet.
+    Keep these as design-system documentation anchors and JS/reference tokens.
+  */
+  --breakpoint-sm: 40rem; /* 640px */
+  --breakpoint-md: 48rem; /* 768px */
+  --breakpoint-nav: 60rem; /* 960px */
+  --breakpoint-lg: 64rem; /* 1024px */
+  --breakpoint-xl: 80rem; /* 1280px */
+
+  /* Control sizing + state */
   --control-font-size-sm: var(--font-size-sm);
   --control-font-size-md: var(--font-size-base);
   --control-font-size-lg: var(--font-size-lg);
@@ -77,34 +138,34 @@
   --control-px-lg: var(--space-6);
   --control-disabled-opacity: 0.56;
 
-  --button-font-weight: 600;
+  /* Interaction focus tokens */
   --button-focus-ring-shadow: 0 0 0 3px rgba(122, 162, 255, 0.35);
-  --button-active-translate-y: 1px;
-
-  --link-color: var(--color-accent);
-  --link-color-hover: var(--color-accent-hover);
-  --link-color-active: var(--color-accent-active);
   --link-focus-ring-shadow: 0 0 0 3px rgba(122, 162, 255, 0.28);
-
   --card-focus-ring-shadow:
     0 0 0 3px rgba(122, 162, 255, 0.28),
     var(--shadow-soft-strong);
 
+  /* Button tokens */
+  --button-font-weight: 600;
+  --button-active-translate-y: 1px;
   --button-primary-bg: var(--color-accent);
   --button-primary-bg-hover: var(--color-accent-hover);
   --button-primary-bg-active: var(--color-accent-active);
   --button-primary-text: var(--color-surface);
   --button-primary-border: var(--color-accent);
-
   --button-secondary-bg: transparent;
   --button-secondary-bg-hover: rgba(11, 42, 111, 0.08);
   --button-secondary-bg-active: rgba(11, 42, 111, 0.14);
   --button-secondary-text: var(--color-accent);
   --button-secondary-border: rgba(11, 42, 111, 0.45);
-
   --button-text-bg: transparent;
   --button-text-bg-hover: rgba(11, 42, 111, 0.08);
   --button-text-bg-active: rgba(11, 42, 111, 0.14);
   --button-text: var(--color-accent);
   --button-text-border: transparent;
+
+  /* Link tokens */
+  --link-color: var(--color-accent);
+  --link-color-hover: var(--color-accent-hover);
+  --link-color-active: var(--color-accent-active);
 }

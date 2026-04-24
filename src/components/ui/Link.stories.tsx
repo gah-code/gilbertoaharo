@@ -35,3 +35,10 @@ export const External: Story = {
     children: "External link",
   },
 };
+
+export const Large: Story = {
+  args: {
+    size: "lg",
+    children: "Large link label",
+  },
+};

@@ -29,6 +29,16 @@ export const Text: Story = {
   },
 };
 
+export const Sizes: Story = {
+  render: () => (
+    <div style={{ display: "flex", gap: "var(--space-3)", alignItems: "center" }}>
+      <Button size="sm">Small</Button>
+      <Button size="md">Medium</Button>
+      <Button size="lg">Large</Button>
+    </div>
+  ),
+};
+
 export const DisabledLink: Story = {
   args: {
     href: "/contact",

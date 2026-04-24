@@ -18,7 +18,7 @@
 
 .timeline-list {
   display: grid;
-  gap: var(--space-10);
+  gap: var(--space-8);
   padding: 0;
   margin: 0;
   list-style: none;
@@ -46,16 +46,16 @@
   display: block;
 }
 
-.timeline-card__grid {
-  display: grid;
-  gap: var(--space-4);
-}
-
 .timeline-card__header {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-2);
   flex-wrap: wrap;
+}
+
+.timeline-card__title {
+  margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .timeline-context {
@@ -76,6 +76,7 @@
 
 .timeline-summary {
   max-width: 65ch;
+  overflow-wrap: anywhere;
 }
 
 .timeline-card__media {
@@ -86,6 +87,7 @@
 .timeline-card__media-frame {
   width: 100%;
   max-width: 28rem;
+  aspect-ratio: 4 / 3;
   background: var(--color-surface);
   border-radius: calc(var(--radius-lg) + 4px);
   border: 1px solid var(--color-border-subtle);
@@ -96,8 +98,9 @@
 
 .timeline-card__media-frame img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
+  object-fit: cover;
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-subtle);
   background: var(--color-surface);
@@ -126,6 +129,15 @@
   display: inline-flex;
 }
 
+.timeline-empty {
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}
+
 @media (min-width: 640px) {
   .timeline-list {
     grid-template-columns: 1fr;
@@ -150,7 +162,7 @@
   }
 
   .timeline-card__media-frame {
-    width: clamp(18rem, 42vw, 24rem);
+    width: clamp(17rem, 42vw, 24rem);
     max-width: none;
     padding: var(--space-3);
   }
@@ -173,12 +185,6 @@
     justify-self: stretch;
   }
 
-  .timeline-card__grid {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    align-items: center;
-    gap: var(--space-6);
-  }
-
   .timeline-card__media-frame {
     width: clamp(18rem, 40vw, 22rem);
     padding: var(--space-3);
@@ -198,9 +204,6 @@
     order: 1;
   }
 
-  .timeline-card__grid {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  }
 }
 
 @media (max-width: 639px) {

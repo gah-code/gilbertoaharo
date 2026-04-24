@@ -1,8 +1,17 @@
 import React from "react";
 import { contentful } from "@/content/contentful/client";
+import { PageShell } from "@/components/layout/PageShell";
+import { Link } from "@/components/ui/Link";
 import { getErrorMessage } from "@/lib/errors";
+import { buildCanonicalUrl } from "@/lib/seo";
 
 type Summary = { type: string; total: number; sampleIds: string[] };
+
+const debugRouteSeo = {
+  title: "Contentful Debug | Gilberto Haro",
+  description: "Developer validation route for Contentful model and content health.",
+  canonicalUrl: buildCanonicalUrl("/debug"),
+};
 
 async function summarize(type: string): Promise<Summary> {
   const res = await contentful.getEntries({
@@ -51,25 +60,65 @@ export function DebugPage() {
       .catch((e) => setErr(getErrorMessage(e)));
   }, []);
 
-  if (err) return <pre>Error: {err}</pre>;
-  if (!rows) return <p>Loading model summary…</p>;
+  if (err) {
+    return (
+      <PageShell
+        title={debugRouteSeo.title}
+        description={debugRouteSeo.description}
+        canonicalUrl={debugRouteSeo.canonicalUrl}
+      >
+        <h1>Contentful Debug</h1>
+        <p>
+          <Link href="/">Home</Link> · <Link href="/articles">Articles</Link>
+        </p>
+        <p role="alert">Error: {err}</p>
+      </PageShell>
+    );
+  }
+
+  if (!rows) {
+    return (
+      <PageShell
+        title={debugRouteSeo.title}
+        description={debugRouteSeo.description}
+        canonicalUrl={debugRouteSeo.canonicalUrl}
+      >
+        <h1>Contentful Debug</h1>
+        <p>
+          <Link href="/">Home</Link> · <Link href="/articles">Articles</Link>
+        </p>
+        <p role="status" aria-live="polite">
+          Loading model summary…
+        </p>
+      </PageShell>
+    );
+  }
 
   return (
-    <div style={{ padding: 16 }}>
-      <h1>Contentful Debug</h1>
-      <p>Counts + sample IDs for each content type.</p>
-      <ul>
-        {rows.map((r) => (
-          <li key={r.type}>
-            <strong>{r.type}</strong>: {r.total}{" "}
-            {r.sampleIds.length ? (
-              <em>(sample: {r.sampleIds.join(", ")})</em>
-            ) : (
-              <em>(none)</em>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <PageShell
+      title={debugRouteSeo.title}
+      description={debugRouteSeo.description}
+      canonicalUrl={debugRouteSeo.canonicalUrl}
+    >
+      <div style={{ padding: 16 }}>
+        <h1>Contentful Debug</h1>
+        <p>
+          <Link href="/">Home</Link> · <Link href="/articles">Articles</Link>
+        </p>
+        <p>Counts + sample IDs for each content type.</p>
+        <ul>
+          {rows.map((r) => (
+            <li key={r.type}>
+              <strong>{r.type}</strong>: {r.total}{" "}
+              {r.sampleIds.length ? (
+                <em>(sample: {r.sampleIds.join(", ")})</em>
+              ) : (
+                <em>(none)</em>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </PageShell>
   );
 }

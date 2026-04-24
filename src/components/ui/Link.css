@@ -38,6 +38,10 @@
   font-size: var(--font-size-base);
 }
 
+.ui-link--lg {
+  font-size: var(--font-size-lg);
+}
+
 .ui-link--muted {
   color: var(--color-text-muted);
   text-decoration-color: color-mix(in srgb, var(--color-text-muted) 40%, transparent);

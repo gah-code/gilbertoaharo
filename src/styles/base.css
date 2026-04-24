@@ -19,7 +19,7 @@ body {
 body {
   margin: 0;
   font-family: var(--font-sans);
-  line-height: 1.55;
+  line-height: var(--line-height-body);
   color: var(--color-text-primary);
   background: var(--color-bg);
   overflow-x: hidden;
@@ -27,13 +27,13 @@ body {
 
 h1,
 h2 {
-  line-height: 1.12;
-  letter-spacing: -0.02em;
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--tracking-tight);
 }
 
 h3,
 h4 {
-  line-height: 1.2;
+  line-height: var(--line-height-heading-sm);
 }
 
 .section {
@@ -57,6 +57,7 @@ h4 {
   margin: 0 0 var(--space-8);
   max-width: var(--lede-max);
   color: var(--color-text-muted);
+  line-height: var(--line-height-body-loose);
 }
 
 a {

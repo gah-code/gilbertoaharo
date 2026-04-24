@@ -2,74 +2,44 @@
 
 ## Getting Help
 
-If you have questions or need support, here are the best ways to reach out:
+- Bug reports / feature requests: open a GitHub issue.
+- Security concerns: follow [`SECURITY.md`](SECURITY.md) (private reporting only).
 
-### Issues & Discussions
+## Start With Docs
 
-- **Bug reports:** [Open an issue](https://github.com/gah-code/gilbertoaharo/issues/new?template=bug.md)
-- **Feature requests:** [Open an issue](https://github.com/gah-code/gilbertoaharo/issues/new?template=feature.md)
-- **Questions:** Use [GitHub Discussions](https://github.com/gah-code/gilbertoaharo/discussions) (coming soon)
+- Project overview/setup: [`README.md`](README.md)
+- Active execution tracker: [`docs/planning/TASKS.md`](docs/planning/TASKS.md)
+- Canonical phase roadmap: [`docs/planning/IMPLEMENTATION-ROADMAP.md`](docs/planning/IMPLEMENTATION-ROADMAP.md)
+- Architecture baseline: [`docs/planning/PHASE-0-BASELINE.md`](docs/planning/PHASE-0-BASELINE.md)
+- Design-system docs hub: [`docs/design-system/design-system.md`](docs/design-system/design-system.md)
+- Contribution workflow: [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
-### Documentation
+## Common Troubleshooting
 
-Check these resources first:
-
-- [README.md](README.md) — Project overview and setup
-- [docs/design-system.md](docs/design-system.md) — Design tokens and patterns
-- [docs/content/cms-advanced.md](docs/content/cms-advanced.md) — Contentful integration
-- [CONTRIBUTING.md](CONTRIBUTING.md) — Development guide
-
-### Security Issues
-
-For security vulnerabilities, see [SECURITY.md](SECURITY.md) — do not open public issues.
-
-## Common Issues
-
-### Build Fails
+### Lint/Test/Build checks
 
 ```bash
-# Clear cache and reinstall
-rm -rf node_modules package-lock.json
-npm install
+npm run lint
+npm run test
 npm run build
 ```
 
-### Dev Server Won't Start
+### Storybook build fails locally
 
-```bash
-# Check Node version (need 20.19+)
-node --version
+- Storybook in this repo requires Node `22.12+`.
+- If local Node is `22.2.0`, `npm run build-storybook` will fail until Node is upgraded.
 
-# Kill any existing processes
-npx lkill :5173 2>/dev/null || true
+### Contentful fetch issues
 
-# Restart
-npm run dev
-```
+- Verify `.env.local` values for `VITE_CONTENTFUL_SPACE_ID`, `VITE_CONTENTFUL_DELIVERY_TOKEN`, and `VITE_CONTENT_SOURCE`.
+- Confirm Contentful credentials and environment are valid.
 
-### Contentful Connection Issues
+### GitHub debug route/service issues
 
-- Verify `VITE_CONTENTFUL_SPACE_ID` and `VITE_CONTENTFUL_DELIVERY_TOKEN` in `.env.local`
-- Check Contentful space is active
-- Ensure token has "Content Delivery API" permission
-- Try in incognito/private browser (clear cache)
+- Verify optional `VITE_GITHUB_*` settings.
+- Remember Phase 1 integration is public-read-first and client-exposed (`VITE_*`) by design.
 
-### Styling Issues
+## Response Expectations
 
-- Clear browser cache (Cmd+Shift+Delete)
-- Verify design tokens are imported: `src/styles/tokens.css`
-- Check Prettier formatting: `npm run format`
-
-## Response Times
-
-- **Bug reports:** We aim to respond within 48 hours
-- **Feature requests:** We aim to review within 1 week
-- **Security issues:** We aim to respond within 24 hours
-
-## Code of Conduct
-
-Please see [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community guidelines.
-
----
-
-**Thanks for using this project!**
+- Critical regressions/security reports: priority triage.
+- General issues/requests: reviewed as maintainership bandwidth allows.

@@ -5,6 +5,31 @@
   color: var(--color-text);
 }
 
+.article-page__context,
+.article-page__footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.article-page__footer-nav {
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.article-page__context-link {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.article-page__context-link:hover {
+  color: var(--color-accent-hover);
+}
+
 .article-header {
   display: grid;
   gap: var(--space-3);
@@ -40,6 +65,7 @@
 .article-hero img {
   width: 100%;
   height: auto;
+  aspect-ratio: 16 / 9;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
   background: var(--color-surface);
@@ -93,6 +119,7 @@
 .embedded-asset img {
   max-width: 100%;
   height: auto;
+  aspect-ratio: 16 / 9;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
   background: var(--color-surface);

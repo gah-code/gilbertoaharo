@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Inline } from "./Inline";
 import { Cluster } from "./Cluster";
 import { Grid } from "./Grid";
+import { Stack } from "./Stack";
 import { Card } from "./Card";
 
 const meta: Meta = {
@@ -41,5 +42,15 @@ export const GridExample: Story = {
       <Card>Three</Card>
       <Card>Four</Card>
     </Grid>
+  ),
+};
+
+export const StackExample: Story = {
+  render: () => (
+    <Stack gap="6">
+      <Card density="sm">First block</Card>
+      <Card density="sm">Second block</Card>
+      <Card density="sm">Third block</Card>
+    </Stack>
   ),
 };

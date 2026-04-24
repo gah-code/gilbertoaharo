@@ -27,4 +27,15 @@ describe("Link", () => {
     expect(link).toHaveAttribute("aria-disabled", "true");
     expect(link).toHaveAttribute("tabindex", "-1");
   });
+
+  it("supports lg size contract", () => {
+    render(
+      <Link href="/internal" size="lg">
+        Large link
+      </Link>,
+    );
+
+    const link = screen.getByRole("link", { name: "Large link" });
+    expect(link).toHaveClass("ui-link--lg");
+  });
 });

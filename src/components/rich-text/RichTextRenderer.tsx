@@ -15,6 +15,12 @@ type AssetLike = {
     file?: {
       url?: string;
       fileName?: string;
+      details?: {
+        image?: {
+          width?: number;
+          height?: number;
+        };
+      };
     };
     title?: string;
     description?: string;
@@ -33,6 +39,12 @@ function nodeChildren(node: RichTextNode): RichTextNode[] {
 function resolveAssetUrl(url?: string | null) {
   if (!url) return undefined;
   return url.startsWith("//") ? `https:${url}` : url;
+}
+
+function parsePositiveDimension(value: unknown): number | undefined {
+  return typeof value === "number" && Number.isFinite(value) && value > 0
+    ? value
+    : undefined;
 }
 
 function applyMarks(text: string, marks: RichTextMark[]) {
@@ -65,18 +77,34 @@ function renderAsset(
   const title = asset?.fields?.title;
   const description = asset?.fields?.description;
   const alt = description || title || file?.fileName || "Embedded media";
+  const width = parsePositiveDimension(file?.details?.image?.width);
+  const height = parsePositiveDimension(file?.details?.image?.height);
 
   if (inline) {
     return (
       <span key={key} className="embedded-asset embedded-asset--inline">
-        <img src={url} alt={alt} loading="lazy" decoding="async" />
+        <img
+          src={url}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          width={width}
+          height={height}
+        />
       </span>
     );
   }
 
   return (
     <figure key={key} className="embedded-asset">
-      <img src={url} alt={alt} loading="lazy" decoding="async" />
+      <img
+        src={url}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        width={width}
+        height={height}
+      />
       {(description || title) && <figcaption>{description ?? title}</figcaption>}
     </figure>
   );

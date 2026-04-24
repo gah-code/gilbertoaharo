@@ -2,13 +2,31 @@ import React from "react";
 import { getContentSource } from "@/content/source";
 import { PageShell } from "@/components/layout/PageShell";
 import { RichTextRenderer } from "@/components/rich-text/RichTextRenderer";
+import { Link } from "@/components/ui/Link";
 import type { ArticlePageData } from "@/content/contentful/types";
+import { env } from "@/env";
 import { getErrorMessage } from "@/lib/errors";
+import { buildCanonicalUrl, resolveRouteSeo } from "@/lib/seo";
 import "./ArticlePage.css";
 
 type ArticleState =
   | { loading: true; error?: undefined; data?: undefined }
   | { loading: false; error?: string; data?: ArticlePageData | null };
+
+const articleIndexPath = env.articlePrefix;
+
+const articleRouteSeo = {
+  title: "Article | Gilberto Haro",
+  description:
+    "Long-form writing on frontend engineering, content systems, and interface architecture.",
+  canonicalUrl: buildCanonicalUrl(articleIndexPath),
+};
+
+const articleNotFoundSeo = {
+  title: "Article not found | Gilberto Haro",
+  description: "The requested article could not be found.",
+  canonicalUrl: buildCanonicalUrl(articleIndexPath),
+};
 
 function resolveAssetUrl(url?: string | null) {
   if (!url) return undefined;
@@ -52,35 +70,79 @@ export function ArticlePage({ slug }: { slug: string }) {
 
   if (state.loading) {
     return (
-      <PageShell>
-        <p>Loading…</p>
+      <PageShell
+        title={articleRouteSeo.title}
+        description={articleRouteSeo.description}
+        canonicalUrl={articleRouteSeo.canonicalUrl}
+      >
+        <p role="status" aria-live="polite">
+          Loading…
+        </p>
       </PageShell>
     );
   }
   if (state.error) {
     return (
-      <PageShell>
-        <p>Error: {state.error}</p>
+      <PageShell
+        title={articleRouteSeo.title}
+        description={articleRouteSeo.description}
+        canonicalUrl={articleRouteSeo.canonicalUrl}
+      >
+        <p role="alert">Error: {state.error}</p>
+        <p>
+          <Link href={articleIndexPath}>Return to all articles</Link>
+        </p>
       </PageShell>
     );
   }
   if (!state.data) {
     return (
-      <PageShell>
-        <p>Not found.</p>
+      <PageShell
+        title={articleNotFoundSeo.title}
+        description={articleNotFoundSeo.description}
+        canonicalUrl={articleNotFoundSeo.canonicalUrl}
+      >
+        <p role="status" aria-live="polite">
+          Not found.
+        </p>
+        <p>
+          <Link href={articleIndexPath}>Browse all articles</Link>
+        </p>
       </PageShell>
     );
   }
 
   const article = state.data;
+  const seo = resolveRouteSeo(
+    {
+      title: article.seo.title || article.title,
+      description: article.seo.description || article.excerpt,
+      canonicalUrl:
+        article.seo.canonicalUrl ||
+        buildCanonicalUrl(`${articleIndexPath}/${article.slug}`),
+    },
+    articleRouteSeo,
+  );
 
   return (
     <PageShell
-      title={article.seo.title}
-      description={article.seo.description}
-      canonicalUrl={article.seo.canonicalUrl}
+      title={seo.title}
+      description={seo.description}
+      canonicalUrl={seo.canonicalUrl}
     >
       <article className="article-page">
+        <nav className="article-page__context" aria-label="Article navigation">
+          <Link href={articleIndexPath} className="article-page__context-link">
+            All articles
+          </Link>
+          <Link href="/" className="article-page__context-link">
+            Home
+          </Link>
+          <Link href="/#projects" className="article-page__context-link">
+            Projects
+          </Link>
+        </nav>
+
         <header className="article-header">
           <h1 className="article-title">{article.title}</h1>
           <div className="article-meta">
@@ -116,7 +178,7 @@ export function ArticlePage({ slug }: { slug: string }) {
 
         {article.attachments?.length ? (
           <section className="attachments">
-            <h2>Attachments</h2>
+            <h2>Attachments and resources</h2>
             <ul className="attachments-list">
               {article.attachments.map((file) => {
                 const label = file.fileName ?? file.url;
@@ -136,6 +198,15 @@ export function ArticlePage({ slug }: { slug: string }) {
             </ul>
           </section>
         ) : null}
+
+        <nav className="article-page__footer-nav" aria-label="Continue browsing">
+          <Link href={articleIndexPath} className="article-page__context-link">
+            Browse all articles
+          </Link>
+          <Link href="/#projects" className="article-page__context-link">
+            Explore projects
+          </Link>
+        </nav>
       </article>
     </PageShell>
   );

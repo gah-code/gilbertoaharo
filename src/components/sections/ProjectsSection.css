@@ -43,6 +43,10 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.projects-section__viewport--single {
+  overflow: visible;
+}
+
 .projects-section__track {
   display: flex;
   gap: var(--space-4);
@@ -51,11 +55,19 @@
   min-width: 100%;
 }
 
+.projects-section__track--single {
+  width: 100%;
+}
+
 .projects-section__slide {
   --project-slide-width: clamp(17rem, 86vw, 22rem);
 
   flex: 0 0 var(--project-slide-width);
   scroll-snap-align: start;
+}
+
+.projects-section__track--single .projects-section__slide {
+  --project-slide-width: min(100%, 44rem);
 }
 
 .projects-section__card {
@@ -84,15 +96,19 @@
 
 .projects-section__title {
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .projects-section__tagline {
   line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
 .projects-section__summary {
   margin: 0;
   max-width: 64ch;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .projects-section__highlights {
@@ -114,10 +130,20 @@
 
 .projects-section__actions {
   margin-top: var(--space-1);
+  justify-content: flex-start;
 }
 
 .projects-section__actions .ui-button--text {
   font-weight: 600;
+}
+
+.projects-section__status {
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
 }
 
 @media (min-width: 640px) {

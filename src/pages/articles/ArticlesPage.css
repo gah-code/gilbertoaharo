@@ -33,6 +33,22 @@
   line-height: 1.7;
 }
 
+.articles-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.articles-page__action-link {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.articles-page__action-link:hover {
+  color: var(--color-accent-hover);
+}
+
 .articles-page__status {
   margin: 0;
   padding: var(--space-4);
@@ -40,6 +56,10 @@
   border-radius: var(--radius-md);
   background: var(--color-surface);
   color: var(--color-text-muted);
+}
+
+.articles-page__inline-link {
+  color: var(--color-accent);
 }
 
 .articles-page__grid {

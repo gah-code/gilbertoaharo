@@ -35,3 +35,9 @@ export const Subtle: Story = {
     variant: "subtle",
   },
 };
+
+export const Interactive: Story = {
+  args: {
+    interactive: true,
+  },
+};

@@ -1,46 +1,72 @@
 # Foundations
 
-**Purpose:** Tokens, global styles, and reusable layout primitives.
+Purpose: canonical token, typography, layout, and style-layer guidance for the design system.
 
 ## Source of truth
 - Tokens: `src/styles/tokens.css`
-- Global base: `src/styles/base.css`
+- Global base rules: `src/styles/base.css`
 - Layout primitives: `src/components/ui/{Container,Stack,Inline,Cluster,Grid}.tsx`
-- Section wrapper: `src/components/sections/SectionShell.tsx`
+- Section wrapper baseline: `src/components/sections/SectionShell.tsx`
+- Foundation stories: `src/stories/{Tokens,Typography,Layout}.stories.tsx`
 
-## Tokens (current)
-- Color: `--color-*` palette + semantic text/surface/focus tokens.
-- Typography: `--font-*` families and `--font-size-*` scale.
-- Spacing: `--space-*` scale.
-- Layout: `--content-max`, `--section-pad-*`, rhythm tokens.
-- Radius/shadow: `--radius-*`, `--shadow-soft`, `--shadow-soft-strong`.
-- Motion/control: `--motion-*`, `--control-*`.
-- Component state tokens:
-  - Button: `--button-*`
-  - Link: `--link-*`
-  - Card focus ring: `--card-focus-ring-shadow`
+## Token governance
+Token groups are intentionally organized in this order:
+1. Typography families and scales.
+2. Typography role aliases (`display`, heading levels, body/meta/caption, line-height, tracking).
+3. Semantic color + state color tokens.
+4. Spacing and readable-measure tokens.
+5. Layout and section rhythm tokens.
+6. Radius/border/elevation tokens.
+7. Motion tokens.
+8. Breakpoint reference tokens (documentation + JS anchors).
+9. Control sizing/state tokens.
+10. Primitive interaction/component tokens (`button`, `link`, `card`).
 
-## Global base (`base.css`)
-- Token import and universal `box-sizing`.
-- Full-height root defaults.
-- Body typography/background defaults.
-- Section rhythm (`.section` spacing + dividers).
-- Global focus-visible baseline across interactive elements.
+Rules:
+- Prefer adding semantic aliases over renaming heavily-used tokens.
+- Keep raw values centralized in `tokens.css`; consume aliases in component CSS.
+- Breakpoint tokens are documented references; media-query usage remains explicit in CSS until custom-properties-in-media-queries are safely universal.
 
-## Layout primitives
-- **Container**: max width + horizontal padding.
-- **Stack**: vertical flow + tokenized gap.
-- **Inline**: single-row flex alignment/justification/gap contract.
-- **Cluster**: wrapped horizontal grouping for chips/actions.
-- **Grid**: typed column/min-width/gap/alignment contract.
-- **SectionShell**: section landmark + container + stack composition.
+## Typography foundation
+Role guidance:
+- `display`: hero-grade heading emphasis.
+- `h1` to `h4`: structural page/section heading hierarchy.
+- `bodyLarge`: intro/lead paragraphs.
+- `body`: default readable copy.
+- `bodySmall`: supporting copy blocks.
+- `meta`: bylines, small labels, secondary supporting text.
+- `eyebrow`: uppercase section labels.
+- `caption`: asset/helper copy.
 
-## Responsive/motion rules
-- Section and container density comes from tokens.
-- Navigation still honors CMS-configured mobile breakpoint.
-- Timeline keeps section-local breakpoints (640/768/1024).
-- Primitives/nav include `prefers-reduced-motion` handling for key transitions.
+Primitive alignment:
+- `Heading` supports semantic `level` and a visual `size` map, now including `size="display"`.
+- `Text` supports a `kind` contract (`body`, `bodyLarge`, `bodySmall`, `meta`, `eyebrow`, `caption`) with safe defaults and explicit overrides.
+- Long-form readable line length target remains ~62ch-68ch.
 
-## Known gaps
-- Shared breakpoint tokens are still pending (nav/timeline keep local breakpoints).
-- Rich text code-block presentation is still minimal.
+## Style ownership rules
+- `tokens.css`: design token values and semantic aliases only.
+- `base.css`: global defaults, reset behavior, cross-app focus/rhythm rules.
+- Primitive CSS (`src/components/ui/*.css`): reusable control visuals and interaction states.
+- Section/page CSS (`src/components/sections/*`, `src/pages/*`): route/feature-specific composition and visual details.
+
+Guardrails:
+- Do not move section/page-specific styling into `base.css`.
+- Do not bypass token layer with repeated magic numbers when a tokenized value is feasible.
+- Keep inline styles in primitives minimal and structural (for example `Container`/`Stack` composition hooks).
+
+## Layout primitives contract
+- `Container`: centered width boundary with configurable `maxWidth` and `paddingX`.
+- `Stack`: vertical flow with token-aware gap contract.
+- `Inline`: one-row grouping with alignment/justify/gap + optional wrap.
+- `Cluster`: wrapped group for chips/actions/badges.
+- `Grid`: typed responsive columns, min-width, gap, and alignment options.
+
+## Responsive and motion baseline
+- Section and container density are token-driven.
+- Navigation keeps CMS-owned mobile breakpoint (`menu.mobileBreakpointPx`).
+- Motion behavior uses shared duration/easing tokens with reduced-motion fallbacks in primitive/nav CSS.
+
+## Deferred to Phase 6
+- Broad component/section visual refinements.
+- Deeper breakpoint normalization across all section CSS.
+- Expanded rich-text code-block and long-form editorial visual treatment.

@@ -1,5 +1,10 @@
 # ROADMAP
 
+> Legacy note (April 2026): canonical phased execution has moved to `docs/planning/IMPLEMENTATION-ROADMAP.md`.  
+> Use `docs/planning/PHASE-0-BASELINE.md` for the architecture baseline.  
+> Use `docs/planning/TASKS.md` for active execution status.  
+> This file is retained for historical context and is not maintained as an active tracker.
+
 > Execution plan + backlog.  
 > Standards live in: `ui-design-guide.md`
 

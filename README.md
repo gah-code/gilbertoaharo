@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Overview](#overview)
+- [Canonical Sources](#canonical-sources)
 - [Why This Project Matters](#why-this-project-matters)
 - [Key Highlights](#key-highlights)
 - [Tech Stack](#tech-stack)
@@ -14,8 +15,7 @@
 - [Local Development](#local-development)
 - [Deployment (Netlify)](#deployment-netlify)
 - [Notable Project Decisions](#notable-project-decisions)
-- [Recruiter / Hiring Manager Signals](#recruiter--hiring-manager-signals)
-- [Roadmap / Next Steps](#roadmap--next-steps)
+- [Roadmap Status and Deferred Items](#roadmap-status-and-deferred-items)
 - [Screenshots / Demo](#screenshots--demo)
 - [Author](#author)
 
@@ -29,8 +29,20 @@ It currently powers:
 - `/articles` for article index rendering
 - `/articles/:slug` for article detail pages
 - `/debug` for Contentful model visibility checks
+- `/debug/github` for GitHub service-layer validation (Phase 1 debug surface)
 
 The project is designed to show practical frontend engineering patterns for teams working with Contentful, Storybook, and component systems over time.
+
+## Canonical Sources
+
+Use these docs as source-of-truth surfaces:
+
+- **Architecture baseline:** `docs/planning/PHASE-0-BASELINE.md`
+- **Canonical phase sequence:** `docs/planning/IMPLEMENTATION-ROADMAP.md`
+- **Active execution tracker:** `docs/planning/TASKS.md`
+- **Phase history records:** `docs/planning/PHASE-*.md`
+- **Design-system reference:** `docs/design-system/design-system.md`
+- **Legacy planning history (non-canonical):** `docs/planning/ROADMAP.md`
 
 ## Why This Project Matters
 
@@ -203,6 +215,14 @@ src/
 - `PageShell` composes global chrome (`SeoHead`, `Header`, `Footer`) and main content container.
 - Global concerns (navigation, footer, SEO) stay in `src/components/layout`.
 
+### SEO Ownership
+
+- Route pages own metadata values (`title`, `description`, `canonicalUrl`) and pass them to `PageShell`.
+- `SeoHead` applies document-level updates and clears stale description/canonical tags between route transitions.
+- Metadata fallbacks are route-defined and canonical generation is centralized in `src/lib/seo.ts`.
+- Phase 2 inventory and ownership notes: `docs/planning/PHASE-2-SEO-FOUNDATION.md`.
+- Structured data/schema, sitemap, robots directives, and broader discoverability changes are deferred to later phases.
+
 ### Content Source Abstraction
 
 - `src/content/source.ts` defines a `ContentSource` contract.
@@ -274,19 +294,22 @@ Testing is focused on reliability of content-rich UI behavior:
 - UI primitive tests for interaction contracts
 - page tests for route-level rendering behavior (`ArticlesPage`, article utilities)
 - typed section renderer coverage (`SectionRenderer.test.tsx`)
+- shell and routing regression checks (`PageShell.test.tsx`, `routes.test.ts`)
 
-Quality expectations:
+Quality-check workflow:
 
 - `npm run lint`
-- `npm run build`
 - `npm run test`
+- `npm run build`
 - `npm run build-storybook`
+
+Note: `build-storybook` currently requires Node `22.12+`; local environments on Node `22.2.0` will fail this step until upgraded.
 
 ## Local Development
 
 ### Prerequisites
 
-- Node.js `>=20.19.0 <21` or `>=22.12.0`
+- Node.js `>=22.12.0 <23`
 - npm
 
 ### Install
@@ -314,10 +337,27 @@ Optional env vars:
 - `VITE_ARTICLE_ROUTE_PREFIX` (defaults internally to `/articles`)
 - `VITE_BUILD_TARGET` (`prod` by default; use `preview` only for preview-mode testing)
 - `VITE_CONTENTFUL_INCLUDE_CONTENT_SOURCE_MAPS` (`false` by default)
+- `VITE_GITHUB_OWNER` (optional default owner for GitHub service calls)
+- `VITE_GITHUB_REPO` (optional default repository for GitHub service calls)
+- `VITE_GITHUB_TOKEN` (optional token; public-read mode is preferred)
+- `VITE_GITHUB_API_BASE` (defaults to `https://api.github.com`)
 
 Environment boundary note:
 
 - Variable classification and the Phase 4 migration options are documented in [`docs/env-classification.md`](docs/env-classification.md).
+
+### GitHub API Integration (Phase 1)
+
+- GitHub integration lives behind a dedicated service layer under `src/lib/github/*`.
+- UI/pages should consume only `githubService` exports and must not fetch GitHub endpoints directly.
+- Phase 1 is read-only and public-read-first by design.
+- GitHub is not a `ContentSource` backend in this phase.
+
+Security notes:
+
+- `VITE_*` values are client-exposed at runtime.
+- Treat `VITE_GITHUB_TOKEN` as optional and non-sensitive in this architecture.
+- For sensitive/private GitHub access, use a serverless proxy in a later phase.
 
 ### Run app
 
@@ -378,10 +418,15 @@ This project deploys to Netlify as a Vite SPA.
 - `VITE_ARTICLE_ROUTE_PREFIX` (only set when overriding `/articles`)
 - `VITE_BUILD_TARGET` (use `preview` only when intentionally enabling preview-mode behavior)
 - `VITE_CONTENTFUL_INCLUDE_CONTENT_SOURCE_MAPS` (`true`/`false`)
+- `VITE_GITHUB_OWNER` (optional default owner for GitHub service calls)
+- `VITE_GITHUB_REPO` (optional default repository for GitHub service calls)
+- `VITE_GITHUB_TOKEN` (optional; public-read mode is preferred)
+- `VITE_GITHUB_API_BASE` (optional override, defaults to `https://api.github.com`)
 
 ### Exposure and Secret Handling
 
 - `VITE_*` variables are compiled into client bundles by Vite and should be treated as public-at-runtime configuration.
+- This also applies to `VITE_GITHUB_TOKEN`; do not use client-side VITE token patterns for sensitive/private GitHub access.
 - Never commit real values in `.env.example`, `.env.preview.example`, docs, changelog entries, or generated build artifacts.
 - Do not commit generated output directories (`dist/`, `storybook-static/`) because they can embed resolved environment values.
 - If Netlify secrets scanning flags `VITE_ARTICLE_ROUTE_PREFIX`, remove that variable from Netlify unless you are truly overriding the route prefix.
@@ -403,12 +448,16 @@ This project deploys to Netlify as a Vite SPA.
 - CMS-safe architecture that keeps routing and layout concerns out of content models
 - Route-local organization for article index page logic under `src/pages/articles`
 
-## Roadmap / Next Steps
+## Roadmap Status and Deferred Items
 
-- Expand Storybook interaction coverage (`test:storybook`) for critical UX paths
-- Continue tightening documentation-to-implementation parity in `docs/design-system`
-- Add repo-managed Contentful import/model artifacts when model governance requires it
-- Evolve preview-mode wiring and environment strategy as integration needs mature
+Phases `0` through `7` are implemented in this roadmap.
+
+Post-roadmap deferred items:
+
+- Upgrade local Node environments to `22.12+` to restore local `build-storybook` parity.
+- Optionally expand Storybook interaction-runner coverage (`npm run test:storybook`) for critical flows.
+- Add deeper integration smoke coverage only where it provides clear regression value.
+- Continue selective docs parity cleanup as future changes land.
 
 ## Screenshots / Demo
 

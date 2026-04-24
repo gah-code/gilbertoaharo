@@ -26,6 +26,20 @@ function upsertLink(rel: string, href: string) {
   if (!existing) document.head.appendChild(link);
 }
 
+function removeMeta(name: string) {
+  const existing = document.querySelector(`meta[name="${name}"]`);
+  if (existing?.parentElement) {
+    existing.parentElement.removeChild(existing);
+  }
+}
+
+function removeLink(rel: string) {
+  const existing = document.querySelector(`link[rel="${rel}"]`);
+  if (existing?.parentElement) {
+    existing.parentElement.removeChild(existing);
+  }
+}
+
 export function SeoHead({ title, description, canonicalUrl }: SeoProps) {
   React.useEffect(() => {
     const fallback = (import.meta.env.VITE_SITE_NAME as string) || undefined;
@@ -39,12 +53,16 @@ export function SeoHead({ title, description, canonicalUrl }: SeoProps) {
   React.useEffect(() => {
     if (description) {
       upsertMeta("description", description);
+    } else {
+      removeMeta("description");
     }
   }, [description]);
 
   React.useEffect(() => {
     if (canonicalUrl) {
       upsertLink("canonical", canonicalUrl);
+    } else {
+      removeLink("canonical");
     }
   }, [canonicalUrl]);
 

@@ -4,9 +4,9 @@ import { classNames } from "./classNames";
 import "./Link.css";
 
 export type LinkVariant = "default" | "muted" | "unstyled";
-export type LinkSize = "sm" | "md";
+export type LinkSize = "sm" | "md" | "lg";
 
-type LinkProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "style"> & {
+export type LinkProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "style"> & {
   href: string;
   variant?: LinkVariant;
   size?: LinkSize;

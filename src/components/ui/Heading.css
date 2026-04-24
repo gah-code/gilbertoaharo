@@ -13,33 +13,38 @@
 }
 
 .ui-heading--size-sm {
-  font-size: var(--font-size-sm);
-  line-height: 1.3;
+  font-size: var(--font-size-heading-6);
+  line-height: var(--line-height-heading-sm);
 }
 
 .ui-heading--size-md {
-  font-size: var(--font-size-base);
-  line-height: 1.3;
+  font-size: var(--font-size-heading-5);
+  line-height: var(--line-height-heading-sm);
 }
 
 .ui-heading--size-lg {
-  font-size: var(--font-size-lg);
-  line-height: 1.2;
+  font-size: var(--font-size-heading-4);
+  line-height: var(--line-height-heading-sm);
 }
 
 .ui-heading--size-xl {
-  font-size: var(--font-size-xl);
-  line-height: 1.2;
+  font-size: var(--font-size-heading-3);
+  line-height: var(--line-height-heading-sm);
 }
 
 .ui-heading--size-2xl {
-  font-size: var(--font-size-2xl);
-  line-height: 1.12;
+  font-size: var(--font-size-heading-2);
+  line-height: var(--line-height-heading);
 }
 
 .ui-heading--size-3xl {
-  font-size: var(--font-size-3xl);
-  line-height: 1.12;
+  font-size: var(--font-size-heading-1);
+  line-height: var(--line-height-heading);
+}
+
+.ui-heading--size-display {
+  font-size: var(--font-size-display);
+  line-height: var(--line-height-display);
 }
 
 .ui-heading--weight-regular {
@@ -59,5 +64,5 @@
 }
 
 .ui-heading--tracking-tight {
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-tight);
 }

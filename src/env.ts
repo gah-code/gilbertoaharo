@@ -3,6 +3,7 @@
 // Boundary note:
 // - All values read here come from Vite client env (`import.meta.env`).
 // - `VITE_CONTENTFUL_DELIVERY_TOKEN` is transitional and still client-exposed.
+// - `VITE_GITHUB_TOKEN` (if used) is also client-exposed by Vite and must be treated as public.
 // - A later phase may move delivery access to a server-only boundary.
 
 const runtimeEnv = import.meta.env as Record<string, unknown>;
@@ -16,6 +17,29 @@ function must(name: string): string {
   const value = readEnv(name);
   if (!value) throw new Error(`Missing env var: ${name}`);
   return value;
+}
+
+function readNonEmptyEnv(name: string): string | undefined {
+  const value = readEnv(name)?.trim();
+  return value && value.length > 0 ? value : undefined;
+}
+
+// GitHub helpers are intentionally optional so the app can boot even when
+// GitHub integration is not configured/mounted.
+export function getGithubOwner(): string | undefined {
+  return readNonEmptyEnv("VITE_GITHUB_OWNER");
+}
+
+export function getGithubRepo(): string | undefined {
+  return readNonEmptyEnv("VITE_GITHUB_REPO");
+}
+
+export function getGithubToken(): string | undefined {
+  return readNonEmptyEnv("VITE_GITHUB_TOKEN");
+}
+
+export function getGithubApiBase(): string {
+  return readNonEmptyEnv("VITE_GITHUB_API_BASE") || "https://api.github.com";
 }
 
 const publicClientConfig = {
@@ -38,6 +62,14 @@ const contentfulClientConfig = {
     readEnv("VITE_CONTENTFUL_DELIVERY_TOKEN") || "",
 };
 
+const githubClientConfig = {
+  owner: getGithubOwner(),
+  repo: getGithubRepo(),
+  // Optional in public-read mode; omit to avoid sending auth header.
+  token: getGithubToken(),
+  apiBase: getGithubApiBase(),
+};
+
 export const envClassification = {
   publicClient: [
     "VITE_BUILD_TARGET",
@@ -48,12 +80,19 @@ export const envClassification = {
     "VITE_CONTENTFUL_SPACE_ID",
     "VITE_CONTENTFUL_ENVIRONMENT",
     "VITE_CONTENTFUL_INCLUDE_CONTENT_SOURCE_MAPS",
+    "VITE_GITHUB_OWNER",
+    "VITE_GITHUB_REPO",
+    "VITE_GITHUB_API_BASE",
   ],
-  temporaryClientExposed: ["VITE_CONTENTFUL_DELIVERY_TOKEN"],
+  temporaryClientExposed: [
+    "VITE_CONTENTFUL_DELIVERY_TOKEN",
+    "VITE_GITHUB_TOKEN",
+  ],
   serverOnlyTarget: [
     "CONTENTFUL_DELIVERY_TOKEN",
     "CONTENTFUL_SPACE_ID",
     "CONTENTFUL_ENVIRONMENT",
+    "GITHUB_TOKEN",
   ],
   unusedOrObsolete: ["VITE_CONTENTFUL_USE_PREVIEW", "VITE_CONTENTFUL_PREVIEW_TOKEN"],
 } as const;
@@ -66,5 +105,11 @@ export const env = {
     environment: contentfulClientConfig.environment,
     includeCSM: contentfulClientConfig.includeCSM,
     deliveryToken: contentfulClientConfig.temporaryClientExposedDeliveryToken,
+  },
+  github: {
+    owner: githubClientConfig.owner,
+    repo: githubClientConfig.repo,
+    token: githubClientConfig.token,
+    apiBase: githubClientConfig.apiBase,
   },
 };

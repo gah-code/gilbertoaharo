@@ -10,6 +10,7 @@ import "./LearningSection.css";
 
 export function LearningSection({ section }: { section: SectionLearning }) {
   const learning = normalizeLearningSection(section);
+  const hasItems = learning.items.length > 0;
 
   return (
     <SectionShell anchorId={learning.anchorId} className="section-learning">
@@ -34,7 +35,13 @@ export function LearningSection({ section }: { section: SectionLearning }) {
           ) : null}
         </Stack>
 
-        <LearningRoadmapTimeline items={learning.items} />
+        {hasItems ? (
+          <LearningRoadmapTimeline items={learning.items} />
+        ) : (
+          <p className="learning-empty" role="status" aria-live="polite">
+            Learning roadmap updates are in progress. Check back soon.
+          </p>
+        )}
       </Stack>
     </SectionShell>
   );

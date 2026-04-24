@@ -6,6 +6,7 @@ import { ArticlesPage } from "@/pages/articles/ArticlesPage";
 import { ArticlePage } from "@/pages/ArticlePage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { DebugPage } from "@/pages/DebugPage";
+import { DebugGithubPage } from "@/pages/DebugGithubPage";
 
 export function Router() {
   const [path, setPath] = React.useState(() => window.location.pathname);
@@ -27,6 +28,9 @@ export function Router() {
 
     case "debug":
       return <DebugPage />;
+
+    case "debug-github":
+      return <DebugGithubPage />;
 
     case "article":
       return <ArticlePage slug={route.slug} />;

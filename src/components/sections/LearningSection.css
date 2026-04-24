@@ -13,3 +13,12 @@
 .learning-intro {
   max-width: var(--lede-max);
 }
+
+.learning-empty {
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}

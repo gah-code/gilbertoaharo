@@ -8,11 +8,50 @@ import "./FooterSection.css";
 
 const EXTERNAL_REL = "noreferrer noopener";
 
+function normalizePathname(pathname: string): string {
+  if (!pathname) return "/";
+  if (pathname !== "/" && pathname.endsWith("/")) return pathname.slice(0, -1);
+  return pathname;
+}
+
+function resolveInternalPathname(href: string): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const url = new URL(href, window.location.origin);
+    if (url.origin !== window.location.origin) return null;
+    return normalizePathname(url.pathname);
+  } catch {
+    return null;
+  }
+}
+
+function isRouteActive(href: string, currentPath: string): boolean {
+  const targetPath = resolveInternalPathname(href);
+  if (!targetPath) return false;
+  if (targetPath === "/") return currentPath === "/";
+  if (currentPath === targetPath) return true;
+  return currentPath.startsWith(`${targetPath}/`);
+}
+
 export function FooterSection({ section }: { section: SectionFooter }) {
   const model = normalizeFooterSection(section);
   const navigationGroups = model.navigationGroups.filter(
     (group) => group.links.length > 0,
   );
+  const [currentPath, setCurrentPath] = React.useState(() =>
+    typeof window === "undefined"
+      ? "/"
+      : normalizePathname(window.location.pathname),
+  );
+
+  React.useEffect(() => {
+    const onPopState = () => {
+      setCurrentPath(normalizePathname(window.location.pathname));
+    };
+
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
 
   return (
     <footer className="footer-section" aria-labelledby="footer-title">
@@ -65,25 +104,29 @@ export function FooterSection({ section }: { section: SectionFooter }) {
                   aria-label={group.label}
                 >
                   <ul className="footer-section__nav-list">
-                    {group.links.map((link) => (
-                      <li key={link.key}>
-                        <Link
-                          href={link.href}
-                          aria-label={link.ariaLabel}
-                          target={link.openInNewTab ? "_blank" : "_self"}
-                          rel={link.openInNewTab ? EXTERNAL_REL : undefined}
-                          variant="unstyled"
-                          className="footer-section__nav-link"
-                        >
-                          <span>{link.label}</span>
-                          <FooterLinkIcon
-                            iconKey={link.iconKey === "arrow" ? "arrow" : undefined}
-                            className="footer-section__nav-icon"
-                            decorative
-                          />
-                        </Link>
-                      </li>
-                    ))}
+                    {group.links.map((link) => {
+                      const isActive = isRouteActive(link.href, currentPath);
+                      return (
+                        <li key={link.key}>
+                          <Link
+                            href={link.href}
+                            aria-label={link.ariaLabel}
+                            aria-current={isActive ? "page" : undefined}
+                            target={link.openInNewTab ? "_blank" : "_self"}
+                            rel={link.openInNewTab ? EXTERNAL_REL : undefined}
+                            variant="unstyled"
+                            className={`footer-section__nav-link ${isActive ? "is-active" : ""}`}
+                          >
+                            <span>{link.label}</span>
+                            <FooterLinkIcon
+                              iconKey={link.iconKey === "arrow" ? "arrow" : undefined}
+                              className="footer-section__nav-icon"
+                              decorative
+                            />
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </nav>
               ))}

@@ -51,6 +51,7 @@ function getSliderState(viewport: HTMLDivElement): SliderState {
 export function ProjectsSection({ section }: { section: SectionProjects }) {
   const projects = normalizeProjectsSection(section);
   const viewportRef = React.useRef<HTMLDivElement | null>(null);
+  const hasProjects = projects.projects.length > 0;
   const hasMultipleSlides = projects.projects.length > 1;
   const [sliderState, setSliderState] = React.useState<SliderState>({
     canScrollPrev: false,
@@ -154,115 +155,124 @@ export function ProjectsSection({ section }: { section: SectionProjects }) {
           ) : null}
         </div>
 
-        <div
-          ref={viewportRef}
-          className="projects-section__viewport"
-          aria-label="Project slider"
-        >
-          <div className="projects-section__track">
-            {projects.projects.map((project) => (
-              <article key={project.key} className="projects-section__slide">
-                <Card className="projects-section__card" variant="subtle" density="lg">
-                  <Stack gap="var(--space-3)">
-                    {project.thumbnailSrc ? (
-                      <div className="projects-section__media-frame">
-                        <img
-                          src={project.thumbnailSrc}
-                          alt={project.thumbnailAlt ?? project.name}
-                          loading="lazy"
-                        />
-                      </div>
-                    ) : null}
+        {!hasProjects ? (
+          <p className="projects-section__status" role="status" aria-live="polite">
+            Project highlights are being refreshed. Check back soon.
+          </p>
+        ) : (
+          <div
+            ref={viewportRef}
+            className={`projects-section__viewport${hasMultipleSlides ? "" : " projects-section__viewport--single"}`}
+            aria-label={hasMultipleSlides ? "Project slider" : "Featured project"}
+          >
+            <div
+              className={`projects-section__track${hasMultipleSlides ? "" : " projects-section__track--single"}`}
+            >
+              {projects.projects.map((project) => (
+                <article key={project.key} className="projects-section__slide">
+                  <Card className="projects-section__card" variant="subtle" density="lg">
+                    <Stack gap="var(--space-3)">
+                      {project.thumbnailSrc ? (
+                        <div className="projects-section__media-frame">
+                          <img
+                            src={project.thumbnailSrc}
+                            alt={project.thumbnailAlt ?? project.name}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </div>
+                      ) : null}
 
-                    {project.featured ? (
-                      <div className="projects-section__featured">
-                        <Badge size="sm" tone="warning">
-                          Featured
-                        </Badge>
-                      </div>
-                    ) : null}
-
-                    <Heading level={3} className="projects-section__title">
-                      {project.name}
-                    </Heading>
-
-                    {project.tagline ? (
-                      <Text className="projects-section__tagline" weight="medium">
-                        {project.tagline}
-                      </Text>
-                    ) : null}
-
-                    {project.summary ? (
-                      <Text className="projects-section__summary" tone="muted">
-                        {project.summary}
-                      </Text>
-                    ) : null}
-
-                    {project.highlights.length ? (
-                      <ul className="projects-section__highlights">
-                        {project.highlights.map((highlight) => (
-                          <li key={highlight}>
-                            <Text as="span" size="sm" tone="muted">
-                              {highlight}
-                            </Text>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
-
-                    {project.role || project.period ? (
-                      <Inline className="projects-section__meta" align="center" gap="2" wrap>
-                        {project.role ? (
-                          <Text as="span" size="sm" tone="muted">
-                            {project.role}
-                          </Text>
-                        ) : null}
-                        {project.role && project.period ? (
-                          <Text as="span" size="sm" tone="muted">
-                            ·
-                          </Text>
-                        ) : null}
-                        {project.period ? (
-                          <Text as="span" size="sm" tone="muted">
-                            {project.period}
-                          </Text>
-                        ) : null}
-                      </Inline>
-                    ) : null}
-
-                    {project.techStack.length ? (
-                      <Cluster className="projects-section__chips" gap="2" align="center">
-                        {project.techStack.map((tech) => (
-                          <Badge key={tech} tone="muted" size="sm">
-                            {tech}
+                      {project.featured ? (
+                        <div className="projects-section__featured">
+                          <Badge size="sm" tone="warning">
+                            Featured
                           </Badge>
-                        ))}
-                      </Cluster>
-                    ) : null}
+                        </div>
+                      ) : null}
 
-                    {project.actions.length ? (
-                      <Cluster className="projects-section__actions" gap="2" align="center">
-                        {project.actions.map((action) => (
-                          <Button
-                            key={action.key}
-                            href={action.href}
-                            variant={action.variant}
-                            size="sm"
-                            aria-label={action.ariaLabel ?? action.analyticsLabel ?? action.label}
-                            target={action.openInNewTab ? "_blank" : undefined}
-                            rel={action.openInNewTab ? "noreferrer noopener" : undefined}
-                          >
-                            {action.label}
-                          </Button>
-                        ))}
-                      </Cluster>
-                    ) : null}
-                  </Stack>
-                </Card>
-              </article>
-            ))}
+                      <Heading level={3} className="projects-section__title">
+                        {project.name}
+                      </Heading>
+
+                      {project.tagline ? (
+                        <Text className="projects-section__tagline" weight="medium">
+                          {project.tagline}
+                        </Text>
+                      ) : null}
+
+                      {project.summary ? (
+                        <Text className="projects-section__summary" tone="muted">
+                          {project.summary}
+                        </Text>
+                      ) : null}
+
+                      {project.highlights.length ? (
+                        <ul className="projects-section__highlights">
+                          {project.highlights.map((highlight) => (
+                            <li key={highlight}>
+                              <Text as="span" size="sm" tone="muted">
+                                {highlight}
+                              </Text>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+
+                      {project.role || project.period ? (
+                        <Inline className="projects-section__meta" align="center" gap="2" wrap>
+                          {project.role ? (
+                            <Text as="span" size="sm" tone="muted">
+                              {project.role}
+                            </Text>
+                          ) : null}
+                          {project.role && project.period ? (
+                            <Text as="span" size="sm" tone="muted">
+                              ·
+                            </Text>
+                          ) : null}
+                          {project.period ? (
+                            <Text as="span" size="sm" tone="muted">
+                              {project.period}
+                            </Text>
+                          ) : null}
+                        </Inline>
+                      ) : null}
+
+                      {project.techStack.length ? (
+                        <Cluster className="projects-section__chips" gap="2" align="center">
+                          {project.techStack.map((tech) => (
+                            <Badge key={tech} tone="muted" size="sm">
+                              {tech}
+                            </Badge>
+                          ))}
+                        </Cluster>
+                      ) : null}
+
+                      {project.actions.length ? (
+                        <Cluster className="projects-section__actions" gap="2" align="center">
+                          {project.actions.map((action) => (
+                            <Button
+                              key={action.key}
+                              href={action.href}
+                              variant={action.variant}
+                              size="sm"
+                              aria-label={action.ariaLabel ?? action.analyticsLabel ?? action.label}
+                              target={action.openInNewTab ? "_blank" : undefined}
+                              rel={action.openInNewTab ? "noreferrer noopener" : undefined}
+                            >
+                              {action.label}
+                            </Button>
+                          ))}
+                        </Cluster>
+                      ) : null}
+                    </Stack>
+                  </Card>
+                </article>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </SectionShell>
   );

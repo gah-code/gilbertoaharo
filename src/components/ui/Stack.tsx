@@ -1,8 +1,17 @@
 import React from "react";
 
-type StackProps = React.HTMLAttributes<HTMLElement> & {
+export type StackGap = "1" | "2" | "3" | "4" | "6" | "8" | "10" | "12" | "16";
+
+function resolveGap(gap: StackGap | string) {
+  if (/^\d+$/.test(gap)) {
+    return `var(--space-${gap})`;
+  }
+  return gap;
+}
+
+export type StackProps = React.HTMLAttributes<HTMLElement> & {
   as?: keyof HTMLElementTagNameMap;
-  gap?: string;
+  gap?: StackGap | string;
 };
 
 export function Stack({
@@ -15,7 +24,7 @@ export function Stack({
   const Element = Component;
   return (
     <Element
-      style={{ display: "flex", flexDirection: "column", gap, ...style }}
+      style={{ display: "flex", flexDirection: "column", gap: resolveGap(gap), ...style }}
       {...rest}
     >
       {children}
