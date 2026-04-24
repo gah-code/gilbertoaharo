@@ -25,7 +25,6 @@ export default meta;
 type Story = StoryObj<typeof LearningSection>;
 
 export const Default: Story = {};
-export const RoadmapTimeline: Story = {};
 
 const sparseLearningSection: SectionLearning = {
   ...learningSection,

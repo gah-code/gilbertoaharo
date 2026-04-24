@@ -52,6 +52,14 @@ Section components now render from stable normalized view models only.
   - `Foundations/Tokens`
   - `Foundations/Typography`
   - `Foundations/Layout`
+  - `Foundations/Interaction States`
+- Primitive story expectations:
+  - show canonical usage patterns first, then controlled variant references
+  - include accessibility-relevant states where appropriate (focus-visible, disabled, link-mode behavior)
+  - avoid redundant no-op variants that add no contract coverage
+- Section story expectations:
+  - use realistic fixture-backed variability (default, sparse/empty, long-content)
+  - avoid exhaustive permutations that reduce scan quality in Storybook
 - Primitive interaction tests: `src/components/ui/*.test.tsx`
 - Normalizer tests: `src/components/sections/**/normalize*.test.ts`
 - Renderer coverage test: `src/components/sections/SectionRenderer.test.tsx`

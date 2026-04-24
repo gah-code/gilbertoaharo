@@ -11,6 +11,19 @@ Follow [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) in all issues, PRs, and discus
 - Node: `>=22.12.0 <23`
 - Install deps: `npm install`
 - Configure env: `cp .env.example .env.local`
+- Local version files: `.nvmrc` and `.node-version` are pinned to `22.12.0`
+
+If your local Node runtime is below `22.12.0`, upgrade before validating:
+
+```bash
+# nvm
+nvm install 22.12.0
+nvm use 22.12.0
+
+# fnm
+fnm install 22.12.0
+fnm use 22.12.0
+```
 
 ## Branch + PR Flow
 
@@ -53,8 +66,8 @@ If Storybook fails only because local Node is below `22.12`, note that explicitl
 When behavior, contracts, or workflow changes:
 
 - Update `README.md` for front-door usage/setup changes.
-- Update `docs/planning/TASKS.md` for active execution state.
-- Update `docs/planning/IMPLEMENTATION-ROADMAP.md` only for phase-sequence or active-phase note changes.
+- Update `docs/planning/TASKS.md` for roadmap closeout status and maintenance follow-ups.
+- Update `docs/planning/IMPLEMENTATION-ROADMAP.md` only for phase-sequence or completion-state note changes.
 - Add/update relevant `docs/planning/PHASE-*.md` record for phase-specific implementation notes.
 - Update `docs/design-system/*` when tokens/primitives/foundation guidance changes.
 

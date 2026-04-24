@@ -7,7 +7,23 @@ Purpose: canonical token, typography, layout, and style-layer guidance for the d
 - Global base rules: `src/styles/base.css`
 - Layout primitives: `src/components/ui/{Container,Stack,Inline,Cluster,Grid}.tsx`
 - Section wrapper baseline: `src/components/sections/SectionShell.tsx`
-- Foundation stories: `src/stories/{Tokens,Typography,Layout}.stories.tsx`
+- Foundation stories: `src/stories/{Tokens,Typography,Layout,InteractionStates}.stories.tsx`
+
+## Storybook foundation workspace
+Canonical foundation stories:
+- `Foundations/Tokens`
+  - semantic color groups
+  - surface/background layering guidance
+  - spacing, shape/elevation, motion/state token reference
+- `Foundations/Typography`
+  - role-based type reference (`display`, headings, body/meta/eyebrow/caption)
+  - practical patterns for section headers and long-form lead/body rhythm
+- `Foundations/Layout`
+  - section rhythm composition
+  - responsive grid composition and grouping primitives in context
+- `Foundations/Interaction States`
+  - baseline interaction expectations for hover/focus-visible/disabled states
+  - reduced-motion-safe transition intent for primitives
 
 ## Token governance
 Token groups are intentionally organized in this order:
@@ -65,6 +81,7 @@ Guardrails:
 - Section and container density are token-driven.
 - Navigation keeps CMS-owned mobile breakpoint (`menu.mobileBreakpointPx`).
 - Motion behavior uses shared duration/easing tokens with reduced-motion fallbacks in primitive/nav CSS.
+- Storybook interaction-state guidance should be updated when focus/hover/disabled or motion contracts change.
 
 ## Deferred to Phase 6
 - Broad component/section visual refinements.

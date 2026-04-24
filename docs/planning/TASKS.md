@@ -1,106 +1,71 @@
 # TASKS
 
-Phase-aligned execution tracker.  
-Canonical sequence and baseline are defined in:
-
-- `docs/planning/PHASE-0-BASELINE.md`
-- `docs/planning/IMPLEMENTATION-ROADMAP.md`
+Roadmap v1 status: complete. Phases `0` through `7` are closed.
+Roadmap v2 status: active.
 
 ---
 
-## Now: Phase 7 — Testing + Governance + Docs
+## Now
 
-### Goal
-
-Lock quality gates, governance clarity, and canonical documentation for sustainable iteration after Phases 0-6.
-
-### Ordered execution queue
-
-#### 1. Testing consolidation
-
-- [x] Audit current test coverage across shell/layout, routes, SEO, GitHub service layer, navigation, sections, and primitives.
-- [x] Add focused regression tests for remaining high-value blind spots:
-  - `PageShell` shell-level contract
-  - route parser continuity (`parsePathname` / `buildArticlePath`)
-- [x] Keep test additions behavioral and non-brittle.
-
-#### 2. Governance + quality workflow
-
-- [x] Align `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `SUPPORT.md` with actual repo scripts and architecture boundaries.
-- [x] Document explicit quality-check workflow (`lint`, `test`, `build`, `build-storybook`).
-- [x] Preserve Storybook Node floor mismatch as environment/tooling blocker, not architecture failure.
-
-#### 3. Documentation canonicalization
-
-- [x] Clarify canonical source ownership across README/planning/design-system docs.
-- [x] Keep legacy roadmap/history docs clearly labeled as non-canonical.
-- [x] Add Phase 7 closeout record with final deferred-item notes.
-
-#### 4. Planning hygiene
-
-- [x] Mark Phase 6 complete in this tracker.
-- [x] Move active phase note to Phase 7 in `IMPLEMENTATION-ROADMAP.md`.
-- [x] Keep phase records (`PHASE-*.md`) intact as historical implementation references.
+- [ ] **Phase C — Component Cleanup + UX Polish**
 
 ---
 
-## Phase 7 completion gate
+## Recently Completed
 
-- [x] Phase 6 is marked complete in `TASKS.md`
-- [x] Phase 7 is the active queue in `TASKS.md`
-- [x] remaining high-value testing gaps are addressed or clearly documented
-- [x] governance/working-agreement guidance is clearer
-- [x] canonical docs are clearer and less ambiguous
-- [x] README is aligned with the final repo shape
-- [x] remaining blockers/deferred items are recorded honestly
-- [x] architecture guardrails remain intact
-- [x] Phase 6 is not reopened except for a true discovered regression
+- [x] **Phase B — Storybook Productization** (completed April 24, 2026)
+  - Strengthened foundation stories (`Tokens`, `Typography`, `Layout`, `Interaction States`).
+  - Tightened primitive stories as canonical usage references.
+  - Clarified Storybook ownership rules in design-system docs.
+  - Verification completed (`lint`, `test`, `build`, `build-storybook` with Node `22.12.0` runtime override).
+  - Phase record: `docs/planning/PHASE-B-STORYBOOK-PRODUCTIZATION.md`
+
+- [x] **Phase A — Maintenance Sweep** (completed April 24, 2026)
+  - Cleanup audit and safe removals captured in `docs/planning/PHASE-A-MAINTENANCE-SWEEP.md`.
+  - Reopen only if a true cleanup regression is discovered.
 
 ---
 
-## Recently completed: Phase 6 — Component + Section Refinement
+## Upcoming
 
-- [x] Refined section rhythm/density across Hero, Timeline, Skills, Projects, Learning, and Contact.
-- [x] Hardened responsive behavior and sparse-content edge states.
-- [x] Improved section Storybook realism with sparse/empty/long-content variants.
-- [x] Added focused section edge-case tests.
-- [x] Documented Phase 6 outcomes in:
-  - `docs/planning/PHASE-6-COMPONENT-SECTION-REFINEMENT.md`
+- [ ] **Phase D — Spacing and Layout Spec Pass**
+- [ ] **Phase E — Project Structure Hardening**
+- [ ] **Phase F — Maintenance QA / Release Discipline**
 
-### Phase 6 closure note
+---
 
-Do not reopen Phase 6 unless Phase 7 QA/governance work finds a true regression in section behavior, responsive consistency, or content-edge handling.
+## Verification Snapshot (Latest: Phase B, April 24, 2026)
+
+- [x] `npm run lint`
+- [x] `npm run test`
+- [x] `npm run build`
+- [x] `npm run build-storybook` (pass with `PATH="/Users/gilbertharo/.n/bin:$PATH"` -> Node `22.12.0`)
+
+Runtime note:
+- Default shell Node is still `22.2.0`.
+- `npm run build` currently completes but prints the Vite Node-floor warning.
+- `npm run build-storybook` requires Node `22.12+` and fails on default shell Node unless runtime override is used.
 
 ---
 
 ## Guardrails
 
-- Keep `src/content` as the core content boundary.
-- Keep `src/components/ui` and `src/components/sections` ownership split.
-- Keep route-level organization under `src/pages/articles`.
-- Keep `PageShell` as shared shell owner for global layout chrome and SEO wiring.
-- Keep section normalizer-first rendering pattern.
-- Keep route-level SEO ownership introduced in Phase 2.
-- Keep GitHub integration under `src/lib/github/*`.
-- Avoid broad refactors unless a post-roadmap phase explicitly justifies them.
+- Keep `src/content/*` as the content boundary and `ContentSource` contract owner.
+- Keep shell ownership in `src/components/layout/*`.
+- Keep primitive ownership in `src/components/ui/*`.
+- Keep section rendering ownership in `src/components/sections/*`.
+- Keep route behavior ownership in `src/pages/*` and `src/pages/articles/*`.
+- Keep section normalizer-first rendering intact.
+- Keep Storybook in-repo and hybrid (`src/components/**/*.stories.*` + `src/stories/*`).
+- Do not reopen closed phases unless a true regression is discovered.
 
 ---
 
-## Links
+## Canonical References
 
-- Baseline: `docs/planning/PHASE-0-BASELINE.md`
-- Canonical roadmap: `docs/planning/IMPLEMENTATION-ROADMAP.md`
-- Phase 2: `docs/planning/PHASE-2-SEO-FOUNDATION.md`
-- Phase 3: `docs/planning/PHASE-3-PERFORMANCE-ACCESSIBILITY.md`
-- Phase 4: `docs/planning/PHASE-4-UX-NAVIGATION.md`
-- Phase 5: `docs/planning/PHASE-5-DESIGN-SYSTEM-FOUNDATIONS.md`
-- Phase 6: `docs/planning/PHASE-6-COMPONENT-SECTION-REFINEMENT.md`
-- Phase 7: `docs/planning/PHASE-7-TESTING-GOVERNANCE-DOCS.md`
-- Legacy roadmap (history): `docs/planning/ROADMAP.md`
-
----
-
-## Final wrap-up / known blockers
-
-- Local Storybook build remains blocked on Node `22.2.0`; Storybook requires `22.12+`.
-- This blocker is environment/tooling only and does not indicate architecture or implementation regression.
+- Phase B productization record: `docs/planning/PHASE-B-STORYBOOK-PRODUCTIZATION.md`
+- Phase A maintenance record: `docs/planning/PHASE-A-MAINTENANCE-SWEEP.md`
+- Canonical phase history (v1): `docs/planning/IMPLEMENTATION-ROADMAP.md`
+- Phase history records (v1): `docs/planning/PHASE-*.md`
+- Legacy roadmap context (historical only): `docs/planning/ROADMAP.md`
+- Design-system hub: `docs/design-system/design-system.md`

@@ -1,61 +1,69 @@
 # Phase 7 — Testing + Governance + Docs
 
-Status: Implemented in this pass (April 24, 2026). Active implementation phase remains Phase 7 until final closeout.
+Status: Completed (April 24, 2026).  
+Roadmap closeout status: complete (Phases 0-7 closed).
 
 ## Scope
 
-Phase 7 consolidates test coverage, governance guidance, and canonical documentation without changing stable architecture boundaries (`PageShell`, `src/content/*`, section normalizer-first rendering, and GitHub service layering).
+Phase 7 consolidated regression coverage, governance guidance, and canonical docs without changing architecture boundaries (`PageShell`, `src/content/*`, section normalizer-first rendering, and GitHub service layering).
 
-## What This Phase Finalized
+## What Phase 7 Finalized
 
 ### 1) Testing consolidation
 
-- Audited current test surface by area:
-  - layout/shell
-  - SEO behavior
-  - GitHub service layer
-  - route states
-  - navigation behavior
-  - section edge cases
-  - primitive contracts
-- Added focused regression tests for remaining high-value gaps:
-  - `src/components/layout/PageShell.test.tsx` (shell-level contract)
-  - `src/router/routes.test.ts` (route continuity and path parsing)
-- Kept additions behavior-focused and avoided snapshot-heavy coverage.
+- Audited coverage across shell/layout, SEO behavior, GitHub service layer, route states, navigation, section edge cases, and primitive contracts.
+- Added focused regression tests for high-value gaps:
+  - `src/components/layout/PageShell.test.tsx`
+  - `src/router/routes.test.ts`
+- Kept additions behavioral and avoided brittle snapshot-heavy patterns.
 
 ### 2) Governance and quality workflow alignment
 
-- Updated front-door governance docs (`README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `SUPPORT.md`) so instructions match actual scripts and architecture boundaries.
-- Standardized quality-check expectations to:
+- Aligned repo guidance docs (`README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `SUPPORT.md`) with actual architecture and scripts.
+- Standardized the expected validation flow:
   - `npm run lint`
   - `npm run test`
   - `npm run build`
-  - `npm run build-storybook` (when environment supports required Node floor)
-- Preserved the known Storybook/Node mismatch as environment/tooling context only.
+  - `npm run build-storybook` (when local Node runtime meets floor)
 
 ### 3) Documentation canonicalization
 
-- Clarified canonical source ownership:
-  - `README.md`: project overview + canonical doc map + quality workflow
-  - `docs/planning/TASKS.md`: active execution tracker
-  - `docs/planning/IMPLEMENTATION-ROADMAP.md`: canonical phase sequence
-  - `docs/planning/PHASE-*.md`: historical phase execution records
-  - `docs/design-system/*`: design-system reference truth
+- Clarified source-of-truth boundaries:
+  - `README.md`: front door + setup + quality workflow
+  - `docs/planning/TASKS.md`: roadmap closeout + maintenance tracker
+  - `docs/planning/IMPLEMENTATION-ROADMAP.md`: canonical completed phase sequence
+  - `docs/planning/PHASE-*.md`: historical implementation records
+  - `docs/design-system/*`: design-system reference
 - Kept `docs/planning/ROADMAP.md` as clearly-labeled legacy history.
 
 ### 4) Planning hygiene
 
-- Marked Phase 6 complete and moved active queue to Phase 7 in `TASKS.md`.
-- Updated active phase note in `IMPLEMENTATION-ROADMAP.md`.
-- Kept phase records additive and sequence-stable.
+- Preserved phase records and sequence stability.
+- Closed active implementation tracking for Phases 0-7 in `TASKS.md`.
+- Added post-roadmap maintenance guidance and future-candidate notes.
+
+## Post-Roadmap Stabilization Notes
+
+- Node/runtime expectations are aligned to `22.12+` in engines, CI, and local version files.
+- Storybook closeout parity is verified when commands run with Node `22.12.0` from `~/.n/bin`.
+- Default shell runtime remains `22.2.0` at `/usr/local/bin/node`; this is now a local shell-configuration follow-up, not a repo defect.
+- Prior phases should remain closed unless a true regression is discovered.
+
+## Closeout Verification Snapshot (April 24, 2026)
+
+- `npm run lint`: pass
+- `npm run test`: pass
+- `npm run build`: pass
+- `npm run build-storybook`: pass
+- Runtime context for this snapshot: `PATH="/Users/gilbertharo/.n/bin:$PATH"` (Node `22.12.0`)
 
 ## Remaining blockers / deferred items
 
-- Local Storybook build remains blocked on Node `22.2.0`; Storybook requires `22.12+`.
-- Broader post-roadmap enhancements (beyond Phases 0-7) remain intentionally deferred:
-  - additional integration-level route smoke coverage
-  - optional Storybook interaction-runner expansion (`test:storybook`)
-  - any future feature work outside current roadmap scope
+- Persist local shell/runtime configuration so `node -v` defaults to `22.12.0` without PATH overrides.
+- Optional post-roadmap candidates:
+  - replace README route screenshot placeholders with real captures
+  - add lightweight structured-data enhancements if kept route-owned and maintainable
+  - extend Storybook interaction-runner coverage for critical flows
 
 ## Guardrail check
 
@@ -64,4 +72,4 @@ Phase 7 consolidates test coverage, governance guidance, and canonical documenta
 - `src/components/ui` vs `src/components/sections` ownership split unchanged.
 - Section normalizer-first rendering unchanged.
 - GitHub integration remains under `src/lib/github/*`.
-- SEO ownership from Phase 2 remains route-owned through `PageShell` + `SeoHead`.
+- SEO ownership remains route-owned through `PageShell` + `SeoHead`.

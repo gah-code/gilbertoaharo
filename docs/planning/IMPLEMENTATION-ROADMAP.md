@@ -2,7 +2,8 @@
 
 Canonical phased execution plan for post-baseline implementation.  
 This roadmap supersedes legacy sequencing in `docs/planning/ROADMAP.md`.
-Current active implementation phase: Phase 7 (Testing + Governance + Docs).
+Roadmap status: Completed (Phases 0-7 closed on April 24, 2026).
+Reopen prior phases only when a true regression is discovered.
 
 ## 1) Phase 0 — Baseline + Execution Map
 

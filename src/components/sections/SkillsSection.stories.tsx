@@ -16,7 +16,6 @@ export default meta;
 type Story = StoryObj<typeof SkillsSection>;
 
 export const Default: Story = {};
-export const EditorialSplitList: Story = {};
 
 const sparseSkillsSection: SectionSkills = {
   ...skillsStorySection,

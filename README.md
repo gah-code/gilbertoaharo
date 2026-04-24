@@ -15,6 +15,7 @@
 - [Local Development](#local-development)
 - [Deployment (Netlify)](#deployment-netlify)
 - [Notable Project Decisions](#notable-project-decisions)
+- [SEO / Searchability Status](#seo--searchability-status)
 - [Roadmap Status and Deferred Items](#roadmap-status-and-deferred-items)
 - [Screenshots / Demo](#screenshots--demo)
 - [Author](#author)
@@ -33,14 +34,17 @@ It currently powers:
 
 The project is designed to show practical frontend engineering patterns for teams working with Contentful, Storybook, and component systems over time.
 
+Roadmap status: phases `0` through `7` are complete; the repository is now in post-roadmap stabilization mode.
+
 ## Canonical Sources
 
 Use these docs as source-of-truth surfaces:
 
 - **Architecture baseline:** `docs/planning/PHASE-0-BASELINE.md`
 - **Canonical phase sequence:** `docs/planning/IMPLEMENTATION-ROADMAP.md`
-- **Active execution tracker:** `docs/planning/TASKS.md`
+- **Roadmap closeout + maintenance tracker:** `docs/planning/TASKS.md`
 - **Phase history records:** `docs/planning/PHASE-*.md`
+- **Final roadmap consolidation record:** `docs/planning/PHASE-7-TESTING-GOVERNANCE-DOCS.md`
 - **Design-system reference:** `docs/design-system/design-system.md`
 - **Legacy planning history (non-canonical):** `docs/planning/ROADMAP.md`
 
@@ -304,6 +308,8 @@ Quality-check workflow:
 - `npm run build-storybook`
 
 Note: `build-storybook` currently requires Node `22.12+`; local environments on Node `22.2.0` will fail this step until upgraded.
+For this closeout pass, Storybook parity was verified with:
+`PATH="/Users/gilbertharo/.n/bin:$PATH" npm run build-storybook`.
 
 ## Local Development
 
@@ -311,6 +317,23 @@ Note: `build-storybook` currently requires Node `22.12+`; local environments on 
 
 - Node.js `>=22.12.0 <23`
 - npm
+
+Recommended local version files:
+
+- `.nvmrc` -> `22.12.0`
+- `.node-version` -> `22.12.0`
+
+Quick upgrade examples:
+
+```bash
+# nvm
+nvm install 22.12.0
+nvm use 22.12.0
+
+# fnm
+fnm install 22.12.0
+fnm use 22.12.0
+```
 
 ### Install
 
@@ -397,7 +420,7 @@ This project deploys to Netlify as a Vite SPA.
 
 - Build command: `npm run build`
 - Publish directory: `dist`
-- Node version: `22`
+- Node version: `22.12+`
 - Real environment variable values must be configured outside git (for example, in Netlify site settings).
 - `.env.example` should contain placeholder values only.
 - Local env files (for example, `.env.local` variants) are git-ignored and must stay untracked.
@@ -448,32 +471,60 @@ This project deploys to Netlify as a Vite SPA.
 - CMS-safe architecture that keeps routing and layout concerns out of content models
 - Route-local organization for article index page logic under `src/pages/articles`
 
+## SEO / Searchability Status
+
+Final verification pass confirms:
+
+- route-owned metadata is intact for `/`, `/articles`, `/articles/:slug`, `/debug`, `/debug/github`, and not-found routes.
+- `PageShell` + `SeoHead` still apply metadata centrally, including stale-tag cleanup for description/canonical tags.
+- discovery-critical internal links are crawlable anchors with real `href` values:
+  - homepage -> articles and projects
+  - articles index -> article detail
+  - article detail -> articles index/home/projects
+  - not-found -> recovery destinations
+- key image surfaces keep meaningful alt text and stable sizing/aspect behavior from prior phases.
+
+Deferred SEO opportunities (intentionally outside roadmap scope):
+
+- optional lightweight JSON-LD (`WebSite`/`Person`/`Article`)
+- external verification in Google Search Console and Rich Results Test after deploy
+
 ## Roadmap Status and Deferred Items
 
-Phases `0` through `7` are implemented in this roadmap.
+Phases `0` through `7` are complete and closed.
+
+Closeout rule: do not reopen prior phases unless a true regression is discovered.
 
 Post-roadmap deferred items:
 
-- Upgrade local Node environments to `22.12+` to restore local `build-storybook` parity.
+- Persist local shell/runtime configuration so `node -v` resolves to `22.12.0` without PATH overrides.
 - Optionally expand Storybook interaction-runner coverage (`npm run test:storybook`) for critical flows.
 - Add deeper integration smoke coverage only where it provides clear regression value.
-- Continue selective docs parity cleanup as future changes land.
+- Replace README route screenshot placeholders with real captures when convenient.
 
 ## Screenshots / Demo
 
 ### Content model reference
 
 ![Content Model](./docs/architecture/contentful-cm-view.png)
+![Content Model v2](./docs/architecture/contentful-cm-view-v2.png)
 
 ### App screenshots
 
-- Landing page: _placeholder_
-- Articles index: _placeholder_
-- Article detail: _placeholder_
+- Landing page: _TODO capture and replace placeholder_
+- Articles index: _TODO capture and replace placeholder_
+- Article detail: _TODO capture and replace placeholder_
+
+### Route demo checklist
+
+- `/` — landing sections + latest-writing bridge
+- `/articles` — article index/discovery surface
+- `/articles/:slug` — article detail continuity links
+- `/debug` and `/debug/github` — developer validation routes
 
 ### Storybook
 
-- Storybook workspace screenshot: _placeholder_
+- Storybook workspace screenshot: _TODO capture and replace placeholder_
 
 ## Author
 

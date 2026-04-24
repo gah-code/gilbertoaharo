@@ -1,5 +1,12 @@
 # Design System Architect Checklist (Context)
 
+> Legacy context note (April 24, 2026): this checklist captures pre-closeout planning context and includes intentionally historical items.
+> For current canonical status and priorities, use:
+> - `docs/design-system/design-system.md`
+> - `docs/design-system/foundations.md`
+> - `docs/design-system/components.md`
+> - `docs/planning/TASKS.md`
+
 Purpose: a lightweight, high-level checklist to guide discovery, build-out, governance, and adoption for this project’s design system. It reflects the current repo state (tokens, layout rules, navigation work, and remaining TODOs).
 
 ## Current Snapshot (project-specific)

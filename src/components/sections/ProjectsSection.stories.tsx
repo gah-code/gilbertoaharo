@@ -16,8 +16,6 @@ export default meta;
 type Story = StoryObj<typeof ProjectsSection>;
 
 export const Default: Story = {};
-export const Slider: Story = {};
-export const RichCards: Story = {};
 
 const singleProjectSection: SectionProjects = {
   ...projectsStorySection,

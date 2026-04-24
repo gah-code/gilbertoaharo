@@ -1,5 +1,11 @@
 # Storybook + Design System Migration Plan
 
+> Legacy note (April 24, 2026): this migration is complete and this file is retained for historical implementation context only.
+> Canonical status tracking now lives in:
+> - `docs/planning/TASKS.md`
+> - `docs/planning/IMPLEMENTATION-ROADMAP.md`
+> - `docs/planning/PHASE-7-TESTING-GOVERNANCE-DOCS.md`
+
 ## Status (2026-04-15)
 
 Storybook integration is now implemented in-repo with a hybrid story layout.

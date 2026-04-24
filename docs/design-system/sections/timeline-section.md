@@ -1,5 +1,13 @@
 # Timeline Section (4.6) Reference
 
+> Legacy context note (April 24, 2026): this file is retained as historical implementation guidance and is not maintained as canonical current-state documentation.
+> Canonical current-state references:
+> - `docs/design-system/design-system.md`
+> - `docs/design-system/components.md`
+> - `src/components/sections/TimelineSection.tsx`
+> - `src/components/sections/TimelineSection.css`
+> - `src/components/sections/timeline/normalizeTimelineSection.ts`
+
 Purpose: Single source for timeline/experience section behavior, structure, and styling so another agent can implement or modify it consistently.
 
 Sources of truth
