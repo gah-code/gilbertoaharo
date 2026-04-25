@@ -14,6 +14,14 @@ const meta: Meta<typeof ArticleCard> = {
   title: "Articles/ArticleCard",
   component: ArticleCard,
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "ArticleCard is the canonical article-list surface. Stories emphasize scan quality, metadata rhythm, and missing-content resilience.",
+      },
+    },
+  },
   decorators: [
     (Story) => (
       <div className="article-card-story__frame">
@@ -60,4 +68,28 @@ export const LongTitle: Story = {
   args: {
     article: longTitleArticleListItemFixture,
   },
+};
+
+export const DenseGridScan: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Dense-card scan check mixing default, missing-image, and long-title states in a realistic grid.",
+      },
+    },
+  },
+  render: () => (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+        gap: "var(--space-4)",
+      }}
+    >
+      <ArticleCard article={defaultArticleListItemFixture} />
+      <ArticleCard article={noImageArticleListItemFixture} />
+      <ArticleCard article={longTitleArticleListItemFixture} />
+    </div>
+  ),
 };

@@ -7,6 +7,14 @@ const meta: Meta<typeof ProjectsSection> = {
   title: "Sections/ProjectsSection",
   component: ProjectsSection,
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "ProjectsSection stories focus on slider behavior, card hierarchy, and realistic content variability (single, empty, long copy, missing media).",
+      },
+    },
+  },
   args: {
     section: projectsStorySection,
   },
@@ -79,6 +87,14 @@ const longCopyProjectsSection: SectionProjects = {
 };
 
 export const LongCopyAndMissingMedia: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Stress case for dense metadata, longer summaries, and missing media fallback inside the same project set.",
+      },
+    },
+  },
   args: {
     section: longCopyProjectsSection,
   },

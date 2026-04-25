@@ -1,6 +1,7 @@
 # Phase B — Storybook Productization (Roadmap v2)
 
 Status: Completed (April 24, 2026)
+Reopen policy: Do not reopen unless a true Storybook or design-foundation regression is discovered.
 
 ## Scope
 

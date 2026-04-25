@@ -19,7 +19,7 @@ export function HeroSection({ section }: { section: SectionHero }) {
       className={`section-hero section-hero--${hero.heroStyle}`}
     >
       <div className={heroLayoutClass}>
-        <Stack className="hero-content" gap="var(--space-6)">
+        <Stack className="hero-content" gap="var(--section-content-gap)">
           <SectionHeader
             eyebrow={hero.eyebrow}
             name={hero.name}

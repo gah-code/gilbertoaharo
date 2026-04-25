@@ -12,7 +12,8 @@
   font: inherit;
   font-size: var(--control-font-size-md);
   font-weight: var(--button-font-weight);
-  line-height: 1;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
   text-decoration: none;
   cursor: pointer;
   transition:
@@ -30,6 +31,10 @@
 .ui-button:focus-visible {
   outline: none;
   box-shadow: var(--button-focus-ring-shadow);
+}
+
+.ui-button:hover:not(:disabled):not(.is-disabled) {
+  transform: translateY(-1px);
 }
 
 .ui-button:active {
@@ -60,6 +65,7 @@
 
 .ui-button--primary:hover {
   background: var(--button-primary-bg-hover);
+  box-shadow: var(--shadow-soft);
 }
 
 .ui-button--primary:active {
@@ -74,6 +80,7 @@
 
 .ui-button--secondary:hover {
   background: var(--button-secondary-bg-hover);
+  border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
 }
 
 .ui-button--secondary:active {
@@ -81,20 +88,26 @@
 }
 
 .ui-button--text {
-  min-height: 0;
-  padding: 0;
+  min-height: var(--control-height-sm);
+  padding: 0 var(--space-2);
   border-color: var(--button-text-border);
   background: var(--button-text-bg);
   color: var(--button-text);
   border-radius: var(--radius-sm);
+  box-shadow: none;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--button-text) 35%, transparent);
+  text-underline-offset: 0.14em;
 }
 
 .ui-button--text:hover {
   background: var(--button-text-bg-hover);
+  text-decoration-color: color-mix(in srgb, var(--button-text) 62%, transparent);
 }
 
 .ui-button--text:active {
   background: var(--button-text-bg-active);
+  transform: none;
 }
 
 .ui-button:disabled,

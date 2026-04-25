@@ -11,6 +11,7 @@
   gap: var(--space-3);
   grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
+  min-width: 0;
 }
 
 .learning-roadmap__rail {
@@ -101,15 +102,15 @@
 }
 
 .learning-roadmap__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-2);
-  flex-wrap: wrap;
 }
 
 .learning-roadmap__header .ui-heading {
   margin: 0;
+  min-width: 0;
+  max-width: 100%;
   overflow-wrap: anywhere;
 }
 
@@ -122,7 +123,7 @@
 
 .learning-roadmap__description {
   margin: 0;
-  max-width: 62ch;
+  max-width: 64ch;
   overflow-wrap: anywhere;
 }
 
@@ -132,12 +133,32 @@
   gap: var(--space-2);
 }
 
+.learning-roadmap__focus-areas .ui-badge {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: left;
+  justify-content: flex-start;
+}
+
 .learning-roadmap__action {
   width: fit-content;
+  margin-top: var(--space-1);
   overflow-wrap: anywhere;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 48rem) {
+  .learning-roadmap {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .learning-roadmap__description {
+    max-width: none;
+  }
+}
+
+@media (min-width: 80rem) {
   .learning-roadmap {
     display: flex;
     gap: var(--space-3);
@@ -146,9 +167,9 @@
 
   .learning-roadmap__step {
     flex: 1 1 0;
-    min-width: 0;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
+    gap: var(--space-2);
   }
 
   .learning-roadmap__rail {
@@ -180,6 +201,32 @@
     min-height: 0;
     min-width: 0;
     height: 2px;
+  }
+
+  .learning-roadmap__card-content {
+    gap: var(--space-4);
+  }
+
+  .learning-roadmap__description {
+    max-width: 40ch;
+  }
+}
+
+@media (min-width: 96rem) {
+  .learning-roadmap {
+    gap: var(--space-4);
+  }
+
+  .learning-roadmap__step {
+    gap: var(--space-3);
+  }
+
+  .learning-roadmap__rail {
+    column-gap: var(--space-3);
+  }
+
+  .learning-roadmap__description {
+    max-width: 44ch;
   }
 }
 

@@ -1,3 +1,5 @@
 .section-action-group {
   width: auto;
+  column-gap: var(--cta-row-gap-loose);
+  row-gap: var(--cta-row-gap);
 }

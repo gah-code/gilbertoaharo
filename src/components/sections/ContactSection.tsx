@@ -15,8 +15,8 @@ export function ContactSection({ section }: { section: SectionContact }) {
 
   return (
     <SectionShell anchorId={contact.anchorId} className="section-contact">
-      <Stack className="contact-layout" gap="var(--space-5)">
-        <Stack className="contact-header" gap="var(--space-2)">
+      <Stack className="contact-layout" gap="var(--section-content-gap)">
+        <Stack className="contact-header" gap="var(--section-header-gap)">
           <Heading level={2}>{contact.title}</Heading>
           {contact.intro ? <Text className="contact-intro">{contact.intro}</Text> : null}
         </Stack>
@@ -25,9 +25,9 @@ export function ContactSection({ section }: { section: SectionContact }) {
             {contact.email}
           </Link>
           {hasLinks ? (
-            <Cluster className="contact-links" gap="3">
+            <Cluster className="contact-links" gap="2" align="center">
               {contact.links.map((link) => (
-                <Link key={link.id} href={link.href}>
+                <Link key={link.id} href={link.href} variant="muted" className="contact-link-chip">
                   {link.label}
                 </Link>
               ))}

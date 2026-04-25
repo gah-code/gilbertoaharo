@@ -5,6 +5,7 @@
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   box-shadow: var(--shadow-soft);
+  overflow: hidden;
   transition:
     border-color var(--motion-duration-fast) var(--motion-ease-standard),
     box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
@@ -12,15 +13,15 @@
 }
 
 .ui-card--sm {
-  padding: var(--space-3);
+  padding: var(--card-pad-sm);
 }
 
 .ui-card--md {
-  padding: var(--space-4);
+  padding: var(--card-pad-md);
 }
 
 .ui-card--lg {
-  padding: var(--space-6);
+  padding: var(--card-pad-lg);
 }
 
 .ui-card--subtle {
@@ -39,6 +40,7 @@
 .ui-card--interactive:hover {
   border-color: rgba(11, 42, 111, 0.22);
   box-shadow: var(--shadow-soft-strong);
+  transform: translateY(-1px);
 }
 
 .ui-card--interactive:active {
@@ -47,6 +49,7 @@
 
 .ui-card--interactive:focus-within {
   outline: none;
+  border-color: color-mix(in srgb, var(--color-accent) 42%, transparent);
   box-shadow: var(--card-focus-ring-shadow);
 }
 

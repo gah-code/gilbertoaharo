@@ -39,6 +39,49 @@ Single source of truth for the current UI system. Start here, then dive deeper v
   - `src/stories/*` for system-wide rules and usage guidance
 - Section stories should model realistic content variability (sparse/empty/long-copy) without becoming exhaustive data permutations.
 
+## Project Structure Rules (Phase E)
+
+Keep these placement rules stable unless there is a clear regression-level reason to change them:
+
+- `src/content/*`: content boundary only (source selection, API wiring, adapters, typed mapping).
+- `src/components/layout/*`: shell/chrome ownership (`PageShell`, header/footer wrappers, SEO surface).
+- `src/components/ui/*`: primitive ownership (reusable UI controls and layout primitives).
+- `src/components/sections/*`: section ownership (rendering + section-local normalizers).
+- `src/pages/*`: route ownership (route behavior and route-local utilities).
+- Storybook:
+  - colocated stories for component contracts
+  - `src/stories/*` for cross-cutting foundations/system guidance
+- Tests:
+  - colocate with the module they validate (`*.test.tsx`/`*.test.ts`)
+- Fixtures:
+  - canonical app/content fixtures: `src/content/static/fixtures.ts`
+  - section-story fixtures: `src/components/sections/sectionStoryFixtures.ts`
+  - component-local fixtures in colocated `__fixtures__/` directories
+- Styles:
+  - tokens only in `src/styles/tokens.css`
+  - global baseline only in `src/styles/base.css`
+  - primitive/section/page-specific CSS colocated with owning modules
+
+### Naming Conventions (Phase E)
+
+- Components/pages/sections: `PascalCase.tsx` and matching `PascalCase.css` when styled.
+- Stories:
+  - `*.stories.tsx` for story files
+  - `*.stories.css` only for story-local wrappers/demos
+- Tests:
+  - `*.test.tsx` for component/page rendering behavior
+  - `*.test.ts` for pure utility/normalizer logic
+- Fixtures:
+  - `*.fixture.ts` for scoped test/story fixtures
+  - `fixtures.ts` for canonical content fixture sources where intentionally centralized
+
+### Phase-State Guard
+
+- `docs/planning/TASKS.md` is the active execution queue source.
+- `docs/planning/IMPLEMENTATION-ROADMAP.md` is the canonical phase order source.
+- `docs/planning/PHASE-*.md` are historical implementation records.
+- If these drift, fix planning docs first before touching runtime or design-system behavior.
+
 Repo map (design-system–relevant roots)
 - Styles: `src/styles/{tokens.css,base.css}`
 - Nav: `src/components/navigation/{ResponsiveNav.tsx,Navigation.css}`

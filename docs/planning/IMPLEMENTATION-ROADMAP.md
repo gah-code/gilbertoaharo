@@ -5,6 +5,18 @@ This roadmap supersedes legacy sequencing in `docs/planning/ROADMAP.md`.
 Roadmap status: Completed (Phases 0-7 closed on April 24, 2026).
 Reopen prior phases only when a true regression is discovered.
 
+## Roadmap v2 Follow-On Sequence (Post Closeout)
+
+Tracked operationally in `docs/planning/TASKS.md` and phase records:
+- Phase A — Maintenance Sweep
+- Phase B — Storybook Productization
+- Phase C — Component Cleanup + UX Polish
+- Phase D — Spacing and Layout Spec Pass
+- Phase E — Project Structure Hardening (completed April 24, 2026)
+- Phase F — Maintenance QA / Release Discipline (completed April 24, 2026)
+
+Roadmap v2 status: completed (all follow-on phases closed on April 24, 2026).
+
 ## 1) Phase 0 — Baseline + Execution Map
 
 ### Goal

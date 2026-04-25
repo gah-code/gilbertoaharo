@@ -6,12 +6,17 @@
   width: 100%;
 }
 
+.skills-layout {
+  max-width: 72rem;
+}
+
 .skills-eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 .skills-intro {
+  margin: 0;
   max-width: var(--lede-max);
 }
 
@@ -32,6 +37,7 @@
 }
 
 .skills-group__rows {
+  margin-top: var(--space-1);
   border-top: 1px solid var(--color-border-subtle);
 }
 
@@ -57,7 +63,7 @@
 }
 
 .skills-row__keywords {
-  margin: var(--space-1) 0 0;
+  margin: var(--space-2) 0 0;
   overflow-wrap: anywhere;
 }
 
@@ -74,5 +80,6 @@
 @media (max-width: 767px) {
   .skills-grid {
     grid-template-columns: 1fr;
+    gap: var(--space-6);
   }
 }

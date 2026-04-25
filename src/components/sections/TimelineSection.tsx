@@ -17,18 +17,20 @@ export function TimelineSection({ section }: { section: SectionTimeline }) {
 
   return (
     <SectionShell anchorId={timeline.anchorId} className="section-timeline">
-      <div className="timeline">
-        {timeline.eyebrow ? (
-          <Text className="timeline-eyebrow" tone="muted" size="sm" weight="medium">
-            {timeline.eyebrow}
-          </Text>
-        ) : null}
-        <Heading level={2}>{timeline.title}</Heading>
-        {timeline.intro ? (
-          <Text className="timeline-intro" tone="muted">
-            {timeline.intro}
-          </Text>
-        ) : null}
+      <Stack className="timeline" gap="var(--section-content-gap)">
+        <Stack className="timeline-header" gap="var(--section-header-gap)">
+          {timeline.eyebrow ? (
+            <Text className="timeline-eyebrow" tone="muted" size="sm" weight="medium">
+              {timeline.eyebrow}
+            </Text>
+          ) : null}
+          <Heading level={2}>{timeline.title}</Heading>
+          {timeline.intro ? (
+            <Text className="timeline-intro" tone="muted">
+              {timeline.intro}
+            </Text>
+          ) : null}
+        </Stack>
         {hasItems ? (
           <ol className="timeline-list">
             {timeline.items.map((item) => (
@@ -114,7 +116,7 @@ export function TimelineSection({ section }: { section: SectionTimeline }) {
             Timeline details are being refreshed. Check back soon.
           </p>
         )}
-      </div>
+      </Stack>
     </SectionShell>
   );
 }

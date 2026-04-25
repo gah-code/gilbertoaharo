@@ -6,6 +6,7 @@
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-lg);
   background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
   overflow: clip;
   min-height: 100%;
   transition:
@@ -16,7 +17,13 @@
 
 .article-card:hover {
   border-color: color-mix(in srgb, var(--color-border) 28%, transparent);
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-soft-strong);
+  transform: translateY(-1px);
+}
+
+.article-card:focus-within {
+  border-color: color-mix(in srgb, var(--color-accent) 38%, transparent);
+  box-shadow: var(--card-focus-ring-shadow);
   transform: translateY(-1px);
 }
 
@@ -29,11 +36,23 @@
 
 .article-card__media-placeholder {
   aspect-ratio: 16 / 9;
-  display: block;
+  display: grid;
+  place-items: center;
   border-bottom: 1px solid var(--color-border-subtle);
   background:
     linear-gradient(150deg, color-mix(in srgb, var(--color-accent-soft) 42%, transparent), transparent 48%),
     var(--color-surface-2);
+}
+
+.article-card__media-placeholder-label {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, var(--color-border-subtle) 90%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 .article-card__media img {
@@ -41,13 +60,19 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.article-card:hover .article-card__media img,
+.article-card:focus-within .article-card__media img {
+  transform: scale(1.02);
 }
 
 .article-card__body {
   display: grid;
   align-content: start;
-  gap: var(--space-3);
-  padding: var(--space-4);
+  gap: var(--card-flow-gap);
+  padding: var(--card-pad-md);
   min-height: 100%;
 }
 
@@ -65,24 +90,40 @@
 .article-card__title-link {
   color: var(--color-text);
   text-decoration: none;
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    text-decoration-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .article-card__title-link:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 42%, transparent);
+  text-underline-offset: 0.16em;
+}
+
+.article-card__title-link:focus-visible {
   color: var(--color-accent);
 }
 
 .article-card__meta {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  row-gap: var(--space-1);
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
   line-height: 1.45;
 }
 
-.article-card__meta > *:not(:last-child)::after {
+.article-card__meta-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.article-card__meta-item + .article-card__meta-item::before {
   content: "·";
-  margin-left: var(--space-2);
+  margin: 0 var(--space-2);
+  color: color-mix(in srgb, var(--color-text-muted) 75%, transparent);
 }
 
 .article-card__author {
@@ -92,9 +133,9 @@
 .article-card__excerpt {
   margin: 0;
   color: var(--color-text-muted);
-  line-height: 1.65;
+  line-height: 1.62;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   overflow-wrap: anywhere;
@@ -105,9 +146,11 @@
   align-items: center;
   gap: var(--space-2);
   font-size: var(--font-size-sm);
+  font-weight: 600;
   color: var(--color-accent);
   text-decoration: none;
   margin-top: auto;
+  padding-top: var(--space-2);
 }
 
 .article-card__cta::after {
@@ -125,7 +168,24 @@
 
 @media (prefers-reduced-motion: reduce) {
   .article-card,
+  .article-card__media img,
   .article-card__cta::after {
     transition: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .article-card__body {
+    gap: var(--card-flow-gap-tight);
+  }
+
+  .article-card__cta {
+    padding-top: var(--space-1);
+  }
+}
+
+@media (max-width: 480px) {
+  .article-card__body {
+    padding: var(--card-pad-sm);
   }
 }

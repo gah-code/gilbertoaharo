@@ -18,7 +18,7 @@ type ActionGroupProps = {
 
 export function ActionGroup({
   actions,
-  gap = "3",
+  gap = "2",
 }: ActionGroupProps) {
   if (!actions?.length) return null;
 

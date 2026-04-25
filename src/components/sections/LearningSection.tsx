@@ -14,8 +14,8 @@ export function LearningSection({ section }: { section: SectionLearning }) {
 
   return (
     <SectionShell anchorId={learning.anchorId} className="section-learning">
-      <Stack className="learning-layout" gap="var(--space-6)">
-        <Stack className="learning-header" gap="var(--space-3)">
+      <Stack className="learning-layout" gap="var(--section-content-gap)">
+        <Stack className="learning-header" gap="var(--section-header-gap)">
           {learning.eyebrow ? (
             <Text
               as="div"
@@ -36,7 +36,9 @@ export function LearningSection({ section }: { section: SectionLearning }) {
         </Stack>
 
         {hasItems ? (
-          <LearningRoadmapTimeline items={learning.items} />
+          <div className="learning-roadmap-surface">
+            <LearningRoadmapTimeline items={learning.items} />
+          </div>
         ) : (
           <p className="learning-empty" role="status" aria-live="polite">
             Learning roadmap updates are in progress. Check back soon.

@@ -16,8 +16,8 @@ export function SkillsSection({ section }: { section: SectionSkills }) {
 
   return (
     <SectionShell anchorId={skills.anchorId} className="section-skills">
-      <Stack className="skills-layout" gap="var(--space-8)">
-        <Stack className="skills-header" gap="var(--space-3)">
+      <Stack className="skills-layout" gap="var(--section-content-gap)">
+        <Stack className="skills-header" gap="var(--section-header-gap)">
           {skills.eyebrow ? (
             <Text
               as="div"
@@ -38,7 +38,7 @@ export function SkillsSection({ section }: { section: SectionSkills }) {
         </Stack>
 
         {hasGroups ? (
-          <Grid className="skills-grid" columns={2} gap="8" align="start">
+          <Grid className="skills-grid" columns={2} gap="6" align="start">
             {skills.groups.map((group) => (
               <div key={group.key} className="skills-group">
                 <Stack gap="var(--space-3)">

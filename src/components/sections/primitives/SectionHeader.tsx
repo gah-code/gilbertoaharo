@@ -23,7 +23,7 @@ export function SectionHeader({
   actions,
 }: SectionHeaderProps) {
   return (
-    <Stack className="section-header" gap="var(--space-4)">
+    <Stack className="section-header" gap="var(--text-flow-gap)">
       {eyebrow ? (
         <Text
           as="div"

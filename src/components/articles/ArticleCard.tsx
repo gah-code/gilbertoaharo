@@ -45,7 +45,9 @@ export function ArticleCard({ article }: { article: ArticleListItem }) {
           />
         </Link>
       ) : (
-        <div className="article-card__media-placeholder" aria-hidden="true" />
+        <div className="article-card__media-placeholder" aria-hidden="true">
+          <span className="article-card__media-placeholder-label">No preview image</span>
+        </div>
       )}
 
       <div className="article-card__body">
@@ -56,12 +58,14 @@ export function ArticleCard({ article }: { article: ArticleListItem }) {
         </h2>
 
         {hasMeta ? (
-          <div className="article-card__meta">
+          <div className="article-card__meta" aria-label="Article metadata">
             {article.authorName ? (
-              <span className="article-card__author">By {article.authorName}</span>
+              <span className="article-card__meta-item article-card__author">
+                By {article.authorName}
+              </span>
             ) : null}
             {dateLabel ? (
-              <time dateTime={dateTime}>
+              <time className="article-card__meta-item" dateTime={dateTime}>
                 {datePrefix} {dateLabel}
               </time>
             ) : null}

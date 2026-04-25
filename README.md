@@ -34,7 +34,10 @@ It currently powers:
 
 The project is designed to show practical frontend engineering patterns for teams working with Contentful, Storybook, and component systems over time.
 
-Roadmap status: phases `0` through `7` are complete; the repository is now in post-roadmap stabilization mode.
+Roadmap status:
+- phases `0` through `7` are complete
+- Roadmap v2 phases `A` through `F` are complete
+- repository is in maintenance mode with Phase F workflow as the active quality baseline
 
 ## Canonical Sources
 
@@ -45,6 +48,7 @@ Use these docs as source-of-truth surfaces:
 - **Roadmap closeout + maintenance tracker:** `docs/planning/TASKS.md`
 - **Phase history records:** `docs/planning/PHASE-*.md`
 - **Final roadmap consolidation record:** `docs/planning/PHASE-7-TESTING-GOVERNANCE-DOCS.md`
+- **Maintenance QA/release discipline record:** `docs/planning/PHASE-F-MAINTENANCE-QA-RELEASE-DISCIPLINE.md`
 - **Design-system reference:** `docs/design-system/design-system.md`
 - **Legacy planning history (non-canonical):** `docs/planning/ROADMAP.md`
 
@@ -302,14 +306,22 @@ Testing is focused on reliability of content-rich UI behavior:
 
 Quality-check workflow:
 
+Before PR:
 - `npm run lint`
 - `npm run test`
 - `npm run build`
-- `npm run build-storybook`
 
-Note: `build-storybook` currently requires Node `22.12+`; local environments on Node `22.2.0` will fail this step until upgraded.
-For this closeout pass, Storybook parity was verified with:
-`PATH="/Users/gilbertharo/.n/bin:$PATH" npm run build-storybook`.
+Before release/demo refresh, and after Storybook/foundation/UI or route changes:
+- `npm run build-storybook`
+- route smoke-check (`/`, `/articles`, `/articles/:slug`, `/debug`, `/debug/github`)
+- metadata spot-check (`title`, `description`, canonical URL) on landing/articles/not-found routes
+- docs sync for changed contracts/workflows (`README.md`, `CONTRIBUTING.md`, `docs/planning/TASKS.md`, relevant phase/design-system docs)
+
+Runtime parity note:
+- `build-storybook` requires Node `22.12+`.
+- default local shell may still resolve to Node `22.2.0`; in that case Storybook build fails on runtime floor.
+- this repository validates Storybook parity with:
+  `PATH="/Users/gilbertharo/.n/bin:$PATH" npm run build-storybook`.
 
 ## Local Development
 
@@ -492,14 +504,18 @@ Deferred SEO opportunities (intentionally outside roadmap scope):
 ## Roadmap Status and Deferred Items
 
 Phases `0` through `7` are complete and closed.
+Roadmap v2 is complete:
+- phases `A` through `F` closed
+- maintenance mode is now the active operating state
 
-Closeout rule: do not reopen prior phases unless a true regression is discovered.
+Closeout rule: do not reopen closed phases unless a true regression is discovered.
 
-Post-roadmap deferred items:
+Deferred follow-up items:
 
 - Persist local shell/runtime configuration so `node -v` resolves to `22.12.0` without PATH overrides.
 - Optionally expand Storybook interaction-runner coverage (`npm run test:storybook`) for critical flows.
-- Add deeper integration smoke coverage only where it provides clear regression value.
+- Optionally add deeper integration smoke coverage only where it provides clear regression value.
+- Optionally add lightweight JSON-LD where maintainable and route-owned.
 - Replace README route screenshot placeholders with real captures when convenient.
 
 ## Screenshots / Demo

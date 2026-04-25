@@ -20,6 +20,8 @@ Canonical foundation stories:
   - practical patterns for section headers and long-form lead/body rhythm
 - `Foundations/Layout`
   - section rhythm composition
+  - card/internal spacing rhythm examples
+  - CTA grouping and readable-measure guidance
   - responsive grid composition and grouping primitives in context
 - `Foundations/Interaction States`
   - baseline interaction expectations for hover/focus-visible/disabled states
@@ -77,10 +79,31 @@ Guardrails:
 - `Cluster`: wrapped group for chips/actions/badges.
 - `Grid`: typed responsive columns, min-width, gap, and alignment options.
 
+## Phase D spacing/layout rhythm rules
+- Section spacing:
+  - `--section-pad-y` for default vertical rhythm
+  - `--section-pad-y-mobile` for compact screen rhythm
+  - `--section-stack-gap` and `--section-content-gap` for shell/content flow
+- Text block spacing:
+  - `--section-header-gap` for eyebrow/title/intro grouping
+  - `--text-flow-gap` and `--text-flow-gap-tight` for body/meta rhythm
+- Card spacing:
+  - `--card-pad-sm|md|lg` for surface padding
+  - `--card-flow-gap` and `--card-flow-gap-tight` for internal content flow
+- CTA spacing:
+  - `--cta-row-gap` and `--cta-row-gap-loose` for wrapped action rows
+- Grid/layout spacing:
+  - `--grid-gap-default` and `--grid-gap-wide` for section-level composition rhythm
+
 ## Responsive and motion baseline
 - Section and container density are token-driven.
+- Section-level width exceptions are allowed only when explicitly documented; current exception: `LearningSection` widens its container at large/XL breakpoints to preserve roadmap readability.
 - Navigation keeps CMS-owned mobile breakpoint (`menu.mobileBreakpointPx`).
 - Motion behavior uses shared duration/easing tokens with reduced-motion fallbacks in primitive/nav CSS.
+- Phase C interaction baseline:
+  - button hover/focus/press states remain subtle and token-aligned
+  - link underline/tint transitions prioritize readability over decoration
+  - interactive cards may lift slightly, while static cards should not imply clickability
 - Storybook interaction-state guidance should be updated when focus/hover/disabled or motion contracts change.
 
 ## Deferred to Phase 6

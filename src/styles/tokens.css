@@ -91,12 +91,27 @@
   /* Layout + readable line length */
   --content-max: 1040px;
   --section-pad-y: clamp(var(--space-10), 6vw, var(--space-16));
+  --section-pad-y-mobile: clamp(var(--space-8), 8vw, var(--space-10));
   --section-pad-x: clamp(var(--space-4), 4vw, var(--space-12));
   --stack-gap: var(--space-12);
+  --section-stack-gap: clamp(var(--space-8), 4vw, var(--space-12));
+  --section-content-gap: clamp(var(--space-6), 3vw, var(--space-8));
+  --section-header-gap: var(--space-3);
+  --text-flow-gap: var(--space-3);
+  --text-flow-gap-tight: var(--space-2);
+  --cta-row-gap: var(--space-2);
+  --cta-row-gap-loose: var(--space-3);
   --heading-gap: var(--space-3);
   --heading-mb: var(--space-6);
   --lede-max: 62ch;
   --measure-body: 68ch;
+  --card-pad-sm: var(--space-3);
+  --card-pad-md: var(--space-4);
+  --card-pad-lg: clamp(var(--space-4), 2.4vw, var(--space-6));
+  --card-flow-gap: var(--space-3);
+  --card-flow-gap-tight: var(--space-2);
+  --grid-gap-default: var(--space-4);
+  --grid-gap-wide: var(--space-6);
 
   /* Radius + borders */
   --radius-sm: 0.25rem;

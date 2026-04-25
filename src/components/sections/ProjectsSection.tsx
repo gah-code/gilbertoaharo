@@ -112,7 +112,7 @@ export function ProjectsSection({ section }: { section: SectionProjects }) {
     <SectionShell anchorId={projects.anchorId} className="section-projects">
       <div className="projects-section">
         <div className="projects-section__header">
-          <Stack className="projects-section__header-content" gap="var(--space-3)">
+          <Stack className="projects-section__header-content" gap="var(--section-header-gap)">
             {projects.eyebrow ? (
               <Text
                 as="div"
@@ -171,7 +171,7 @@ export function ProjectsSection({ section }: { section: SectionProjects }) {
               {projects.projects.map((project) => (
                 <article key={project.key} className="projects-section__slide">
                   <Card className="projects-section__card" variant="subtle" density="lg">
-                    <Stack gap="var(--space-3)">
+                    <Stack className="projects-section__card-content" gap="var(--card-flow-gap)">
                       {project.thumbnailSrc ? (
                         <div className="projects-section__media-frame">
                           <img
@@ -181,7 +181,11 @@ export function ProjectsSection({ section }: { section: SectionProjects }) {
                             decoding="async"
                           />
                         </div>
-                      ) : null}
+                      ) : (
+                        <div className="projects-section__media-placeholder" aria-hidden="true">
+                          <span>No preview image</span>
+                        </div>
+                      )}
 
                       {project.featured ? (
                         <div className="projects-section__featured">

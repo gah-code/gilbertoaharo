@@ -4,9 +4,10 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
+  line-height: 1.4;
   color: var(--link-color);
   text-decoration-line: underline;
-  text-decoration-thickness: from-font;
+  text-decoration-thickness: 0.08em;
   text-underline-offset: 0.18em;
   text-decoration-color: color-mix(in srgb, var(--link-color) 42%, transparent);
   border-radius: var(--radius-sm);
@@ -36,6 +37,7 @@
 
 .ui-link--md {
   font-size: var(--font-size-base);
+  font-weight: 500;
 }
 
 .ui-link--lg {
@@ -44,6 +46,7 @@
 
 .ui-link--muted {
   color: var(--color-text-muted);
+  font-weight: 400;
   text-decoration-color: color-mix(in srgb, var(--color-text-muted) 40%, transparent);
 }
 
@@ -55,6 +58,7 @@
 .ui-link--unstyled {
   color: inherit;
   text-decoration: none;
+  font-weight: inherit;
 }
 
 .ui-link--unstyled:hover,
