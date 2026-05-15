@@ -229,6 +229,16 @@ Current implementation checkpoint (May 15, 2026):
 - Node note: default shell Node remains `v22.2.0`; `npm run build` passes but prints the known Vite Node-floor warning. `.nvmrc` and `.node-version` both specify `22.12.0`.
 - No layout, IA, routing, CMS model, Contentful migration, typography, card/elevation, section redesign, or production component behavior changes were made.
 
+Batch 2 checkpoint (May 15, 2026):
+
+- Status: In progress — motion/responsive baseline documented.
+- Motion inventory confirms primitives, ArticleCard, Projects, Hero, and Footer use shared motion tokens with reduced-motion coverage.
+- Navigation still uses local `0.12s`, `0.15s`, and `0.2s` `ease` transitions. No exact-equivalent substitution was made because the current tokens use `120ms`/`180ms` with `cubic-bezier(0.2, 0, 0, 1)`, so replacing navigation values would be a behavior change rather than token hygiene.
+- Responsive inventory confirms breakpoint reference tokens exist for `40rem`, `48rem`, `60rem`, `64rem`, and `80rem`; explicit media-query values remain acceptable because CSS custom properties are not reliable inside media queries.
+- Deferred responsive findings: Learning's `96rem` wide-layout breakpoint, `820px` hero tuning, `900px`/`901px` footer/header tuning, and compact `480px` adjustments should be reviewed during responsive QA instead of Phase 3.
+- README Storybook guidance now uses portable Node `22.12+` instructions via `.nvmrc`, `.node-version`, or an equivalent version manager instead of a machine-specific PATH command.
+- No layout, IA, routing, CMS model, Contentful migration, typography, card/elevation, image delivery, CLS, or visual polish work was started.
+
 ## Phase 4 - Image Delivery and Desktop CLS Confirmation
 
 Objective:

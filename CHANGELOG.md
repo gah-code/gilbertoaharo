@@ -15,6 +15,8 @@
 - Recorded the Phase 2 SEO cleanup checkpoint and deploy/Lighthouse follow-up in the current audit and roadmap docs. (`docs/design-system/design-system-snapshot-audit-current.md`, `docs/planning/design-system-roadmap-current.md`)
 - Closed the Phase 2 live deploy gate after Netlify served the current artifact: live crawler files now return static content, canonical behavior passes, and Lighthouse SEO follow-up is `100`. (`docs/planning/phase-2-deploy-artifact-validation-spec.md`, `docs/design-system/design-system-snapshot-audit-current.md`, `docs/planning/design-system-roadmap-current.md`)
 - Started Phase 3 token verification by adding the missing `--space-5` midpoint token and reflecting it in the token story reference. (`src/styles/tokens.css`, `src/stories/Tokens.stories.tsx`, `docs/design-system/foundations.md`)
+- Documented the Phase 3 motion/responsive baseline, including tokenized motion coverage, deferred navigation transition alignment, breakpoint reference-token strategy, and section-specific responsive values. (`docs/design-system/foundations.md`, `docs/design-system/design-system-snapshot-audit-current.md`, `docs/planning/design-system-roadmap-current.md`, `docs/planning/TASKS.md`)
+- Replaced the current README Storybook runtime note's machine-specific PATH command with portable Node `22.12+` guidance using `.nvmrc`, `.node-version`, or an equivalent version manager. (`README.md`)
 
 ### Verification
 
@@ -26,6 +28,8 @@
 - Built `dist/robots.txt` and `dist/sitemap.xml` are present and do not contain SPA HTML.
 - Live deploy verification now passes: `robots.txt` returns robots text, `sitemap.xml` returns XML, root fallback metadata is updated, canonical behavior passes, and Lighthouse SEO follow-up is `100`.
 - Focused CSS custom property scan passes after adding `--space-5`; no concrete undefined CSS variable references remain.
+- Motion and breakpoint scans pass as a documentation baseline; no exact-equivalent CSS transition substitution was made.
+- Current README/active docs no longer contain a machine-specific Storybook command; historical phase records still preserve original runtime evidence.
 
 ## [2026-04-21 - Update 3]
 

@@ -10,6 +10,7 @@ Roadmap v2 status: complete. Phases `A` through `F` are closed (April 24, 2026).
 - [ ] **Design System + UX Roadmap — Phase 3 Token Verification in progress**
   - Phase 2 — Domain/SEO Foundation Cleanup is closed and live-verified in `docs/planning/phase-2-deploy-artifact-validation-spec.md`.
   - Keep Phase 3 scoped to token verification, undefined custom property hygiene, and responsive/motion baseline notes.
+  - Motion/responsive baseline documentation is in progress: navigation hard-coded transitions and section-specific breakpoints are documented as deferred QA/polish findings, not active visual work.
   - Do not start typography, card/elevation, section polish, routing, IA, CMS, or Contentful migration work during this phase.
 
 - [ ] **Roadmap v2 closeout complete — maintenance mode**
@@ -69,13 +70,16 @@ A phase cannot be considered complete unless:
 
 ---
 
-## Verification Snapshot (Latest: Phase 3 token verification start, May 15, 2026)
+## Verification Snapshot (Latest: Phase 3 motion/responsive baseline pass, May 15, 2026)
 
 - [x] `npm run lint`
 - [x] `npm run test`
 - [x] `npm run build`
 - [x] `npm run build-storybook` (pass with Node `22.12.0` selected through the local version manager)
 - [x] Focused CSS custom property scan (no concrete undefined references after adding `--space-5`)
+- [x] Motion baseline scan (navigation local transition values documented as deferred)
+- [x] Responsive/breakpoint scan (reference tokens confirmed; explicit media-query values documented)
+- [x] Current Storybook guidance uses portable Node `22.12+` instructions instead of a machine-specific PATH command.
 
 Runtime note:
 - Default shell Node is still `22.2.0`.

@@ -76,7 +76,7 @@ Pitfalls identified from docs and current evidence:
 
 ### Conflicts or stale docs
 
-- `README.md` still contains a machine-specific Storybook command using `/Users/gilbertharo/.n/bin`. The current roadmap guidance correctly prefers `.nvmrc`, `.node-version`, or any equivalent Node `22.12+` runtime.
+- Phase 3 Batch 2 resolved the current `README.md` machine-specific Storybook command by replacing it with portable Node `22.12+` guidance using `.nvmrc`, `.node-version`, or an equivalent version manager. Historical phase records may still preserve machine-specific runtime examples as evidence from the original validation snapshots.
 - `docs/planning/ROADMAP.md` is historical; the current audit and roadmap files supersede it for this work.
 - The prior current-roadmap checkpoint said Phase 2 was blocked at live verification. The evidence in this spec supersedes that blocker and supports closing Phase 2 after checkpoint docs are updated.
 

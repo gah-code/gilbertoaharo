@@ -580,6 +580,15 @@ Phase 3 token verification note (May 15, 2026):
 - Navigation still has local hard-coded transition durations; this remains a deferred motion-token alignment task, not part of the first token defect fix.
 - Validation passed: `npm run lint`, `npm run test`, `npm run build`, focused CSS custom property scan, and `npm run build-storybook` with Node `22.12.0` selected through the local version manager.
 
+Phase 3 motion/responsive baseline note (May 15, 2026):
+
+- Motion inventory confirms primitives, ArticleCard, Projects, Hero, and Footer use shared motion tokens with reduced-motion coverage.
+- Navigation uses local `0.12s`, `0.15s`, and `0.2s` `ease` transitions. No exact-equivalent token substitution was made because the current token easing and durations do not match those values exactly.
+- Responsive inventory confirms the documented breakpoint reference tokens (`40rem`, `48rem`, `60rem`, `64rem`, `80rem`) and keeps explicit media query values as the current browser-safe CSS strategy.
+- Deferred responsive findings are documented for Learning `96rem`, Hero `820px`, Footer/Header `900px`/`901px`, and compact `480px` tuning.
+- README Storybook guidance was updated to portable Node `22.12+` instructions through `.nvmrc`, `.node-version`, or an equivalent version manager.
+- No layout, IA, routing, CMS model, Contentful migration, typography, card/elevation, image delivery, CLS, or visual polish work was started.
+
 | Risk | Severity | Likelihood | Evidence | User impact | Recommended mitigation | Owner/phase |
 | --- | --- | --- | --- | --- | --- | --- |
 | Invalid robots/sitemap | Low | Resolved | Phase 2 live `curl -s` checks return robots text/XML, not SPA HTML | Regression would harm crawl control and sitemap discovery | Keep body checks in release validation | Phase 2 closed |
@@ -588,6 +597,8 @@ Phase 3 token verification note (May 15, 2026):
 | Oversized Contentful images | High | Confirmed by Lighthouse | 6.9-8.3 MB total transfer | Slow loads, data cost, LCP risk | Use Contentful image transforms/responsive sizes after preserving current content contracts | Phase 4/7 |
 | Accessible-name mismatches | High | Confirmed by Lighthouse | Label/content-name audit | Voice control/screen reader confusion | Align visible labels and aria labels | Phase 8 |
 | Undefined `--space-5` | Low | Resolved | `--space-5` added to `tokens.css`; undefined-variable scan clean | Regression would affect wide Learning spacing | Keep token scan in Phase 3 validation | Phase 3 started |
+| Navigation hard-coded motion values | Low-medium | Confirmed | `Navigation.css` uses local `0.12s`, `0.15s`, and `0.2s` `ease` transitions; reduced-motion block exists | Possible motion inconsistency, but current behavior is stable | Defer until a motion-token alignment phase can preserve or intentionally change behavior | Phase 3 deferred / later polish |
+| Section-specific breakpoint drift | Low-medium | Confirmed | Learning `96rem`, Hero `820px`, Footer/Header `900px`/`901px`, compact `480px` values | Potential responsive maintenance friction | Keep documented as content-specific values; verify during responsive QA before changing | Phase 8 |
 | Heading order skips | Medium | Confirmed by Lighthouse | `TimelineSection`, `LearningRoadmapTimeline` | Screen reader navigation clarity | Use semantic `h3` visual size override | Phase 8 |
 | Default Node drift | Medium | Confirmed | Node `22.2.0`; Storybook fails | Local validation friction | Make default shell resolve 22.12+ | Phase 10 |
 | Browser-side delivery token | Medium | Known architecture | `env.ts`, `client.ts` | Public delivery token exposure pattern | Keep documented; later server boundary if needed | Future data phase |
@@ -720,6 +731,7 @@ Scope:
 - Phase 2 closeout checkpoint: live crawler files, root metadata, canonical behavior, deployed commit, and Lighthouse SEO `100` passed. Prior Netlify stale deploy/cache blocker is resolved.
 - Phase 3 start checkpoint: token verification began after Phase 2 closeout; `--space-5` was added and the focused undefined-variable scan is clean.
 - Phase 3 validation checkpoint: `npm run lint`, `npm run test`, `npm run build`, focused CSS custom property scan, and `npm run build-storybook` with Node `22.12.0` passed. Default shell Node remains `v22.2.0`, so `npm run build` still prints the known Vite Node-floor warning.
+- Phase 3 motion/responsive baseline checkpoint: documented current motion-token coverage, deferred navigation hard-coded transitions, breakpoint reference-token strategy, section-specific responsive values, and portable Storybook/Node guidance. No visual polish or component behavior changes were made.
 
 Files created:
 

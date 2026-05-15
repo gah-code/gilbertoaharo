@@ -102,11 +102,32 @@ Guardrails:
 - Section-level width exceptions are allowed only when explicitly documented; current exception: `LearningSection` widens its container at large/XL breakpoints to preserve roadmap readability.
 - Navigation keeps CMS-owned mobile breakpoint (`menu.mobileBreakpointPx`).
 - Motion behavior uses shared duration/easing tokens with reduced-motion fallbacks in primitive/nav CSS.
+- CSS custom properties are reference anchors for breakpoints, not media-query inputs. Explicit media query values are acceptable when they match the documented breakpoint scale.
 - Phase C interaction baseline:
   - button hover/focus/press states remain subtle and token-aligned
   - link underline/tint transitions prioritize readability over decoration
   - interactive cards may lift slightly, while static cards should not imply clickability
 - Storybook interaction-state guidance should be updated when focus/hover/disabled or motion contracts change.
+
+### Motion baseline inventory
+
+| Area | File | Current value | Tokenized? | Reduced-motion covered? | Recommendation |
+| --- | --- | --- | --- | --- | --- |
+| Motion tokens | `src/styles/tokens.css` | `--motion-duration-fast: 120ms`, `--motion-duration-base: 180ms`, `--motion-ease-standard: cubic-bezier(0.2, 0, 0, 1)` | Yes | N/A | Keep as the current small motion scale. Add tokens only when a repeated, confirmed gap appears. |
+| Primitives | `Button.css`, `Link.css`, `Card.css` | Hover/focus transitions use motion tokens | Yes | Yes | Keep tokenized primitive transitions as the canonical pattern. |
+| Article/project/hero/footer surfaces | `ArticleCard.css`, `ProjectsSection.css`, `HeroSection.css`, `FooterSection.css` | Hover/focus transitions use motion tokens | Yes | Yes | Keep section/card transition behavior stable until the card/elevation phase. |
+| Project scroll behavior | `ProjectsSection.tsx` | Smooth scroll uses `prefers-reduced-motion` guard | N/A | Yes | Keep the JS reduced-motion guard. |
+| Navigation | `Navigation.css` | Local `0.12s`, `0.15s`, and `0.2s` `ease` transitions | No | Yes | Defer. These do not exactly match the current duration/easing tokens, so changing them during Phase 3 would risk behavior drift. |
+
+### Responsive baseline inventory
+
+| Area | File | Breakpoint/value | Matches reference token? | Risk | Recommendation |
+| --- | --- | --- | --- | --- | --- |
+| Reference scale | `src/styles/tokens.css` | `40rem`, `48rem`, `60rem`, `64rem`, `80rem` | Yes | Low | Keep as documentation/JS anchors; do not attempt to use CSS variables inside media queries. |
+| Navigation | `Navigation.css`, navigation data | `960px` mobile breakpoint | Yes, matches `--breakpoint-nav` / CMS default | Low | Keep explicit CSS and CMS-owned breakpoint aligned. |
+| Core sections | section CSS | `640px`, `768px`, `1024px`, `80rem` | Yes | Low | Keep explicit values where they map to the reference scale. |
+| Learning wide layout | `LearningSection.css`, `LearningRoadmapTimeline.css` | `80rem`, `96rem` | `80rem` matches; `96rem` is a documented section exception | Medium-low | Verify at wide viewports before Phase 7 polish; do not create a new token unless another surface needs the same value. |
+| Content-specific tuning | `HeroSection.css`, `FooterSection.css`, `SectionHeader.css`, compact section CSS | `820px`, `900px`/`901px`, `480px`, max `639px`/`767px` | Mixed | Low-medium | Treat as content/layout-specific breakpoints for now. Revisit only during responsive QA, not Phase 3 token cleanup. |
 
 ## Deferred to Phase 6
 - Broad component/section visual refinements.

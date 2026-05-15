@@ -320,8 +320,14 @@ Before release/demo refresh, and after Storybook/foundation/UI or route changes:
 Runtime parity note:
 - `build-storybook` requires Node `22.12+`.
 - default local shell may still resolve to Node `22.2.0`; in that case Storybook build fails on runtime floor.
-- this repository validates Storybook parity with:
-  `PATH="/Users/gilbertharo/.n/bin:$PATH" npm run build-storybook`.
+- use the repo-supported Node version before building Storybook:
+
+  ```bash
+  node --version
+  npm run build-storybook
+  ```
+
+- if the active shell is below the supported version, switch using `.nvmrc`, `.node-version`, or an equivalent local Node version manager. Storybook should run with Node `22.12+` or the version declared by the repo.
 
 ## Local Development
 
