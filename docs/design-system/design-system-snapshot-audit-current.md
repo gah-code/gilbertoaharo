@@ -10,13 +10,13 @@ The project is in a mature maintenance-mode state for a UI-first, CMS-backed per
 
 The highest-priority risks are not broad architecture gaps. They are focused release-quality issues:
 
-- Live SEO is incomplete: `robots.txt` and `sitemap.xml` return the SPA HTML, and Lighthouse reports no valid canonical link.
+- Phase 2 live SEO gate is now closed: `robots.txt` returns plain robots rules, `sitemap.xml` returns XML, live fallback metadata is updated, canonical behavior passes, and Lighthouse SEO follow-up returned `100`.
 - Live performance has heavy Contentful image payloads and a serious desktop CLS Lighthouse lab finding that needs trace/filmstrip confirmation before root cause is assigned.
 - Accessibility is generally strong but has content/name mismatches caused by CMS-provided `ariaLabel` values that do not include visible button/link text.
 - Heading levels skip from section headings to `h4` in timeline and learning cards.
-- One confirmed token bug exists: `LearningSection.css` references `--space-5`, which is not defined in `tokens.css`.
+- Phase 3 token verification has started; the confirmed `--space-5` defect is fixed by adding the missing midpoint token to `tokens.css`.
 
-Recommended next move: run the roadmap's Phase 1 baseline freeze and Phase 2 domain/SEO foundation cleanup before visual polish. The preferred path is conservative: fix crawler/canonical basics, verify the token defect, confirm desktop CLS with trace/filmstrip evidence, then improve image delivery and card/section polish without changing IA, routing, CMS boundaries, or layout strategy.
+Recommended next move: continue Phase 3 token verification documentation and then move to desktop CLS/image evidence before visual polish. The preferred path remains conservative: keep the Phase 2 SEO evidence closed, finish token/responsive/motion baseline notes, confirm desktop CLS with trace/filmstrip evidence, then improve image delivery and card/section polish without changing IA, routing, CMS boundaries, or layout strategy.
 
 ## 2. Evidence and Method
 
@@ -32,6 +32,8 @@ Commands run:
 | `curl -I https://www.gilbertoharo.com/` | DNS fail | Could not resolve host. |
 | `curl -s https://gilbertaharo.com/robots.txt` | Pass, invalid content | Body inspection returned SPA HTML, not robots rules. |
 | `curl -s https://gilbertaharo.com/sitemap.xml` | Pass, invalid content | Body inspection returned SPA HTML, not XML sitemap. |
+| Phase 2 live `curl -s` follow-up | Pass | `robots.txt` now returns robots rules and `sitemap.xml` now returns XML; neither returns SPA HTML. |
+| Phase 2 Lighthouse SEO follow-up | Pass | SEO score `100`; canonical, robots, and crawlability audits pass. |
 | `npx --yes lighthouse@latest ... desktop` | Pass after network escalation | Wrote JSON/HTML artifacts. Default network sandbox blocked initial registry lookup. |
 | `npx --yes lighthouse@latest ... mobile` | Pass after network escalation | Wrote JSON/HTML artifacts. |
 | PageSpeed Insights API curl | Blocked by quota | API returned 429 quota exceeded. |
@@ -68,10 +70,10 @@ Known limitations:
 
 | Area | Current status | Confidence | Evidence | Risk | Recommended next action |
 | --- | --- | --- | --- | --- | --- |
-| Foundations/tokens | Strong, organized token layer with typography, color, spacing, radius, shadow, motion, breakpoint references, controls, focus, button/link/card tokens. | High | `src/styles/tokens.css`, `src/stories/Tokens.stories.tsx` | One undefined token reference in Learning. | Fix `--space-5` reference or add token in a scoped token phase. |
+| Foundations/tokens | Strong, organized token layer with typography, color, spacing, radius, shadow, motion, breakpoint references, controls, focus, button/link/card tokens. Phase 3 added the missing `--space-5` midpoint token. | High | `src/styles/tokens.css`, `src/stories/Tokens.stories.tsx` | Navigation still has hard-coded transition values; broader motion alignment is deferred. | Continue responsive/motion baseline documentation; avoid broad visual refactors. |
 | Typography | Solid system stack and role aliases; readable line-height; headline tracking is slightly tight but controlled. | High | `tokens.css`, `Heading`, `Text`, `ArticlePage.css` | Brand could remain generic; article pages could use stronger editorial rhythm. | Decide whether to stay system-font or test one variable sans. |
 | Color/contrast | Automated contrast passes in Lighthouse; semantic colors exist. | High | Lighthouse color contrast score 1, tokens. | Border token `#8f887e` can feel heavy if overused. | Keep palette; tune border/elevation locally if visual noise appears. |
-| Spacing/whitespace | Strong section/card spacing tokens and colocated usage. | High | `tokens.css`, `base.css`, Phase D docs | Undefined `--space-5`; breakpoint values duplicated by explicit media queries. | Token verification phase, not broad redesign. |
+| Spacing/whitespace | Strong section/card spacing tokens and colocated usage; `--space-5` now exists as the midpoint between `--space-4` and `--space-6`. | High | `tokens.css`, `base.css`, Phase D docs | Breakpoint values are still explicit by design because CSS custom properties are not reliable in media queries. | Keep token verification scoped; do not redesign spacing. |
 | Shadows/elevation | Simple elevation system exists (`soft`, `soft-strong`) and is used consistently for cards/media. | Medium-high | `tokens.css`, `Card.css`, `ArticleCard.css`, sections | Elevated shadow may be too frequent/heavy for all cards. | Define no-shadow/border/soft/elevated usage guidance. |
 | Motion/interactions | Motion tokens and reduced-motion rules exist in primitives/sections/nav. | High | `Button.css`, `Card.css`, `ProjectsSection.css`, `Navigation.css` | Some hard-coded transition durations remain in nav. | Gradually align nav transitions to motion tokens. |
 | Visual hierarchy | Clear professional/editorial hierarchy; hero, sections, cards are scannable. | Medium-high | Section implementations and Lighthouse DOM labels | Projects slider and learning roadmap may compete visually; CTA naming issues. | Polish cards and labels after SEO/accessibility basics. |
@@ -81,14 +83,14 @@ Known limitations:
 | Timeline | Normalized, ordered list, media fallback, responsive alternation. | High | `TimelineSection`, normalizer tests | Heading level skips to `h4`; timeline images are oversized. | Adjust semantic level in a11y phase; optimize image delivery. |
 | Skills | Clean split-list, avoids card clutter, strong normalizer compatibility. | High | `SkillsSection`, `normalizeSkillsSection` | Badge nowrap could be tight for long labels, though current labels are short. | Keep; add long-label story if content expands. |
 | Projects | Rich normalized project cards in scroll-snap slider. | Medium-high | `ProjectsSection`, stories, tests | Slider discoverability and image payloads need QA; accessible names can mismatch visible labels. | Card/action copy pass and image strategy. |
-| Learning | Strong roadmap concept and responsive timeline. | Medium | `LearningSection`, `LearningRoadmapTimeline` | Undefined `--space-5`; `h4` heading skip; wide breakpoint behavior needs viewport QA. | Token fix and heading-level review. |
+| Learning | Strong roadmap concept and responsive timeline; the `--space-5` wide-breakpoint token defect is fixed. | Medium | `LearningSection`, `LearningRoadmapTimeline` | `h4` heading skip and wide-breakpoint behavior still need viewport/a11y QA. | Heading-level review and viewport QA in later a11y/responsive phase. |
 | Contact | Straightforward conversion surface with email and link chips. | High | `ContactSection`, test/story | Contact links rely on generic link styling, but acceptable. | Keep; no redesign needed. |
-| ArticleCard/article surfaces | ArticleCard exists and is the canonical article-list card with stories/tests. | High | `src/components/articles/ArticleCard.*` | CTA text "Read article" is good; live/project generic labels still need deploy verification after the Phase 2 label guard. | Keep ArticleCard; verify project article CTAs are descriptive after deploy. |
+| ArticleCard/article surfaces | ArticleCard exists and is the canonical article-list card with stories/tests. | High | `src/components/articles/ArticleCard.*` | CTA text "Read article" is good; project/card hierarchy can still be polished later. | Keep ArticleCard; defer deeper card polish until after token/a11y/performance evidence. |
 | Rich text/blog article experience | Handles marks, links, embedded assets, metadata, attachments. | Medium-high | `RichTextRenderer`, `ArticlePage.css` | No code block language labels, no schema, hero alt uses title. | Defer editorial refinements; add article schema later. |
 | Storybook | Present, Storybook 10, docs/a11y addons, foundation + primitives + sections + ArticleCard stories. | High | `.storybook`, 20 story files, CI gate | `test:storybook` exists but was not run; visual regression not configured. | Add runner coverage later after core issues. |
 | Tests/CI | Strong unit/render coverage and CI gates. | High | 31 test files, 101 tests, `.github/workflows/ci.yml` | No browser E2E or visual regression. | Add selective Playwright/Storybook runner only when value is clear. |
 | Contentful/data modeling | Good boundary: content source, adapters, typed raw models, normalizers. | High | `src/content/**`, `src/components/sections/*/normalize*` | Browser-side delivery token remains transitional; Contentful image transforms not used. | Preserve boundary; add safe image transform helpers later. |
-| SEO | Partially implemented route title/description/canonical logic, but live crawler files and canonical are failing. | High | Lighthouse SEO 0.77, curl robots/sitemap | Search engines get weak crawler directives and invalid canonical. | Prioritize canonical/robots/sitemap before design polish. |
+| SEO | Phase 2 live gate is closed: crawler files, fallback metadata, canonical behavior, and Lighthouse SEO follow-up pass. | High | `phase-2-deploy-artifact-validation-spec.md`, live curl checks, Lighthouse SEO `100` | Route-owned OG/Twitter metadata and structured data remain future opportunities. | Keep crawler/canonical evidence as release baseline; defer schema/social metadata expansion. |
 | Accessibility | Automated score 0.98; strong keyboard/nav patterns. | High | Lighthouse, code/tests | Heading-order and label-content-name mismatch warnings. | Fix content/ARIA labels and heading levels. |
 | Responsive design | Generally solid; explicit breakpoints across sections; nav uses CMS breakpoint. | Medium-high | CSS media queries, stories | Breakpoints are reference tokens only, not enforced; Learning wide token issue. | Viewport QA and token alignment phase. |
 | Performance | Local bundle is reasonable, but live images dominate payload; desktop CLS is a serious Lighthouse lab finding that needs trace/filmstrip confirmation. | High for lab | Lighthouse, `dist` review | Image bytes and potential desktop layout shift can hurt user experience and CWV. | Confirm CLS with trace/filmstrip review, then address image transform/sizing before visual polish. |
@@ -108,14 +110,14 @@ Canonical conclusion:
 
 - Operational canonical host appears to be `https://gilbertaharo.com/`.
 - The repo/context also references `gilbertoharo.com`, but that domain did not resolve. This is not duplicate-content risk today; it is brand/domain drift risk. If the alternate domain is owned, add a redirect. If it is not owned, make docs consistently use `gilbertaharo.com`.
-- Lighthouse reported "Document does not have a valid `rel=canonical`" on the live landing page before Phase 2. Local code now falls back to `https://gilbertaharo.com` when `VITE_SITE_URL` is missing or invalid; deploy verification is still required.
+- Lighthouse reported "Document does not have a valid `rel=canonical`" on the live landing page before Phase 2. Phase 2 live verification now confirms canonical behavior passes with Lighthouse SEO `100`.
 
 ### Robots and Sitemap
 
 | Resource | Status | Content observed | Risk |
 | --- | --- | --- | --- |
-| `https://gilbertaharo.com/robots.txt` | HTTP 200 | SPA HTML (`index.html`) | Invalid robots file; Lighthouse reports 15 parse errors. |
-| `https://gilbertaharo.com/sitemap.xml` | HTTP 200 | SPA HTML (`index.html`) | Missing XML sitemap; crawlers receive app shell HTML. |
+| `https://gilbertaharo.com/robots.txt` | HTTP 200 | Plain robots rules | Phase 2 live verification passed; `/debug` and `/debug/` are excluded. |
+| `https://gilbertaharo.com/sitemap.xml` | HTTP 200 | XML sitemap | Phase 2 live verification passed; homepage, article index, and known article routes are listed. |
 
 ### Lighthouse Mobile
 
@@ -160,7 +162,7 @@ Artifact: `.tmp/design-system-audit/lighthouse-desktop.report.json` and `.html`
 Top desktop problems:
 
 - Serious desktop CLS Lighthouse lab finding on `main#main-content`; confirm with trace/filmstrip before assigning root cause.
-- Same SEO issues as mobile: invalid robots, invalid canonical, weak link text.
+- Historical SEO issues from the original audit are resolved by Phase 2; the remaining desktop priority is CLS trace/filmstrip confirmation.
 - Large image payloads: total transfer around 8.3 MB.
 - Contentful images are far larger than their displayed dimensions.
 - Unused JS estimated savings around 52 KB.
@@ -205,7 +207,7 @@ Results:
 | Foundation | Exists | Used | Duplicated | Missing/gap | Change now or defer |
 | --- | --- | --- | --- | --- | --- |
 | Typography tokens | `--font-sans`, `--font-mono`, sizes, roles, line-height, tracking. | `Heading`, `Text`, sections, pages. | Some page/section CSS uses direct clamps. | No web-font decision recorded for brand direction. | Defer font change; document decision first. |
-| Spacing tokens | `--space-1/2/3/4/6/8/10/12/16`, section/card/grid aliases. | Broadly used. | Explicit media-query values duplicate breakpoint intent. | `--space-5` is referenced but not defined. | Fix in early token phase. |
+| Spacing tokens | `--space-1/2/3/4/5/6/8/10/12/16`, section/card/grid aliases. | Broadly used. | Explicit media-query values duplicate breakpoint intent. | No concrete undefined spacing-token references remain after Phase 3 start. | Continue token scan documentation; defer broad spacing changes. |
 | Color tokens | Background/surface/accent/text/muted/border/state colors. | Broadly used. | Some local `rgba` and `color-mix` values. | No formal non-text contrast token matrix. | Defer matrix; keep contrast QA. |
 | Radius tokens | `sm`, `md`, `lg`, `pill`. | Cards, badges, nav, sections. | Some `calc(radius + px)` local usage. | No elevation/radius pairing guidance. | Defer to polish phase. |
 | Shadow/elevation tokens | `--shadow-soft`, `--shadow-soft-strong`. | Cards/media/ArticleCard/sections. | Nav has some hard-coded shadows. | No "no shadow vs border vs elevated" spec. | Add guidance before visual tuning. |
@@ -306,14 +308,14 @@ Strengths:
 
 Concerns:
 
-- `LearningSection.css` wide-breakpoint padding uses undefined `--space-5`.
+- Learning wide-breakpoint padding now resolves through the added `--space-5` token.
 - Some sections use local clamp values for widths/gaps. This is acceptable but should remain documented.
 - Article spacing is readable but not as polished as the homepage sections.
 - Project slider spacing is functional; card density should be checked after image and CTA cleanup.
 
 Recommendations:
 
-- Fix the undefined token reference early.
+- Keep the `--space-5` fix covered by token scan validation.
 - Keep section rhythm rules from Phase D.
 - Add "card internal spacing rules" to design-system docs before making visual edits.
 - QA 375, 412, 768, 1024, 1280, and 1440 px before changing Learning/Projects spacing.
@@ -405,7 +407,7 @@ Strengths:
 
 Concerns:
 
-- `LearningSection.css` wide breakpoint references an undefined token.
+- Learning wide-breakpoint spacing now resolves through `--space-5`; continue viewport QA before any section polish.
 - Explicit breakpoints can drift from documented tokens if not checked.
 - Projects scroll-snap needs device QA for discoverability and keyboard/touch behavior.
 - Desktop CLS requires focused trace/filmstrip confirmation before a responsive/layout root cause is assigned.
@@ -443,8 +445,8 @@ Screenshots:
 | Hero | `HeroSection` renders normalized model through `SectionHeader`, `ProofList`, `MediaFrame`. | Contentful/static `sectionHero`; `normalizeHeroSection`. | Clear brand, strong CTAs, responsive media. | Live CTA aria labels mismatch visible text; hero image oversized. | Story + normalizer tests. | Keep layout; fix content labels and image delivery. |
 | Timeline | Ordered list of normalized timeline items with media and Card. | `sectionTimeline`; normalizer. | Scannable, responsive alternation, media fallback. | `Heading level={4}` skips levels; timeline images oversized. | Story + tests. | Change semantic heading level later; optimize image URLs. |
 | Skills | Split-list grouped rows with badges. | `sectionSkills`; normalizer. | Dense and readable; avoids over-carded UI. | Long badges should be tested if content changes. | Story + tests. | Keep. |
-| Projects | Scroll-snap slider with rich cards, actions, media, highlights. | `sectionProjects`; normalizer and project links. | High content density and strong card structure. | Slider/image payload issues remain; generic CTA labels have a local Phase 2 guard pending live verification. | Story + tests. | Verify labels after deploy; polish card hierarchy and image strategy after SEO. |
-| Learning | Roadmap timeline inside surface wrapper. | `sectionLearning`; normalizer. | Distinctive learning narrative, good status badges. | Undefined token, `h4` skip, wide breakpoint QA needed. | Story + tests. | Fix token and heading semantics before visual polish. |
+| Projects | Scroll-snap slider with rich cards, actions, media, highlights. | `sectionProjects`; normalizer and project links. | High content density and strong card structure. | Slider/image payload issues remain; generic CTA labels have a Phase 2 guard now live-verified. | Story + tests. | Polish card hierarchy and image strategy after token/a11y/performance evidence. |
+| Learning | Roadmap timeline inside surface wrapper. | `sectionLearning`; normalizer. | Distinctive learning narrative, good status badges; `--space-5` token defect fixed. | `h4` skip and wide breakpoint QA still needed. | Story + tests. | Review heading semantics and viewport behavior before visual polish. |
 | Contact | Email plus link chips. | `sectionContact`; normalizer. | Clear conversion path. | No major issue. | Story + tests. | Keep. |
 | Blog/article surfaces | Landing latest writing, `/articles`, `/articles/:slug`. | `getAllArticles`, `getArticleBySlug`. | ArticleCard exists; article detail handles rich text/assets. | SEO schema/social metadata missing; article hero alt could be more descriptive. | Tests + ArticleCard story. | Add SEO/schema later; keep ArticleCard. |
 | ArticleCard | Canonical article-list surface. | `ArticleListItem`. | Good missing-content resilience; stories cover states. | Multiple links to same destination; no category/tags yet. | Story + tests. | Keep as canonical; no new duplicate card component. |
@@ -465,21 +467,22 @@ Current implementation:
 - `public/robots.txt` and `public/sitemap.xml` now exist locally and build into `dist`.
 - `index.html` now contains a stronger fallback title, description, favicon, theme color, and baseline share metadata.
 
-Confirmed live findings before Phase 2 deploy:
+Confirmed live findings after Phase 2 closeout:
 
 - `gilbertaharo.com` is reachable.
 - `www.gilbertaharo.com` redirects to `gilbertaharo.com`.
 - `gilbertoharo.com` and `www.gilbertoharo.com` did not resolve.
-- `curl -s https://gilbertaharo.com/robots.txt` returns SPA HTML and is invalid.
-- `curl -s https://gilbertaharo.com/sitemap.xml` returns SPA HTML, not XML.
-- Lighthouse SEO score is 77 on mobile and desktop.
-- Lighthouse reports no valid canonical.
-- Lighthouse reports one weak link text: "Read more".
+- `curl -s https://gilbertaharo.com/robots.txt` returns valid robots text.
+- `curl -s https://gilbertaharo.com/sitemap.xml` returns valid XML sitemap content.
+- Neither crawler file returns SPA HTML.
+- Live root metadata uses the updated Phase 2 fallback title, description, favicon, Open Graph, and Twitter metadata.
+- Lighthouse SEO follow-up score is `100`.
+- Lighthouse confirms valid canonical, valid robots, and crawlability.
+- Prior blocker root cause: Netlify stale deploy/cache.
 
 Remaining gaps:
 
-- Live deploy verification is still required for `robots.txt`, `sitemap.xml`, canonical output, and Lighthouse SEO.
-- `robots.txt` and `sitemap.xml` still need body inspection after deploy because HTTP status/header checks alone can pass while the body is SPA fallback HTML.
+- Keep `robots.txt` and `sitemap.xml` body inspection in future release checks because HTTP status/header checks alone can pass while the body is SPA fallback HTML.
 - Route-owned Open Graph metadata is not yet generated by `SeoHead`; only the `index.html` fallback has baseline share metadata.
 - Route-owned Twitter/X card metadata is not yet generated by `SeoHead`; only the `index.html` fallback has baseline share metadata.
 - No JSON-LD structured data.
@@ -490,8 +493,7 @@ Remaining gaps:
 
 Recommendations:
 
-- Deploy Phase 2 and validate crawler files with `curl -s` body checks, confirming neither response contains SPA fallback HTML such as `<!doctype html>` or `<div id="root">`.
-- Confirm Netlify serves the static crawler files before the SPA fallback.
+- Preserve the Phase 2 live verification baseline and keep crawler body checks in the release checklist.
 - Keep canonical URLs absolute by setting/validating `VITE_SITE_URL=https://gilbertaharo.com`; the helper fallback now protects missing/invalid env values.
 - Decide whether the static sitemap should remain manually maintained or become generated from the article source.
 - Add route-owned OG/Twitter metadata in `SeoHead`.
@@ -564,20 +566,28 @@ Safe migration guidance:
 
 ## 17. Risk Register
 
-Phase 2 local remediation note (May 15, 2026):
+Phase 2 closeout note (May 15, 2026):
 
 - Local repo changes now add valid `public/robots.txt`, valid `public/sitemap.xml`, stronger `index.html` fallback metadata, a replacement favicon, absolute canonical fallback behavior, and a generic project-action label guard.
-- Live-site risk status remains pending until these changes are deployed and verified with `curl -s` body checks and a Lighthouse SEO rerun.
-- Live verification attempt is currently blocked: `robots.txt` and `sitemap.xml` still return old deployed SPA HTML, headers report `content-type: text/html`, and the root HTML still shows `/vite.svg` plus title `gilbertoaharo`.
+- Live-site verification now passes: `robots.txt` returns valid robots text, `sitemap.xml` returns valid XML, neither crawler file returns SPA HTML, live root metadata is updated, and Lighthouse SEO follow-up returned `100`.
+- Resolved blocker: the live site originally served stale SPA HTML for crawler files because of Netlify stale deploy/cache. The current production deploy now serves the Phase 2 artifact.
+
+Phase 3 token verification note (May 15, 2026):
+
+- Phase 3 started only after Phase 2 live verification passed.
+- Added `--space-5: 1.25rem` to `src/styles/tokens.css` and included it in `src/stories/Tokens.stories.tsx`.
+- Focused undefined CSS variable scan found no remaining concrete undefined custom property references. The only pre-filter false positive was the dynamic `Stack` template string (`var(--space-${gap})`).
+- Navigation still has local hard-coded transition durations; this remains a deferred motion-token alignment task, not part of the first token defect fix.
+- Validation passed: `npm run lint`, `npm run test`, `npm run build`, focused CSS custom property scan, and `npm run build-storybook` with Node `22.12.0` selected through the local version manager.
 
 | Risk | Severity | Likelihood | Evidence | User impact | Recommended mitigation | Owner/phase |
 | --- | --- | --- | --- | --- | --- | --- |
-| Invalid robots/sitemap | High | Confirmed | `curl -s` body checks return HTML; Lighthouse robots errors | Poor crawl control and missing sitemap discovery | Add static/generated files, Netlify exception, and body checks that reject SPA fallback HTML | Phase 2 |
-| Invalid live canonical | High | Confirmed by Lighthouse | SEO canonical audit score 0 | Duplicate/ambiguous URL signals | Validate `VITE_SITE_URL` and canonical output | Phase 2 |
+| Invalid robots/sitemap | Low | Resolved | Phase 2 live `curl -s` checks return robots text/XML, not SPA HTML | Regression would harm crawl control and sitemap discovery | Keep body checks in release validation | Phase 2 closed |
+| Invalid live canonical | Low | Resolved | Lighthouse SEO follow-up score `100`; canonical audit passes | Regression would create duplicate/ambiguous URL signals | Keep canonical spot checks in release validation | Phase 2 closed |
 | Desktop CLS 0.908 | High | Confirmed by Lighthouse lab output; root cause unconfirmed | Desktop performance 73 | Potential jarring layout shift and CWV risk | Confirm with trace/filmstrip before assigning root cause, then mitigate the verified shift source | Phase 4/8 |
 | Oversized Contentful images | High | Confirmed by Lighthouse | 6.9-8.3 MB total transfer | Slow loads, data cost, LCP risk | Use Contentful image transforms/responsive sizes after preserving current content contracts | Phase 4/7 |
 | Accessible-name mismatches | High | Confirmed by Lighthouse | Label/content-name audit | Voice control/screen reader confusion | Align visible labels and aria labels | Phase 8 |
-| Undefined `--space-5` | Medium | Confirmed by rg/code | `LearningSection.css` lines 50/58 | Wide Learning spacing may compute incorrectly | Fix token reference or add token | Phase 3 |
+| Undefined `--space-5` | Low | Resolved | `--space-5` added to `tokens.css`; undefined-variable scan clean | Regression would affect wide Learning spacing | Keep token scan in Phase 3 validation | Phase 3 started |
 | Heading order skips | Medium | Confirmed by Lighthouse | `TimelineSection`, `LearningRoadmapTimeline` | Screen reader navigation clarity | Use semantic `h3` visual size override | Phase 8 |
 | Default Node drift | Medium | Confirmed | Node `22.2.0`; Storybook fails | Local validation friction | Make default shell resolve 22.12+ | Phase 10 |
 | Browser-side delivery token | Medium | Known architecture | `env.ts`, `client.ts` | Public delivery token exposure pattern | Keep documented; later server boundary if needed | Future data phase |
@@ -589,12 +599,12 @@ Phase 2 local remediation note (May 15, 2026):
 
 | Recommendation | Impact | Effort | Risk | Files likely affected | Layout/functionality change |
 | --- | --- | --- | --- | --- | --- |
-| Deploy and verify valid `robots.txt`. | High | Low | Low | `public/robots.txt` | No layout; crawler behavior only |
-| Deploy and verify valid `sitemap.xml`; decide whether static or generated maintenance is preferred. | High | Low-medium | Low | `public/sitemap.xml` or build script | No layout |
-| Validate robots/sitemap bodies with `curl -s` and reject SPA fallback HTML. | High | Low | Low | deploy config, validation notes | No layout |
-| Verify live canonical is absolute after deploy. | High | Low-medium | Medium | `src/lib/seo.ts`, env/deploy config, `SeoHead` tests | No layout |
+| Keep live `robots.txt` release body checks in place. | High | Low | Low | validation notes | No layout; crawler behavior only |
+| Keep live `sitemap.xml` release body checks in place; decide whether static or generated maintenance is preferred. | High | Low-medium | Low | `public/sitemap.xml` or build script | No layout |
+| Preserve crawler-file body validation with `curl -s` and reject SPA fallback HTML. | High | Low | Low | deploy config, validation notes | No layout |
+| Keep live canonical validation in release checks. | High | Low-medium | Medium | `src/lib/seo.ts`, env/deploy config, `SeoHead` tests | No layout |
 | Keep `index.html` fallback SEO title, description, icons, and baseline share metadata aligned with route metadata. | Medium | Low | Low | `index.html`, `public/*` | No layout |
-| Fix `--space-5` usage in Learning. | Medium | Low | Low | `LearningSection.css` or `tokens.css` | Minor spacing behavior |
+| Continue Phase 3 token scan documentation after fixing `--space-5`. | Medium | Low | Low | `tokens.css`, foundations docs | No layout redesign |
 
 ### Design Polish
 
@@ -707,7 +717,9 @@ Scope:
 - Verified domains, Lighthouse, PageSpeed/CrUX availability, local validation, Storybook, tokens, components, sections, SEO, a11y, responsive behavior, and Contentful/data boundaries.
 - Validation correction pass: updated the audit and roadmap to require body-based crawler checks, add `index.html` fallback SEO cleanup, move image delivery/desktop CLS confirmation before typography/card polish, replace machine-specific Storybook commands with portable Node 22.12+ guidance, and treat desktop CLS as a serious Lighthouse lab finding pending trace/filmstrip confirmation.
 - Phase 2 implementation checkpoint: added local crawler files, absolute canonical fallback behavior, fallback metadata, favicon, safe generic project-action label normalization, and deploy/Lighthouse follow-up notes.
-- Phase 2 live verification checkpoint: blocked on deploy. Live crawler files still return SPA HTML, so Phase 3 was not started.
+- Phase 2 closeout checkpoint: live crawler files, root metadata, canonical behavior, deployed commit, and Lighthouse SEO `100` passed. Prior Netlify stale deploy/cache blocker is resolved.
+- Phase 3 start checkpoint: token verification began after Phase 2 closeout; `--space-5` was added and the focused undefined-variable scan is clean.
+- Phase 3 validation checkpoint: `npm run lint`, `npm run test`, `npm run build`, focused CSS custom property scan, and `npm run build-storybook` with Node `22.12.0` passed. Default shell Node remains `v22.2.0`, so `npm run build` still prints the known Vite Node-floor warning.
 
 Files created:
 
@@ -730,4 +742,4 @@ Commands run:
 
 Next recommended phase:
 
-- Deploy Phase 2, verify live crawler file bodies and canonical output, then rerun Lighthouse SEO. After live verification passes, continue to Phase 3 token verification and Phase 4 CLS/image confirmation.
+- Finish Phase 3 documentation/validation, then continue to Phase 4 CLS trace/filmstrip confirmation and image delivery investigation before visual polish.

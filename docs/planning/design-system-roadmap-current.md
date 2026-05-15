@@ -72,7 +72,7 @@ Objective:
 
 Why it matters:
 
-- Lighthouse SEO is 77. `robots.txt` and `sitemap.xml` return SPA HTML, and canonical is not valid on the live page.
+- The initial audit found Lighthouse SEO at 77 because `robots.txt` and `sitemap.xml` returned SPA HTML and canonical was not valid on the live page. Phase 2 closeout now verifies these live SEO basics are fixed.
 
 Scope:
 
@@ -139,23 +139,22 @@ Type:
 
 - Implementation, but no layout/functionality change.
 
-Current implementation checkpoint (May 15, 2026):
+Closeout checkpoint (May 15, 2026):
 
-- Local Phase 2 implementation is complete pending deploy verification.
+- Status: Closed.
+- Local Phase 2 implementation completed and live deploy verification passed.
 - Added static crawler files, absolute canonical fallback behavior, stronger `index.html` fallback metadata, a replacement favicon, and a generic project-action label guard.
 - Netlify fallback config was inspected and left unchanged because static files should shadow the SPA fallback when present.
 - Validation passed locally: `npm run lint`, `npm run test`, `npm run build`, `xmllint --noout dist/sitemap.xml`, and built `dist/robots.txt`/`dist/sitemap.xml` body inspection.
-- Remaining follow-up: deploy, verify live `curl -s` bodies do not return SPA HTML, then rerun Lighthouse SEO.
+- Live verification passed: `robots.txt` returns valid robots text, `sitemap.xml` returns XML, neither crawler file returns SPA HTML, and live root metadata is updated.
+- Lighthouse SEO follow-up returned `100`; canonical, robots, and crawlability audits passed.
+- Root cause of the prior blocker: Netlify stale deploy/cache. The local source/build artifact was valid, but the live site had not yet served the Phase 2 deploy artifact.
+- No layout, IA, routing, CMS model, Contentful migration, Phase 3 token work, or production component behavior changes were introduced during Phase 2 closeout.
 
-Live verification attempt (May 15, 2026):
+Resolved blocker history (May 15, 2026):
 
-- Status: blocked.
-- `curl -s https://gilbertaharo.com/robots.txt` still returns deployed SPA HTML with the old Vite favicon/title.
-- `curl -s https://gilbertaharo.com/sitemap.xml` still returns deployed SPA HTML.
-- `curl -I` for both crawler files returns `content-type: text/html; charset=UTF-8`.
-- `curl -s https://gilbertaharo.com/` still shows the old fallback metadata (`/vite.svg`, title `gilbertoaharo`).
-- Phase 3 was not started because Phase 2 is not live-verified.
-- Recommended fix: deploy the local Phase 2 changes, clear/retry any Netlify deploy cache if needed, then rerun the live body checks and Lighthouse SEO.
+- Initial live verification was blocked because the live site still served old SPA HTML for `robots.txt` and `sitemap.xml`, and the root HTML still showed old Vite-era fallback metadata.
+- Deploy/cache refresh resolved the mismatch. Current evidence is documented in `docs/planning/phase-2-deploy-artifact-validation-spec.md`.
 
 ## Phase 3 - Token Verification and Responsive/Motion Token Alignment
 
@@ -165,7 +164,7 @@ Objective:
 
 Why it matters:
 
-- `LearningSection.css` references undefined `--space-5`. Breakpoints and motion tokens exist, but some CSS still uses local values.
+- The initial confirmed defect was that `LearningSection.css` referenced undefined `--space-5`; that first token fix is now applied. Breakpoints and motion tokens exist, but some CSS still uses local values that should be documented before broader polish.
 
 Scope:
 
@@ -217,6 +216,18 @@ Rollback strategy:
 Type:
 
 - Implementation, token-only.
+
+Current implementation checkpoint (May 15, 2026):
+
+- Status: In progress — first token defect fixed.
+- Phase 2 live SEO gate was confirmed closed before Phase 3 work began.
+- Added missing `--space-5: 1.25rem` to `src/styles/tokens.css` and included it in `src/stories/Tokens.stories.tsx`.
+- Decision used: add the missing midpoint token because `LearningSection.css` intentionally uses `--space-5` between `--space-4` and `--space-6` at wide breakpoints.
+- Focused undefined CSS custom property scan found no concrete undefined references after the fix. The only pre-filter false positive was the dynamic `Stack` template string (`var(--space-${gap})`), which is not a concrete token reference.
+- Responsive/motion baseline review: breakpoint reference tokens and motion tokens exist; explicit media-query values remain intentional because CSS custom properties are not reliable in media queries. Navigation still has local hard-coded transition values and should remain a deferred polish item, not part of this token defect fix.
+- Validation passed: `npm run lint`, `npm run test`, `npm run build`, focused CSS custom property scan, and `npm run build-storybook` with Node `22.12.0` selected through the local version manager.
+- Node note: default shell Node remains `v22.2.0`; `npm run build` passes but prints the known Vite Node-floor warning. `.nvmrc` and `.node-version` both specify `22.12.0`.
+- No layout, IA, routing, CMS model, Contentful migration, typography, card/elevation, section redesign, or production component behavior changes were made.
 
 ## Phase 4 - Image Delivery and Desktop CLS Confirmation
 
@@ -664,7 +675,7 @@ Type:
 
 Current branch:
 
-- SEO is 77 and desktop performance is 73 with a serious Lighthouse lab CLS finding. Prioritize SEO and trace/filmstrip confirmation before assigning CLS root cause or starting visual polish.
+- Phase 2 SEO follow-up is now 100 and the live crawler/canonical blocker is closed. Continue with token verification and trace/filmstrip confirmation before assigning desktop CLS root cause or starting visual polish.
 
 ### B. Typography
 
@@ -720,8 +731,8 @@ Current branch:
 ## Preferred Path
 
 1. Complete Phase 1 baseline freeze.
-2. Execute Phase 2 SEO cleanup: robots, sitemap, canonical, `index.html` fallback metadata/icons/share tags, weak link text, and body checks that prove crawler files are not SPA HTML.
-3. Execute Phase 3 token verification: fix `--space-5`, check undefined variables.
+2. Phase 2 SEO cleanup is closed: robots, sitemap, canonical, `index.html` fallback metadata/icons/share tags, weak link text, and body checks now pass on the live site.
+3. Continue Phase 3 token verification: the first `--space-5` defect is fixed; keep remaining work limited to token scan documentation and responsive/motion baseline notes.
 4. Confirm desktop CLS with Lighthouse trace/filmstrip review and investigate image payloads before visual polish.
 5. Keep typography system-stack for now.
 6. Define elevation model and card hierarchy before broad card CSS tuning.
@@ -746,7 +757,8 @@ Current checkpoint:
 - `agent/CHECKPOINT_LOG.md` does not exist in this repo, so the current audit report includes a "Checkpoint Log Entry" section.
 - This roadmap has received a docs-only validation correction pass on May 15, 2026 to clarify body-based crawler validation, `index.html` fallback SEO cleanup, portable Node guidance, and desktop CLS confirmation requirements.
 - Phase 2 implementation checkpoint added on May 15, 2026: local crawler files, canonical fallback, fallback metadata, favicon, generic project-action label guard, tests, build output inspection, and deploy/Lighthouse follow-up are documented.
-- Phase 2 live verification attempted on May 15, 2026 and is blocked because the live deploy still serves the old SPA HTML for crawler files. Phase 3 remains gated.
+- Phase 2 closeout checkpoint added on May 15, 2026: live crawler files, root metadata, canonical behavior, deployed commit, and Lighthouse SEO `100` are documented in `docs/planning/phase-2-deploy-artifact-validation-spec.md`. The prior blocker is preserved as a resolved Netlify stale deploy/cache incident.
+- Phase 3 implementation checkpoint added on May 15, 2026: token verification started only after Phase 2 closeout; the missing `--space-5` token was added and the undefined-variable scan found no remaining concrete undefined references.
 
 CHANGELOG guidance:
 

@@ -84,6 +84,8 @@ Guardrails:
   - `--section-pad-y` for default vertical rhythm
   - `--section-pad-y-mobile` for compact screen rhythm
   - `--section-stack-gap` and `--section-content-gap` for shell/content flow
+- Spacing scale:
+  - `--space-5` is the midpoint between `--space-4` and `--space-6`, used where large-screen surfaces need a smaller step than the standard card/section jumps.
 - Text block spacing:
   - `--section-header-gap` for eyebrow/title/intro grouping
   - `--text-flow-gap` and `--text-flow-gap-tight` for body/meta rhythm

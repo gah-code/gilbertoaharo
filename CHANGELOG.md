@@ -13,15 +13,19 @@
 - Updated canonical URL generation to fall back to `https://gilbertaharo.com` when `VITE_SITE_URL` is missing or invalid, keeping route canonical URLs absolute in production. (`src/lib/seo.ts`, `src/content/contentful/adapters.ts`)
 - Normalized exact generic project action labels such as `Read more`, `Learn more`, and `View` into more descriptive visible labels using the project name. (`src/components/sections/projects/normalizeProjectsSection.ts`)
 - Recorded the Phase 2 SEO cleanup checkpoint and deploy/Lighthouse follow-up in the current audit and roadmap docs. (`docs/design-system/design-system-snapshot-audit-current.md`, `docs/planning/design-system-roadmap-current.md`)
+- Closed the Phase 2 live deploy gate after Netlify served the current artifact: live crawler files now return static content, canonical behavior passes, and Lighthouse SEO follow-up is `100`. (`docs/planning/phase-2-deploy-artifact-validation-spec.md`, `docs/design-system/design-system-snapshot-audit-current.md`, `docs/planning/design-system-roadmap-current.md`)
+- Started Phase 3 token verification by adding the missing `--space-5` midpoint token and reflecting it in the token story reference. (`src/styles/tokens.css`, `src/stories/Tokens.stories.tsx`, `docs/design-system/foundations.md`)
 
 ### Verification
 
 - `npm run lint` (passes)
 - `npm run test` (passes: Vitest 31/31 files, 101/101 tests)
 - `npm run build` (passes; local Node `22.2.0` still prints the Vite Node-floor warning)
+- `npm run build-storybook` (passes with Node `22.12.0` selected through the local version manager)
 - `xmllint --noout dist/sitemap.xml` (passes)
 - Built `dist/robots.txt` and `dist/sitemap.xml` are present and do not contain SPA HTML.
-- Live deploy verification is blocked until the Phase 2 changes are deployed; current live `robots.txt` and `sitemap.xml` still return old SPA HTML.
+- Live deploy verification now passes: `robots.txt` returns robots text, `sitemap.xml` returns XML, root fallback metadata is updated, canonical behavior passes, and Lighthouse SEO follow-up is `100`.
+- Focused CSS custom property scan passes after adding `--space-5`; no concrete undefined CSS variable references remain.
 
 ## [2026-04-21 - Update 3]
 

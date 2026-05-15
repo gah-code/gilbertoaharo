@@ -7,6 +7,11 @@ Roadmap v2 status: complete. Phases `A` through `F` are closed (April 24, 2026).
 
 ## Now
 
+- [ ] **Design System + UX Roadmap — Phase 3 Token Verification in progress**
+  - Phase 2 — Domain/SEO Foundation Cleanup is closed and live-verified in `docs/planning/phase-2-deploy-artifact-validation-spec.md`.
+  - Keep Phase 3 scoped to token verification, undefined custom property hygiene, and responsive/motion baseline notes.
+  - Do not start typography, card/elevation, section polish, routing, IA, CMS, or Contentful migration work during this phase.
+
 - [ ] **Roadmap v2 closeout complete — maintenance mode**
   - Use the Phase F maintenance workflow and release checklist for ongoing updates.
   - Keep queue/state transitions aligned with the closeout rule below.
@@ -21,6 +26,11 @@ A phase cannot be considered complete unless:
 ---
 
 ## Recently Completed
+
+- [x] **Phase 2 — Domain/SEO Foundation Cleanup** (closed May 15, 2026)
+  - Live crawler files, root fallback metadata, canonical behavior, deployed commit, and Lighthouse SEO `100` are documented in `docs/planning/phase-2-deploy-artifact-validation-spec.md`.
+  - Prior blocker is preserved as a resolved Netlify stale deploy/cache incident.
+  - Reopen only if a true regression is discovered in crawler file delivery, canonical behavior, fallback metadata, deploy artifact alignment, or SEO release validation.
 
 - [x] **Phase F — Maintenance QA / Release Discipline** (completed April 24, 2026)
   - Maintenance workflow, release-readiness checklist, parity notes, and deferred items are documented in `docs/planning/PHASE-F-MAINTENANCE-QA-RELEASE-DISCIPLINE.md`.
@@ -59,17 +69,18 @@ A phase cannot be considered complete unless:
 
 ---
 
-## Verification Snapshot (Latest: Phase F closeout pass, April 24, 2026)
+## Verification Snapshot (Latest: Phase 3 token verification start, May 15, 2026)
 
 - [x] `npm run lint`
 - [x] `npm run test`
 - [x] `npm run build`
-- [x] `npm run build-storybook` (pass with `PATH="/Users/gilbertharo/.n/bin:$PATH"` -> Node `22.12.0`)
+- [x] `npm run build-storybook` (pass with Node `22.12.0` selected through the local version manager)
+- [x] Focused CSS custom property scan (no concrete undefined references after adding `--space-5`)
 
 Runtime note:
 - Default shell Node is still `22.2.0`.
 - `npm run build` currently completes but prints the Vite Node-floor warning.
-- `npm run build-storybook` still fails on default shell Node and succeeds only with the Node `22.12+` override.
+- `npm run build-storybook` still requires Node `22.12+`; use `.nvmrc`, `.node-version`, or an equivalent version manager rather than a machine-specific command.
 
 ---
 
@@ -88,6 +99,8 @@ Runtime note:
 
 ## Canonical References
 
+- Current design-system roadmap: `docs/planning/design-system-roadmap-current.md`
+- Phase 2 deploy validation spec: `docs/planning/phase-2-deploy-artifact-validation-spec.md`
 - Phase F maintenance discipline record: `docs/planning/PHASE-F-MAINTENANCE-QA-RELEASE-DISCIPLINE.md`
 - Phase E structure hardening record: `docs/planning/PHASE-E-PROJECT-STRUCTURE-HARDENING.md`
 - Phase D spacing/layout record: `docs/planning/PHASE-D-SPACING-LAYOUT-SPEC.md`
