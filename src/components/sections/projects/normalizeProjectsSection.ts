@@ -92,6 +92,31 @@ function resolveButtonVariant(
   return mapActionVariant(kind);
 }
 
+function makeDescriptiveActionLabel(
+  label: string,
+  projectName: string,
+  kind?: ProjectLinkKind,
+): string {
+  const normalized = label.toLowerCase();
+
+  if (normalized === "read more") {
+    if (kind === "article" || kind === "case-study") {
+      return `Read about ${projectName}`;
+    }
+    return `View ${projectName}`;
+  }
+
+  if (normalized === "learn more") {
+    return `Learn about ${projectName}`;
+  }
+
+  if (normalized === "view") {
+    return `View ${projectName}`;
+  }
+
+  return label;
+}
+
 function normalizeProjectAction(
   project: Project,
   projectKey: string,
@@ -106,16 +131,22 @@ function normalizeProjectAction(
 
   const label = compactText(resolved.label);
   if (!label) return null;
+  const projectName = compactText(project.fields.name) ?? "this project";
+  const visibleLabel = makeDescriptiveActionLabel(
+    label,
+    projectName,
+    resolved.kind,
+  );
 
   const key = makeStableKey(
-    [projectKey, link.sys.id, resolved.kind, label],
+    [projectKey, link.sys.id, resolved.kind, visibleLabel],
     `${projectKey}-action-${actionIndex}`,
   );
 
   return {
     key,
     href,
-    label,
+    label: visibleLabel,
     variant: resolveButtonVariant(resolved.variant, resolved.kind),
     openInNewTab: resolved.openInNewTab,
     ariaLabel: compactText(resolved.ariaLabel),

@@ -6,7 +6,7 @@ import { Link } from "@/components/ui/Link";
 import type { ArticlePageData } from "@/content/contentful/types";
 import { env } from "@/env";
 import { getErrorMessage } from "@/lib/errors";
-import { buildCanonicalUrl, resolveRouteSeo } from "@/lib/seo";
+import { buildCanonicalUrl, resolveCanonicalUrl, resolveRouteSeo } from "@/lib/seo";
 import "./ArticlePage.css";
 
 type ArticleState =
@@ -117,9 +117,10 @@ export function ArticlePage({ slug }: { slug: string }) {
     {
       title: article.seo.title || article.title,
       description: article.seo.description || article.excerpt,
-      canonicalUrl:
-        article.seo.canonicalUrl ||
-        buildCanonicalUrl(`${articleIndexPath}/${article.slug}`),
+      canonicalUrl: resolveCanonicalUrl(
+        article.seo.canonicalUrl,
+        `${articleIndexPath}/${article.slug}`,
+      ),
     },
     articleRouteSeo,
   );

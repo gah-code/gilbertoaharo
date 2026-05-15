@@ -48,7 +48,7 @@ const section: SectionProjects = {
               sys: { id: "project-link-1", contentType: { sys: { id: "projectLink" } } },
               fields: {
                 internalName: "Article Link",
-                label: "Read Notes",
+                label: "Read more",
                 href: "https://example.com/will-be-ignored",
                 url: "https://example.com/legacy",
                 kind: "article",
@@ -148,6 +148,7 @@ describe("normalizeProjectsSection", () => {
     expect(firstProject?.techStack).toEqual(["React", "TypeScript"]);
     expect(firstProject?.actions).toHaveLength(5);
     expect(firstProject?.actions[0]?.href).toBe("/articles/platform-refresh-notes");
+    expect(firstProject?.actions[0]?.label).toBe("Read about Portfolio Platform");
     expect(firstProject?.actions[0]?.variant).toBe("primary");
     expect(firstProject?.actions[0]?.openInNewTab).toBe(false);
     expect(firstProject?.actions[1]?.variant).toBe("secondary");

@@ -1,5 +1,28 @@
 # Changelog
 
+## [2026-05-15]
+
+### Added
+
+- Added production crawler files for the canonical domain, including `robots.txt` with `/debug` exclusions and a static XML sitemap for the homepage, article index, and statically known article routes. (`public/robots.txt`, `public/sitemap.xml`)
+- Added a project favicon and stronger fallback page metadata for crawlers/unfurlers that read `index.html` before the React route metadata runs. (`public/favicon.svg`, `index.html`)
+- Added canonical helper tests and adapter/project normalizer coverage for absolute canonical fallbacks and safe generic project-action label cleanup. (`src/lib/seo.test.ts`, `src/content/contentful/adapters.test.ts`, `src/components/sections/projects/normalizeProjectsSection.test.ts`)
+
+### Changed
+
+- Updated canonical URL generation to fall back to `https://gilbertaharo.com` when `VITE_SITE_URL` is missing or invalid, keeping route canonical URLs absolute in production. (`src/lib/seo.ts`, `src/content/contentful/adapters.ts`)
+- Normalized exact generic project action labels such as `Read more`, `Learn more`, and `View` into more descriptive visible labels using the project name. (`src/components/sections/projects/normalizeProjectsSection.ts`)
+- Recorded the Phase 2 SEO cleanup checkpoint and deploy/Lighthouse follow-up in the current audit and roadmap docs. (`docs/design-system/design-system-snapshot-audit-current.md`, `docs/planning/design-system-roadmap-current.md`)
+
+### Verification
+
+- `npm run lint` (passes)
+- `npm run test` (passes: Vitest 31/31 files, 101/101 tests)
+- `npm run build` (passes; local Node `22.2.0` still prints the Vite Node-floor warning)
+- `xmllint --noout dist/sitemap.xml` (passes)
+- Built `dist/robots.txt` and `dist/sitemap.xml` are present and do not contain SPA HTML.
+- Live deploy verification is blocked until the Phase 2 changes are deployed; current live `robots.txt` and `sitemap.xml` still return old SPA HTML.
+
 ## [2026-04-21 - Update 3]
 
 ### Changed

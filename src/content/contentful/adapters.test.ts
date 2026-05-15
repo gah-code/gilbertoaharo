@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { mapLandingPage, mapNavigationMenu } from "./adapters";
+import { mapArticlePage, mapLandingPage, mapNavigationMenu } from "./adapters";
 import type {
+  Article,
   EntryTypeId,
   FooterLink,
   NavLink,
@@ -180,5 +181,42 @@ describe("contentful adapters", () => {
     expect(articles[0]?.fields.iconKey).toBe("none");
     expect(articles[0]?.fields.variant).toBe("secondary");
     expect(articles[0]?.fields.openInNewTab).toBe(true);
+  });
+
+  it("maps article canonical fallbacks to the production absolute URL", () => {
+    const article: Article = {
+      sys: makeSys("article-canonical", "article"),
+      fields: {
+        internalName: "Canonical Article",
+        slug: "canonical-article",
+        title: "Canonical Article",
+        body: { nodeType: "document", content: [] },
+      },
+    };
+
+    const mapped = mapArticlePage(article);
+
+    expect(mapped.seo.canonicalUrl).toBe(
+      "https://gilbertaharo.com/articles/canonical-article",
+    );
+  });
+
+  it("maps relative article canonical overrides to absolute URLs", () => {
+    const article: Article = {
+      sys: makeSys("article-canonical-override", "article"),
+      fields: {
+        internalName: "Canonical Override Article",
+        slug: "canonical-override-article",
+        title: "Canonical Override Article",
+        body: { nodeType: "document", content: [] },
+        canonicalUrl: "/articles/custom-canonical",
+      },
+    };
+
+    const mapped = mapArticlePage(article);
+
+    expect(mapped.seo.canonicalUrl).toBe(
+      "https://gilbertaharo.com/articles/custom-canonical",
+    );
   });
 });

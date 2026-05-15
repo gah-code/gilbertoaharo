@@ -53,10 +53,10 @@ function makeArticle(overrides?: Partial<ArticlePageData>): ArticlePageData {
     excerpt: "A practical guide to typed boundaries and adaptation layers.",
     body: { nodeType: "document", data: {}, content: [] },
     attachments: [],
-    seo: {
-      title: "Typed Boundaries | Gilberto Haro",
-      description: "How to keep CMS and UI contracts safe and maintainable.",
-      canonicalUrl: "https://gilbertoharo.com/articles/typed-boundaries",
+      seo: {
+        title: "Typed Boundaries | Gilberto Haro",
+        description: "How to keep CMS and UI contracts safe and maintainable.",
+        canonicalUrl: "https://gilbertaharo.com/articles/typed-boundaries",
     },
     ...overrides,
   };
@@ -88,7 +88,7 @@ describe("ArticlePage SEO", () => {
     );
     expect(shell).toHaveAttribute(
       "data-canonical-url",
-      "https://gilbertoharo.com/articles/typed-boundaries",
+      "https://gilbertaharo.com/articles/typed-boundaries",
     );
     expect(screen.getByRole("link", { name: "All articles" })).toHaveAttribute(
       "href",

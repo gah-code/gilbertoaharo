@@ -24,6 +24,7 @@ import type {
   TimelineItem,
 } from "./types";
 import { env } from "@/env";
+import { resolveCanonicalUrl } from "@/lib/seo";
 
 export function mapLandingPage(
   page: PagePersonalLanding,
@@ -79,11 +80,6 @@ export function resolveProjectLink(link: ProjectLink): {
 
 export function mapArticlePage(article: Article): ArticlePageData {
   const prefix = env.articlePrefix;
-  const siteUrl = env.siteUrl;
-
-  const canonicalFallback = siteUrl
-    ? `${siteUrl}${prefix}/${article.fields.slug}`
-    : `${prefix}/${article.fields.slug}`;
 
   const seoTitle = article.fields.metaTitle ?? article.fields.title;
   const seoDesc = article.fields.metaDescription ?? article.fields.excerpt;
@@ -117,7 +113,10 @@ export function mapArticlePage(article: Article): ArticlePageData {
     seo: {
       title: seoTitle,
       description: seoDesc,
-      canonicalUrl: article.fields.canonicalUrl ?? canonicalFallback,
+      canonicalUrl: resolveCanonicalUrl(
+        article.fields.canonicalUrl,
+        `${prefix}/${article.fields.slug}`,
+      ),
     },
   };
 }

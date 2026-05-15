@@ -6,6 +6,8 @@ export type RouteSeo = {
   canonicalUrl?: string;
 };
 
+export const DEFAULT_SITE_URL = "https://gilbertaharo.com";
+
 function trimNonEmpty(value?: string | null): string | undefined {
   const normalized = value?.trim();
   return normalized && normalized.length > 0 ? normalized : undefined;
@@ -21,17 +23,45 @@ function normalizePath(pathname: string): string {
   return withLeadingSlash;
 }
 
+function normalizeSiteUrl(siteUrl?: string | null): string {
+  const fallback = DEFAULT_SITE_URL;
+  const candidate = trimNonEmpty(siteUrl) ?? fallback;
+
+  try {
+    const parsed = new URL(candidate);
+    return parsed.origin;
+  } catch {
+    return fallback;
+  }
+}
+
 export function buildCanonicalUrl(pathname: string): string {
   const normalizedPath = normalizePath(pathname);
-  const siteUrl = trimNonEmpty(env.siteUrl);
-
-  if (!siteUrl) return normalizedPath;
+  const siteUrl = normalizeSiteUrl(env.siteUrl);
 
   try {
     const baseUrl = siteUrl.endsWith("/") ? siteUrl : `${siteUrl}/`;
     return new URL(normalizedPath, baseUrl).toString();
   } catch {
-    return normalizedPath;
+    return new URL(normalizedPath, `${DEFAULT_SITE_URL}/`).toString();
+  }
+}
+
+export function resolveCanonicalUrl(
+  canonicalUrl?: string | null,
+  fallbackPath = "/",
+): string {
+  const candidate = trimNonEmpty(canonicalUrl);
+  if (!candidate) return buildCanonicalUrl(fallbackPath);
+
+  const absoluteCandidate = candidate.startsWith("//")
+    ? `https:${candidate}`
+    : candidate;
+
+  try {
+    return new URL(absoluteCandidate).toString();
+  } catch {
+    return buildCanonicalUrl(candidate);
   }
 }
 

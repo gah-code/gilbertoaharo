@@ -1,0 +1,753 @@
+# Design System + UX Roadmap - Current
+
+Date: May 15, 2026  
+Status: proposed roadmap after current-state audit  
+Mode: preserve UI-first, CMS-second architecture; no layout/IA/routing/CMS changes without explicit approval.
+
+Preferred path:
+
+Audit and measure first -> fix canonical/SEO basics -> verify tokens and interaction states -> confirm desktop CLS and image delivery evidence -> decide typography conservatively -> improve Card/ArticleCard/Projects/Learning polish -> harden accessibility/responsive behavior -> expand Storybook and regression coverage -> release with checkpoint log.
+
+## Phase 1 - Baseline Freeze and Measurement
+
+Objective:
+
+- Freeze the current evidence baseline before any implementation changes.
+
+Why it matters:
+
+- The live site has mixed signals: strong local validation, high mobile Lighthouse performance, weak SEO, a serious desktop CLS Lighthouse lab finding that still needs trace/filmstrip confirmation, and image payload issues. A baseline prevents accidental scope creep.
+
+Scope:
+
+- Preserve `.tmp/design-system-audit/` locally as raw measurement evidence.
+- Record current Lighthouse scores and local command results.
+- Confirm current Node/runtime parity note.
+- Decide whether `.tmp/` should remain untracked or be cleaned manually before PR.
+
+Out of scope:
+
+- Production component changes.
+- CMS changes.
+- Design polish.
+
+Files likely affected:
+
+- Docs only: audit and roadmap docs.
+- Optional later: `docs/planning/TASKS.md` if this roadmap is accepted as active.
+
+Acceptance criteria:
+
+- Current audit and roadmap docs exist.
+- Baseline metrics are captured.
+- Known blocked checks are documented.
+- No production code changes are included.
+
+Risk:
+
+- Low.
+
+Dependencies:
+
+- None.
+
+Validation commands:
+
+- `git status --short`
+- Review `.tmp/design-system-audit/` artifact list.
+
+Rollback strategy:
+
+- Remove the new docs if the roadmap is rejected.
+
+Type:
+
+- Audit-only / docs-only.
+
+## Phase 2 - Domain/SEO Foundation Cleanup
+
+Objective:
+
+- Fix crawler basics and canonical confidence.
+
+Why it matters:
+
+- Lighthouse SEO is 77. `robots.txt` and `sitemap.xml` return SPA HTML, and canonical is not valid on the live page.
+
+Scope:
+
+- Add valid `robots.txt`.
+- Add valid `sitemap.xml` or a documented build-time generation path.
+- Ensure Netlify redirect rules do not rewrite crawler files.
+- Validate crawler file bodies with `curl -s`, not headers alone.
+- Require `robots.txt` and `sitemap.xml` to avoid SPA fallback HTML such as `<!doctype html>` or `<div id="root">`.
+- Verify `VITE_SITE_URL` or canonical generation yields absolute canonical URLs.
+- Clean up `index.html` fallback SEO: title, meta description, favicon/app icon references, and baseline share metadata where appropriate.
+- Replace weak visible link text where content-only updates are enough.
+- Clarify canonical domain as `gilbertaharo.com` unless alternate domain ownership changes.
+
+Out of scope:
+
+- Article schema and Person schema unless the basic files are already stable.
+- Route restructuring.
+- CMS migrations.
+
+Files likely affected:
+
+- `public/robots.txt`
+- `public/sitemap.xml` or sitemap generation script
+- `index.html`
+- `public/*` icon assets or manifest files, if fallback icon references need correction
+- `src/lib/seo.ts`
+- `src/components/layout/SeoHead.tsx`
+- relevant SEO tests
+- deployment env/config docs
+
+Acceptance criteria:
+
+- `curl -s https://gilbertaharo.com/robots.txt` returns valid robots text with expected directives.
+- `curl -s https://gilbertaharo.com/sitemap.xml` returns XML sitemap content.
+- Neither crawler file body contains SPA fallback HTML such as `<!doctype html>` or `<div id="root">`.
+- Lighthouse SEO target is >= 95.
+- Canonical is absolute and valid.
+- `index.html` has a portfolio-appropriate fallback title, meta description, favicon/app icon references, and baseline share metadata where appropriate.
+- Debug routes are handled intentionally in robots/sitemap policy.
+
+Risk:
+
+- Low-medium, because canonical/deploy env mistakes can affect indexing.
+
+Dependencies:
+
+- Phase 1 baseline.
+
+Validation commands:
+
+- `npm run lint`
+- `npm run test`
+- `npm run build`
+- `curl -s https://gilbertaharo.com/robots.txt`
+- `curl -s https://gilbertaharo.com/sitemap.xml`
+- Inspect both crawler file bodies and confirm no SPA fallback HTML is returned.
+- Lighthouse SEO rerun.
+
+Rollback strategy:
+
+- Revert SEO file additions and canonical helper changes; restore previous deploy config.
+
+Type:
+
+- Implementation, but no layout/functionality change.
+
+Current implementation checkpoint (May 15, 2026):
+
+- Local Phase 2 implementation is complete pending deploy verification.
+- Added static crawler files, absolute canonical fallback behavior, stronger `index.html` fallback metadata, a replacement favicon, and a generic project-action label guard.
+- Netlify fallback config was inspected and left unchanged because static files should shadow the SPA fallback when present.
+- Validation passed locally: `npm run lint`, `npm run test`, `npm run build`, `xmllint --noout dist/sitemap.xml`, and built `dist/robots.txt`/`dist/sitemap.xml` body inspection.
+- Remaining follow-up: deploy, verify live `curl -s` bodies do not return SPA HTML, then rerun Lighthouse SEO.
+
+Live verification attempt (May 15, 2026):
+
+- Status: blocked.
+- `curl -s https://gilbertaharo.com/robots.txt` still returns deployed SPA HTML with the old Vite favicon/title.
+- `curl -s https://gilbertaharo.com/sitemap.xml` still returns deployed SPA HTML.
+- `curl -I` for both crawler files returns `content-type: text/html; charset=UTF-8`.
+- `curl -s https://gilbertaharo.com/` still shows the old fallback metadata (`/vite.svg`, title `gilbertoaharo`).
+- Phase 3 was not started because Phase 2 is not live-verified.
+- Recommended fix: deploy the local Phase 2 changes, clear/retry any Netlify deploy cache if needed, then rerun the live body checks and Lighthouse SEO.
+
+## Phase 3 - Token Verification and Responsive/Motion Token Alignment
+
+Objective:
+
+- Fix token defects and document the responsive/motion baseline before visual work.
+
+Why it matters:
+
+- `LearningSection.css` references undefined `--space-5`. Breakpoints and motion tokens exist, but some CSS still uses local values.
+
+Scope:
+
+- Fix or define `--space-5`.
+- Audit undefined CSS custom properties.
+- Keep breakpoint reference-token strategy documented.
+- Align obvious hard-coded nav/section transition values where safe.
+- Add token QA notes to foundations docs.
+
+Out of scope:
+
+- Broad visual redesign.
+- Replacing all explicit media queries.
+
+Files likely affected:
+
+- `src/styles/tokens.css`
+- `src/components/sections/LearningSection.css`
+- possibly `src/components/navigation/Navigation.css`
+- `docs/design-system/foundations.md`
+- token stories
+
+Acceptance criteria:
+
+- No undefined design token references in production CSS.
+- Learning wide breakpoints preserve intended padding.
+- Motion/reduced-motion behavior remains intact.
+
+Risk:
+
+- Low.
+
+Dependencies:
+
+- Phase 1.
+
+Validation commands:
+
+- `rg -n -- "var\\(--space-5\\)|--space-5" src docs`
+- `npm run lint`
+- `npm run test`
+- `npm run build`
+- Use Node 22.12+ via `.nvmrc`, `.node-version`, or an equivalent version manager, then run `npm run build-storybook`
+
+Rollback strategy:
+
+- Revert token/CSS changes.
+
+Type:
+
+- Implementation, token-only.
+
+## Phase 4 - Image Delivery and Desktop CLS Confirmation
+
+Objective:
+
+- Confirm the serious desktop CLS Lighthouse lab finding with trace/filmstrip review and address image delivery before typography or card visual polish.
+
+Why it matters:
+
+- The audit found heavy live image payloads and a serious desktop CLS Lighthouse lab finding. The CLS finding needs trace and filmstrip evidence before its root cause is assigned.
+
+Scope:
+
+- Review Lighthouse trace/filmstrip output for desktop CLS before assigning root cause.
+- Identify whether the shift is caused by async content, media sizing, header/footer behavior, font fallback, or another source.
+- Review Contentful image delivery and responsive image sizing opportunities.
+- Define the smallest safe image delivery adjustment path that preserves current UI-first, CMS-second contracts.
+- Keep any later implementation limited to asset sizing/format/reservation behavior unless explicit approval expands scope.
+
+Out of scope:
+
+- Layout redesign.
+- Routing changes.
+- CMS migrations or destructive Contentful field changes.
+- Typography, card, or section visual polish.
+
+Files likely affected:
+
+- `src/content/contentful/*`
+- `src/components/sections/*`
+- `src/components/articles/ArticleCard.*`
+- `src/components/rich-text/*`
+- performance/audit docs
+
+Acceptance criteria:
+
+- Desktop CLS has trace/filmstrip evidence before root cause is documented.
+- Image delivery recommendations distinguish confirmed issues from likely issues.
+- Any approved image work preserves existing content contracts and section layout concepts.
+- Lighthouse desktop/mobile performance is rerun after any image or reservation change.
+
+Risk:
+
+- Medium, because asset sizing changes can affect live visual quality.
+
+Dependencies:
+
+- Phase 1 baseline.
+- Phase 2 SEO cleanup preferred first if crawler fixes are already in motion.
+
+Validation commands:
+
+- Lighthouse desktop rerun with trace/filmstrip artifacts.
+- Lighthouse mobile rerun if image delivery changes.
+- `npm run build`
+- Review generated asset/network payloads.
+
+Rollback strategy:
+
+- Revert image helper, sizing, or reservation changes; preserve trace evidence in the audit folder.
+
+Type:
+
+- Investigation first; implementation only after confirmation.
+
+## Phase 5 - Typography Decision and Type-Scale Refinement
+
+Objective:
+
+- Decide whether to keep the system stack or test one web font, then tune type only where evidence supports it.
+
+Why it matters:
+
+- The current system stack performs well. Typography is clear, but brand distinction and article readability can be improved without loading fonts.
+
+Scope:
+
+- Document preferred typography direction.
+- Tune article/readable rhythm if needed.
+- Avoid more than one new family if testing a web font.
+- Keep body size readable on mobile.
+
+Out of scope:
+
+- Full brand redesign.
+- Multiple font families.
+- Font loading before SEO, image delivery, and CLS evidence are addressed.
+
+Files likely affected:
+
+- `src/styles/tokens.css`
+- `src/styles/base.css`
+- `src/pages/ArticlePage.css`
+- `src/stories/Typography.stories.tsx`
+- design-system docs
+
+Acceptance criteria:
+
+- Typography direction is documented.
+- If no web font is chosen, current stack remains explicit.
+- If a web font is tested, `font-display: swap`, subset weights, and performance impact are documented.
+
+Risk:
+
+- Medium if adding web fonts; low if staying system stack.
+
+Dependencies:
+
+- Phases 2, 3, and 4 preferred first.
+
+Validation commands:
+
+- `npm run build`
+- Lighthouse performance spot check if font changes.
+- Visual viewport review.
+
+Rollback strategy:
+
+- Revert token/font CSS changes.
+
+Type:
+
+- Docs-first; implementation only after decision.
+
+## Phase 6 - Component State/Elevation and ArticleCard/Card Pattern Polish
+
+Objective:
+
+- Tighten Button/Link/Card/Badge states, elevation guidance, and ArticleCard/project card hierarchy without changing component architecture.
+
+Why it matters:
+
+- Primitives are mature, and ArticleCard exists as a strong canonical article-list card. The remaining risk is inconsistent hierarchy across article, project, learning, media, and nav surfaces.
+
+Scope:
+
+- Define no-shadow, border-only, soft, elevated-hover usage.
+- Verify focus rings remain visible over all surfaces.
+- Tune only small state/elevation values if needed.
+- Keep ArticleCard as canonical article-list card.
+- Audit whether project/article cards should share only tokens or a deeper card spec.
+- Improve visible link labels where generic labels remain.
+- Add metadata rhythm guidance for article/project cards.
+- Add or update stories for hover/focus/disabled/elevated/card examples only where a real state is missing.
+
+Out of scope:
+
+- New primitive architecture.
+- Creating duplicate card components prematurely.
+- Changing `/articles` routing.
+- CMS field migrations.
+
+Files likely affected:
+
+- `src/components/ui/Card.css`
+- `src/components/articles/ArticleCard.*`
+- `src/components/sections/ProjectsSection.*`
+- relevant section CSS
+- `src/stories/InteractionStates.stories.tsx`
+- `src/components/ui/Card.stories.tsx`
+- story fixtures and docs
+
+Acceptance criteria:
+
+- Elevation model is documented.
+- Focus-visible remains clear.
+- Static content does not imply clickability.
+- ArticleCard remains canonical.
+- Generic "Read more" labels are replaced where possible.
+- Card hierarchy supports scanning on mobile and desktop.
+
+Risk:
+
+- Medium, because subtle CSS and copy changes affect many surfaces.
+
+Dependencies:
+
+- Phase 2 for SEO/link text.
+- Phase 3 for token correctness.
+- Phase 4 for image/CLS evidence.
+
+Validation commands:
+
+- `npm run lint`
+- `npm run test`
+- `npm run test -- src/components/articles/ArticleCard.test.tsx src/pages/articles/ArticlesPage.test.tsx`
+- `npm run build`
+- Use Node 22.12+ via `.nvmrc`, `.node-version`, or an equivalent version manager, then run `npm run build-storybook`
+
+Rollback strategy:
+
+- Revert elevation/state CSS, story, and card copy changes.
+
+Type:
+
+- Docs plus small implementation with content-safe changes only.
+
+## Phase 7 - ProjectsSection and LearningSection Design Pass
+
+Objective:
+
+- Refine the highest-density homepage sections after foundation and SEO/a11y issues are addressed.
+
+Why it matters:
+
+- Projects and Learning carry the strongest product signal, but they also have the most visual complexity and performance/a11y findings.
+
+Scope:
+
+- Projects: card hierarchy, action labels, confirmed image sizing strategy if Phase 4 identified one, slider discoverability.
+- Learning: token fix verification, heading semantics, wide breakpoint spacing.
+- Preserve current section order and layout concept.
+- Preserve Contentful model and normalizer-first rendering.
+
+Out of scope:
+
+- Replacing scroll-snap slider with a third-party carousel.
+- Changing IA.
+- CMS migrations.
+
+Files likely affected:
+
+- `src/components/sections/ProjectsSection.*`
+- `src/components/sections/LearningSection.*`
+- `src/components/sections/learning/LearningRoadmapTimeline.*`
+- section stories/tests
+
+Acceptance criteria:
+
+- No generic project action labels in visible UI.
+- Learning spacing works at 80rem/96rem.
+- Heading order is valid or intentionally documented.
+- Any image delivery changes follow Phase 4 evidence and do not break CMS contracts.
+
+Risk:
+
+- Medium.
+
+Dependencies:
+
+- Phases 3, 4, 5, and 6.
+
+Validation commands:
+
+- `npm run test -- src/components/sections/ProjectsSection.test.tsx src/components/sections/LearningSection.test.tsx`
+- `npm run build`
+- Use Node 22.12+ via `.nvmrc`, `.node-version`, or an equivalent version manager, then run `npm run build-storybook`
+- Lighthouse rerun if image changes
+
+Rollback strategy:
+
+- Revert section CSS/TSX and fixture/story changes.
+
+Type:
+
+- Implementation, scoped visual/a11y polish.
+
+## Phase 8 - Accessibility and Responsive QA Hardening
+
+Objective:
+
+- Close Lighthouse/manual a11y issues and verify key responsive states.
+
+Why it matters:
+
+- Automated accessibility is high, but known issues affect screen reader/voice control users and semantic heading navigation.
+
+Scope:
+
+- Fix label-content-name mismatches.
+- Fix heading-order skips.
+- Verify mobile drawer focus return and focus trap after any nav changes.
+- Verify focus is not obscured.
+- Check touch target and text reflow on common viewport widths.
+- Respect reduced motion.
+
+Out of scope:
+
+- Visual redesign.
+- New routing.
+
+Files likely affected:
+
+- `ActionGroup.tsx`
+- `ProjectsSection.tsx`
+- `FooterSection.tsx`
+- `TimelineSection.tsx`
+- `LearningRoadmapTimeline.tsx`
+- tests/stories
+
+Acceptance criteria:
+
+- Lighthouse accessibility remains >= 98 and known warnings are resolved where measurable.
+- Manual keyboard path passes for nav, project slider controls, contact links, and article cards.
+- Responsive checks pass at 375, 412, 768, 1024, 1280, 1440 px.
+
+Risk:
+
+- Low-medium.
+
+Dependencies:
+
+- Phase 6/7 content and section decisions.
+
+Validation commands:
+
+- `npm run test`
+- Lighthouse mobile/desktop a11y
+- Use Node 22.12+ via `.nvmrc`, `.node-version`, or an equivalent version manager, then run `npm run build-storybook`
+- Manual keyboard/viewport checklist
+
+Rollback strategy:
+
+- Revert semantic/label changes; restore previous tests.
+
+Type:
+
+- Implementation and QA.
+
+## Phase 9 - Storybook Documentation, A11y Stories, and Visual Regression Readiness
+
+Objective:
+
+- Convert the current Storybook coverage into stronger regression guidance.
+
+Why it matters:
+
+- Storybook exists and builds, but a11y/interaction checks are not yet used as a routine gate.
+
+Scope:
+
+- Add high-value a11y stories for Button, Link, Card, ArticleCard, Projects, Learning, ResponsiveNav.
+- Add story docs for elevation and CTA labeling.
+- Trial `test:storybook` on a small set if a dev server workflow is stable.
+- Define visual regression readiness without requiring paid tools.
+
+Out of scope:
+
+- Full visual regression rollout before stories are stable.
+- Paid service dependency as a requirement.
+
+Files likely affected:
+
+- `.storybook/*`
+- `src/**/*.stories.tsx`
+- possibly package scripts/docs
+
+Acceptance criteria:
+
+- High-risk states are represented in stories.
+- Storybook build continues to pass on Node 22.12+.
+- Optional story test-runner path is documented.
+
+Risk:
+
+- Low-medium.
+
+Dependencies:
+
+- Phases 5-8.
+
+Validation commands:
+
+- Use Node 22.12+ via `.nvmrc`, `.node-version`, or an equivalent version manager, then run `npm run build-storybook`
+- Optional `npm run test:storybook` after server setup
+
+Rollback strategy:
+
+- Revert story additions/config changes.
+
+Type:
+
+- Docs/story implementation.
+
+## Phase 10 - Release, Regression Guardrails, and Checkpoint Logging
+
+Objective:
+
+- Release the accepted improvements with evidence and maintenance guardrails.
+
+Why it matters:
+
+- The repo is in maintenance mode. Changes should ship with clear validation and no roadmap drift.
+
+Scope:
+
+- Run full validation.
+- Rerun Lighthouse after SEO/a11y/performance changes.
+- Update checkpoint log or add checkpoint section in report if `agent/CHECKPOINT_LOG.md` remains absent.
+- Recommend CHANGELOG entry only if project convention expects audit docs to be logged.
+- Confirm no production code changes outside approved phases.
+
+Out of scope:
+
+- New phase work.
+- Broad refactors.
+
+Files likely affected:
+
+- `docs/planning/TASKS.md` if this roadmap becomes active.
+- checkpoint docs if an `agent` directory is introduced later.
+- optional `CHANGELOG.md` only with explicit convention/approval.
+
+Acceptance criteria:
+
+- `npm run lint` passes.
+- `npm run test` passes.
+- `npm run build` passes.
+- `npm run build-storybook` passes on Node 22.12+ via `.nvmrc`, `.node-version`, or an equivalent version manager.
+- Lighthouse SEO/a11y/performance deltas are documented.
+- Roadmap state is clear.
+
+Risk:
+
+- Low.
+
+Dependencies:
+
+- Accepted implementation phases.
+
+Validation commands:
+
+- `npm run lint`
+- `npm run test`
+- `npm run build`
+- Use Node 22.12+ via `.nvmrc`, `.node-version`, or an equivalent version manager, then run `npm run build-storybook`
+- Lighthouse mobile/desktop
+
+Rollback strategy:
+
+- Revert release docs/checkpoint updates; preserve raw audit artifacts locally if needed.
+
+Type:
+
+- Docs/checkpoint/release validation.
+
+## Decision Tree
+
+### A. Live Site Metrics
+
+- If Lighthouse accessibility < 95: prioritize accessibility before visual polish.
+- If performance < 90 or LCP/CLS/TBT are poor: prioritize performance and asset/font strategy.
+- If SEO < 95: prioritize canonical, metadata, sitemap, robots, and structured data.
+- If scores are high: proceed to component polish and Storybook docs.
+
+Current branch:
+
+- SEO is 77 and desktop performance is 73 with a serious Lighthouse lab CLS finding. Prioritize SEO and trace/filmstrip confirmation before assigning CLS root cause or starting visual polish.
+
+### B. Typography
+
+- If current font stack performs well and matches personality: keep it and tune scale/line-height.
+- If readability is weak but performance is strong: adjust type scale before adding web fonts.
+- If brand personality needs more distinction: test one variable sans font.
+- If blog/editorial pages feel plain: consider a serif accent for articles only, but avoid loading multiple families unless justified.
+
+Current branch:
+
+- Keep the system stack. Tune article rhythm before adding fonts.
+
+### C. ArticleCard
+
+- If ArticleCard exists: audit and improve states, hierarchy, metadata, and Storybook coverage.
+- If ArticleCard does not exist: define an ArticleCard spec first, then create implementation in a later phase.
+- If current Card can support article use: extend Card API carefully instead of creating duplicate components.
+
+Current branch:
+
+- ArticleCard exists with stories/tests. Keep it canonical; improve visible link/copy patterns around related project/article cards.
+
+### D. Projects and Learning Sections
+
+- If content is strong but visual hierarchy is weak: adjust card layout, headings, metadata, badges, and CTAs.
+- If content model is weak: recommend Contentful/content changes before UI polish.
+- If both are weak: prioritize content clarity first, then visual treatment.
+
+Current branch:
+
+- Content model is reasonably strong. Fix CTA label content, confirm image delivery/CLS evidence, resolve the token defect, and address heading semantics before visual polish.
+
+### E. Storybook
+
+- If Storybook is absent: scaffold after primitive API is stable.
+- If Storybook exists but coverage is thin: add stories for primitives and high-value sections.
+- If Storybook and CI are already strong: add a11y/visual regression readiness.
+
+Current branch:
+
+- Storybook and CI are strong. Add targeted a11y/interaction readiness after core SEO/a11y fixes.
+
+### F. Implementation Safety
+
+- If a recommendation changes layout/IA: defer and require explicit approval.
+- If a recommendation only tokenizes existing behavior: safe early phase.
+- If a recommendation affects CMS fields: require migration plan and fallback mapping.
+
+Current branch:
+
+- Early work should be docs/SEO/token/a11y-safe. CMS migrations are not needed for the first phases.
+
+## Preferred Path
+
+1. Complete Phase 1 baseline freeze.
+2. Execute Phase 2 SEO cleanup: robots, sitemap, canonical, `index.html` fallback metadata/icons/share tags, weak link text, and body checks that prove crawler files are not SPA HTML.
+3. Execute Phase 3 token verification: fix `--space-5`, check undefined variables.
+4. Confirm desktop CLS with Lighthouse trace/filmstrip review and investigate image payloads before visual polish.
+5. Keep typography system-stack for now.
+6. Define elevation model and card hierarchy before broad card CSS tuning.
+7. Improve ArticleCard/project visible link labels and card hierarchy.
+8. Polish Projects and Learning within existing layout patterns.
+9. Harden accessibility and responsive QA.
+10. Expand Storybook a11y/visual readiness and close with release checkpoint.
+
+## Logging Requirements
+
+For each accepted phase, record:
+
+- Date.
+- Scope.
+- Files changed.
+- Commands run.
+- Pass/fail summary.
+- Next recommended phase.
+
+Current checkpoint:
+
+- `agent/CHECKPOINT_LOG.md` does not exist in this repo, so the current audit report includes a "Checkpoint Log Entry" section.
+- This roadmap has received a docs-only validation correction pass on May 15, 2026 to clarify body-based crawler validation, `index.html` fallback SEO cleanup, portable Node guidance, and desktop CLS confirmation requirements.
+- Phase 2 implementation checkpoint added on May 15, 2026: local crawler files, canonical fallback, fallback metadata, favicon, generic project-action label guard, tests, build output inspection, and deploy/Lighthouse follow-up are documented.
+- Phase 2 live verification attempted on May 15, 2026 and is blocked because the live deploy still serves the old SPA HTML for crawler files. Phase 3 remains gated.
+
+CHANGELOG guidance:
+
+- `CHANGELOG.md` has a verification convention for implementation changes. This audit did not modify production behavior, so this roadmap recommends a changelog entry only if the project owner wants audit docs tracked there. Do not modify `CHANGELOG.md` automatically for this docs-only audit.

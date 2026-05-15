@@ -26,7 +26,7 @@ describe("SeoHead", () => {
       <SeoHead
         title="Landing | Gilberto Haro"
         description="Landing route description."
-        canonicalUrl="https://gilbertoharo.com/"
+        canonicalUrl="https://gilbertaharo.com/"
       />,
     );
 
@@ -37,7 +37,7 @@ describe("SeoHead", () => {
     );
     expect(getCanonicalLink()).toHaveAttribute(
       "href",
-      "https://gilbertoharo.com/",
+      "https://gilbertaharo.com/",
     );
   });
 
@@ -54,7 +54,7 @@ describe("SeoHead", () => {
       <SeoHead
         title="Articles | Gilberto Haro"
         description="Articles route description."
-        canonicalUrl="https://gilbertoharo.com/articles"
+        canonicalUrl="https://gilbertaharo.com/articles"
       />,
     );
 
