@@ -629,6 +629,15 @@ Phase 4 Batch 4.1 checkpoint (May 18, 2026):
 - CLS fixes remain blocked until trace/filmstrip review isolates a specific shift source.
 - No layout, IA, routing, CMS model, Contentful migration, typography/card/elevation polish, or production rendering behavior change was introduced in Batch 4.1.
 
+Phase 4 Batch 4.2 checkpoint (May 18, 2026):
+
+- Adopted the existing Contentful image helper for Hero media through `HeroSection` and `MediaFrame`.
+- `MediaFrame` now supports optional generic `srcSet` and `sizes` props without changing CSS, wrapper markup, loading/decoding defaults, or aspect-ratio behavior.
+- Hero Contentful images now use transformed fallback `src`, responsive `srcset`, and `(min-width: 1024px) 40vw, 90vw` sizes; non-Contentful Hero images keep the existing single-`src` behavior.
+- Timeline, Projects, ArticleCard, ArticlePage, and RichTextRenderer remain deferred and unchanged.
+- CLS fixes remain blocked until trace/filmstrip review isolates a specific shift source.
+- No layout, IA, routing, CMS model, Contentful migration, typography/card/elevation polish, or unrelated production behavior change was introduced in Batch 4.2.
+
 | Risk | Severity | Likelihood | Evidence | User impact | Recommended mitigation | Owner/phase |
 | --- | --- | --- | --- | --- | --- | --- |
 | Invalid robots/sitemap | Low | Resolved | Phase 2 live `curl -s` checks return robots text/XML, not SPA HTML | Regression would harm crawl control and sitemap discovery | Keep body checks in release validation | Phase 2 closed |
@@ -776,6 +785,7 @@ Scope:
 - Phase 4 evidence checkpoint: created `docs/planning/phase-4-image-cls-evidence.md`, captured fresh Lighthouse desktop artifacts locally, confirmed image payload weight, documented conflicting CLS evidence, and inspected image rendering/code paths. No image delivery or CLS implementation was started.
 - Phase 4 planning checkpoint: created `docs/planning/phase-4-image-delivery-implementation-plan.md`, repeated the CLS sanity check, kept CLS fixes blocked, and planned the first image-delivery path around a pure Contentful image URL helper plus Hero/Timeline adoption. No implementation was started.
 - Phase 4 Batch 4.1 checkpoint: added pure Contentful image URL helper and unit tests, preserving non-Contentful/protocol-relative behavior and avoiding all UI image adoption or CLS work.
+- Phase 4 Batch 4.2 checkpoint: adopted responsive Contentful delivery for Hero media through `MediaFrame`, preserving non-Contentful behavior and leaving Timeline/later image surfaces and CLS work untouched.
 
 Files created:
 

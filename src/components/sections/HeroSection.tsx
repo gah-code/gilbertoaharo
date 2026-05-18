@@ -1,5 +1,9 @@
 import React from "react";
 import type { SectionHero } from "@/content/contentful/types";
+import {
+  buildContentfulImageUrl,
+  buildContentfulSrcSet,
+} from "@/lib/images/contentfulImage";
 import { SectionShell } from "./SectionShell";
 import { Stack } from "../ui/Stack";
 import { normalizeHeroSection } from "./hero/normalizeHeroSection";
@@ -8,10 +12,29 @@ import { ProofList } from "./primitives/ProofList";
 import { MediaFrame } from "./primitives/MediaFrame";
 import "./HeroSection.css";
 
+const HERO_IMAGE_WIDTHS = [480, 720, 960, 1200];
+const HERO_IMAGE_SIZES = "(min-width: 1024px) 40vw, 90vw";
+
 export function HeroSection({ section }: { section: SectionHero }) {
   const hero = normalizeHeroSection(section);
   const mediaFrameKind = hero.media?.kind === "avatarImage" ? "avatar" : "image";
   const heroLayoutClass = hero.media ? "hero-layout" : "hero-layout hero-layout--text-only";
+  const heroImageSrc =
+    hero.media?.kind === "heroImage"
+      ? buildContentfulImageUrl(hero.media.src, {
+          width: 1200,
+          quality: 75,
+          format: "webp",
+        })
+      : hero.media?.src;
+  const heroImageSrcSet =
+    hero.media?.kind === "heroImage"
+      ? buildContentfulSrcSet(hero.media.src, HERO_IMAGE_WIDTHS, {
+          quality: 75,
+          format: "webp",
+        })
+      : undefined;
+  const heroImageSizes = heroImageSrcSet ? HERO_IMAGE_SIZES : undefined;
 
   return (
     <SectionShell
@@ -34,7 +57,9 @@ export function HeroSection({ section }: { section: SectionHero }) {
           <div className={`hero-media hero-media--${hero.media.kind}`}>
             <MediaFrame
               kind={mediaFrameKind}
-              src={hero.media.src}
+              src={heroImageSrc ?? hero.media.src}
+              srcSet={heroImageSrcSet}
+              sizes={heroImageSizes}
               alt={hero.media.alt}
               loading="eager"
               decoding="async"

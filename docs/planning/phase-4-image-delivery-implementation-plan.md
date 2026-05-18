@@ -234,6 +234,15 @@ Batch 4.1 checkpoint, May 18, 2026:
 - Targeted validation passed: `npm run test -- src/lib/images/contentfulImage.test.ts`.
 - No UI image adoption, image rendering component change, layout change, CMS model change, Contentful migration, or CLS fix was introduced.
 
+Batch 4.2 checkpoint, May 18, 2026:
+
+- Status: complete.
+- Added generic optional `srcSet` and `sizes` props to `MediaFrame` without changing its CSS, markup wrapper, loading defaults, decoding defaults, or aspect-ratio behavior.
+- Adopted the Contentful image helper for Hero media only, using transformed fallback `src`, responsive `srcset`, and `(min-width: 1024px) 40vw, 90vw` sizes.
+- Non-Contentful Hero URLs preserve the existing single-`src` behavior.
+- Targeted validation passed: `npm run test -- src/components/sections/HeroSection.test.tsx` and `npm run test -- src/lib/images/contentfulImage.test.ts`.
+- No Timeline, Projects, ArticleCard, ArticlePage, RichTextRenderer, layout CSS, routing, CMS model, Contentful migration, or CLS fix was introduced.
+
 ### After Hero/Timeline Adoption
 
 - No layout change.
