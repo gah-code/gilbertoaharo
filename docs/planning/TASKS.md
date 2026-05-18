@@ -13,9 +13,10 @@ Roadmap v2 status: complete. Phases `A` through `F` are closed (April 24, 2026).
   - Phase 4 implementation planning is documented in `docs/planning/phase-4-image-delivery-implementation-plan.md`.
   - Batch 4.1 is complete: a pure Contentful image URL helper and unit tests are in place, with no UI image adoption yet.
   - Batch 4.2 is complete: Hero media now uses Contentful-derived responsive image delivery through `MediaFrame`, with no Timeline or later-surface adoption yet.
+  - Batch 4.2 deploy verification passed: production deploy `e4b2ac06` is ready, live Lighthouse requested the Hero image as transformed WebP (`w=720&q=75&fm=webp`), total byte weight dropped from about `8,356 KiB` to `5,874 KiB`, and Hero transfer dropped from about `2,565,640 B` to `24,470 B`.
   - Repeat Lighthouse desktop evidence reproduced the severe CLS finding (`0.908`), but the affected node remains broad (`main#main-content`), so CLS root cause remains unconfirmed and must not drive layout changes yet.
   - Image payload weight is confirmed: fresh desktop Lighthouse reports `8,356 KiB` total byte weight, `5` image requests totaling `8,388,839 B`, and `8,101 KiB` estimated image-delivery savings.
-  - Recommended next implementation batch, pending approval: Timeline media adoption.
+  - Recommended next implementation batch: Timeline media adoption. CLS fixes remain blocked.
   - Do not start image delivery changes, CLS fixes, typography, card/elevation, section polish, routing, IA, CMS, or Contentful migration work without explicit Phase 4 implementation approval.
 
 - [ ] **Roadmap v2 closeout complete — maintenance mode**
@@ -80,7 +81,7 @@ A phase cannot be considered complete unless:
 
 ---
 
-## Verification Snapshot (Latest: Phase 4 Batch 4.2 Hero image delivery, May 18, 2026)
+## Verification Snapshot (Latest: Phase 4 Batch 4.2 deploy verification, May 18, 2026)
 
 - [x] `npm run lint`
 - [x] `npm run test`
@@ -90,6 +91,7 @@ A phase cannot be considered complete unless:
 - [x] `npm run build-storybook` (pass with Node `22.12.0` selected through the local version manager)
 - [x] Fresh desktop Lighthouse performance evidence captured locally under `.tmp/design-system-audit/` (untracked)
 - [x] Repeat desktop Lighthouse CLS sanity check captured locally under `.tmp/design-system-audit/` (untracked)
+- [x] Batch 4.2 live Lighthouse Hero-after evidence captured locally under `.tmp/design-system-audit/` (untracked)
 - [x] Phase 4 image payload inventory and image code-path inventory documented
 - [x] Phase 4 image-delivery implementation plan documented
 - [x] `git diff --check`

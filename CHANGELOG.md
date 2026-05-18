@@ -13,6 +13,7 @@
 - Captured Phase 4 evidence for image delivery and desktop CLS, including a fresh Lighthouse desktop artifact summary, image payload inventory, code-path inventory, and implementation decision tree without changing production behavior. (`docs/planning/phase-4-image-cls-evidence.md`, `docs/planning/design-system-roadmap-current.md`, `docs/planning/TASKS.md`, `docs/design-system/design-system-snapshot-audit-current.md`)
 - Added a Phase 4 image-delivery implementation plan that scopes the first approved path to a pure Contentful image URL helper, Hero/MediaFrame adoption, and Timeline media adoption while keeping CLS fixes blocked until a specific shift source is isolated. (`docs/planning/phase-4-image-delivery-implementation-plan.md`)
 - Adopted the Contentful image helper for Hero media only by adding generic `srcSet`/`sizes` support to `MediaFrame` and deriving transformed Hero image `src`, `srcset`, and `sizes` values without changing layout, Timeline, Projects, article, rich-text, CMS, or CLS behavior. (`src/components/sections/HeroSection.tsx`, `src/components/sections/primitives/MediaFrame.tsx`, `src/components/sections/HeroSection.test.tsx`)
+- Verified the deployed Batch 4.2 Hero image delivery impact: Netlify production serves commit `e4b2ac06`, the Hero request is transformed to WebP with responsive delivery, total byte weight dropped from about `8,356 KiB` to `5,874 KiB`, and Timeline adoption is approved as the next image-delivery batch while CLS fixes remain blocked. (`docs/planning/design-system-roadmap-current.md`, `docs/planning/TASKS.md`, `docs/planning/phase-4-image-delivery-implementation-plan.md`, `docs/design-system/design-system-snapshot-audit-current.md`)
 
 ### Verification
 
@@ -27,6 +28,7 @@
 - `git diff --check` (passes)
 - Fresh Phase 4 Lighthouse desktop evidence captured locally under `.tmp/design-system-audit/`; CLS was not severely reproduced (`0.009` fresh vs. `0.908` previous), while image payload weight remains confirmed (`8,356 KiB`, estimated image-delivery savings `8,101 KiB`).
 - Repeat Phase 4 desktop Lighthouse sanity check reproduced severe CLS (`0.908`) and confirmed the same image payload issue (`8,355 KiB` total byte weight, `8,101 KiB` estimated image-delivery savings); CLS root cause remains unconfirmed because the affected node is still the broad `main#main-content` region.
+- Batch 4.2 live Lighthouse verification passes for Hero image delivery: `5,874 KiB` total byte weight, `5,846,759 B` image transfer, Hero image request `24,470 B`, `5,631 KiB` remaining estimated image-delivery savings, LCP `0.8 s`, CLS `0.908`, TBT `30 ms`, performance score `0.75`.
 
 ## [2026-05-15]
 

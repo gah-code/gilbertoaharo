@@ -638,6 +638,16 @@ Phase 4 Batch 4.2 checkpoint (May 18, 2026):
 - CLS fixes remain blocked until trace/filmstrip review isolates a specific shift source.
 - No layout, IA, routing, CMS model, Contentful migration, typography/card/elevation polish, or unrelated production behavior change was introduced in Batch 4.2.
 
+Phase 4 Batch 4.2 deploy verification checkpoint (May 18, 2026):
+
+- Netlify production is ready on commit `e4b2ac06cbc26ccece8f36780f5f96450f951d56`.
+- Live root serves the expected current build asset. Because the app is client-rendered, raw `curl` confirms the shell and deployed JS, while Lighthouse provides rendered Hero node and network-request evidence.
+- Lighthouse confirms the Hero image is requested as transformed WebP (`hero-design.jpeg?w=720&q=75&fm=webp`) with rendered `sizes`/`srcset` on the Hero image node.
+- Total byte weight improved from about `8,356 KiB` to `5,874 KiB`; image transfer improved from about `8,388,839 B` to `5,846,759 B`; Hero image transfer improved from about `2,565,640 B` to `24,470 B`.
+- Remaining estimated image-delivery savings are about `5,631 KiB`, concentrated in Timeline media. Timeline adoption is approved as the next image-delivery batch.
+- Lighthouse still reports CLS `0.908` against broad `main#main-content`, so CLS fixes remain blocked until a specific source is isolated.
+- No production code changed during this verification pass.
+
 | Risk | Severity | Likelihood | Evidence | User impact | Recommended mitigation | Owner/phase |
 | --- | --- | --- | --- | --- | --- | --- |
 | Invalid robots/sitemap | Low | Resolved | Phase 2 live `curl -s` checks return robots text/XML, not SPA HTML | Regression would harm crawl control and sitemap discovery | Keep body checks in release validation | Phase 2 closed |
@@ -786,6 +796,7 @@ Scope:
 - Phase 4 planning checkpoint: created `docs/planning/phase-4-image-delivery-implementation-plan.md`, repeated the CLS sanity check, kept CLS fixes blocked, and planned the first image-delivery path around a pure Contentful image URL helper plus Hero/Timeline adoption. No implementation was started.
 - Phase 4 Batch 4.1 checkpoint: added pure Contentful image URL helper and unit tests, preserving non-Contentful/protocol-relative behavior and avoiding all UI image adoption or CLS work.
 - Phase 4 Batch 4.2 checkpoint: adopted responsive Contentful delivery for Hero media through `MediaFrame`, preserving non-Contentful behavior and leaving Timeline/later image surfaces and CLS work untouched.
+- Phase 4 Batch 4.2 deploy verification checkpoint: production serves commit `e4b2ac06`, Hero transformed delivery is verified by Lighthouse, total byte weight improved to `5,874 KiB`, and Timeline adoption is approved next while CLS fixes remain blocked.
 
 Files created:
 

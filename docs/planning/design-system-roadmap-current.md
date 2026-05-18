@@ -362,6 +362,17 @@ Batch 4.2 checkpoint (May 18, 2026):
 - Targeted validation passed: `npm run test -- src/components/sections/HeroSection.test.tsx` and `npm run test -- src/lib/images/contentfulImage.test.ts`.
 - No Timeline, Projects, ArticleCard, ArticlePage, RichTextRenderer, layout CSS, routing, IA, CMS model, Contentful migration, CLS fix, typography/card/elevation, or unrelated production behavior change was introduced in Batch 4.2.
 
+Batch 4.2 deploy verification checkpoint (May 18, 2026):
+
+- Status: Pass for Hero payload impact; Timeline adoption is approved as the next image-delivery batch.
+- Netlify production deploy is ready on commit `e4b2ac06cbc26ccece8f36780f5f96450f951d56`.
+- Live root serves the current build asset (`/assets/index-gVd8DrVW.js`). Because the Vite app is client-rendered, raw `curl` only verifies the deploy artifact shell; rendered Hero evidence comes from Lighthouse and the deployed bundle.
+- Rendered Lighthouse evidence confirms the Hero image node includes `sizes`, `srcset`, and transformed Contentful `src`; the network request selected `hero-design.jpeg?w=720&q=75&fm=webp`.
+- Payload moved from about `8,356 KiB` total byte weight / `8,388,839 B` image transfer / `2,565,640 B` Hero image transfer to `5,874 KiB` total byte weight / `5,846,759 B` image transfer / `24,470 B` Hero image transfer.
+- Remaining image-delivery savings dropped from about `8,101 KiB` to `5,631 KiB`; the remaining largest savings are Timeline images.
+- Lighthouse after deploy: performance `0.75`, LCP `0.8 s`, CLS `0.908`, TBT `30 ms`. CLS still identifies only broad `main#main-content`, so CLS fixes remain blocked.
+- No production code changed during this verification pass.
+
 ## Phase 5 - Typography Decision and Type-Scale Refinement
 
 Objective:

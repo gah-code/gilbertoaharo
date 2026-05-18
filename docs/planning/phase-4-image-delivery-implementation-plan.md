@@ -243,6 +243,18 @@ Batch 4.2 checkpoint, May 18, 2026:
 - Targeted validation passed: `npm run test -- src/components/sections/HeroSection.test.tsx` and `npm run test -- src/lib/images/contentfulImage.test.ts`.
 - No Timeline, Projects, ArticleCard, ArticlePage, RichTextRenderer, layout CSS, routing, CMS model, Contentful migration, or CLS fix was introduced.
 
+Batch 4.2 deploy verification, May 18, 2026:
+
+- Status: pass.
+- Netlify production deploy `6a0b9745ccf94d00080070c7` is ready on commit `e4b2ac06cbc26ccece8f36780f5f96450f951d56`.
+- Live client-rendered evidence from Lighthouse confirms Hero `sizes`/`srcset` and transformed Contentful delivery; the selected Hero request is `hero-design.jpeg?w=720&q=75&fm=webp`.
+- Total byte weight improved from about `8,356 KiB` to `5,874 KiB`.
+- Image transfer improved from about `8,388,839 B` to `5,846,759 B`.
+- Hero image transfer improved from about `2,565,640 B` to `24,470 B`.
+- Remaining image-delivery savings are about `5,631 KiB`, concentrated in Timeline media.
+- LCP is `0.8 s`, TBT is `30 ms`, and CLS remains `0.908` with broad `main#main-content` attribution. Do not implement CLS fixes until a specific shift source is isolated.
+- Decision: proceed to Batch 4.3 Timeline media adoption; keep Projects, ArticleCard, ArticlePage, RichTextRenderer, layout reservation, and CLS fixes out of scope.
+
 ### After Hero/Timeline Adoption
 
 - No layout change.
