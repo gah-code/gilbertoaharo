@@ -604,12 +604,21 @@ Phase 4 readiness note (May 18, 2026):
 - Existing local evidence lives in `.tmp/design-system-audit/` and remains untracked.
 - Missing evidence: confirmed desktop CLS source, asset-by-asset payload inventory, and an evidence-backed decision on whether Contentful image sizing, async content, media reservation, header/footer behavior, or font fallback contributes to the measured shift.
 
+Phase 4 evidence checkpoint (May 18, 2026):
+
+- Evidence report: `docs/planning/phase-4-image-cls-evidence.md`.
+- Fresh Lighthouse desktop artifacts were captured locally under `.tmp/design-system-audit/` and remain untracked.
+- CLS evidence is conflicting: the prior desktop artifact reported `0.908`, while the fresh Phase 4 desktop run reported `0.009`; root cause remains unconfirmed because the reported shifted node is the broad `main#main-content` region.
+- Image payload issue is confirmed: fresh desktop total byte weight is `8,356 KiB`, with `5` image requests totaling `8,388,839 B` and estimated image-delivery savings of `8,101 KiB`.
+- Largest payload contributors are raw Contentful hero/timeline images. Future implementation should preserve current CMS contracts while adding derived image URL delivery, responsive `srcset`/`sizes`, modern format, and quality parameters.
+- No image delivery implementation, CLS fix, layout change, routing change, CMS model change, Contentful migration, typography/card/elevation polish, or production behavior change was introduced during evidence capture.
+
 | Risk | Severity | Likelihood | Evidence | User impact | Recommended mitigation | Owner/phase |
 | --- | --- | --- | --- | --- | --- | --- |
 | Invalid robots/sitemap | Low | Resolved | Phase 2 live `curl -s` checks return robots text/XML, not SPA HTML | Regression would harm crawl control and sitemap discovery | Keep body checks in release validation | Phase 2 closed |
 | Invalid live canonical | Low | Resolved | Lighthouse SEO follow-up score `100`; canonical audit passes | Regression would create duplicate/ambiguous URL signals | Keep canonical spot checks in release validation | Phase 2 closed |
-| Desktop CLS 0.908 | High | Confirmed by Lighthouse lab output; root cause unconfirmed | Desktop performance 73 | Potential jarring layout shift and CWV risk | Confirm with trace/filmstrip before assigning root cause, then mitigate the verified shift source | Phase 4/8 |
-| Oversized Contentful images | High | Confirmed by Lighthouse | 6.9-8.3 MB total transfer | Slow loads, data cost, LCP risk | Use Contentful image transforms/responsive sizes after preserving current content contracts | Phase 4/7 |
+| Desktop CLS severe lab finding | High | Conflicting evidence; root cause unconfirmed | Previous desktop CLS `0.908`; fresh Phase 4 desktop CLS `0.009`; affected node remains broad `main#main-content` | Potential jarring layout shift and CWV risk if severe result reproduces | Repeat trace/filmstrip review before assigning root cause, then mitigate only the verified shift source | Phase 4/8 |
+| Oversized Contentful images | High | Confirmed by Lighthouse | Fresh desktop total byte weight `8,356 KiB`; image requests total `8,388,839 B`; estimated image-delivery savings `8,101 KiB` | Slow loads, data cost, LCP risk | Use Contentful image transforms/responsive sizes after preserving current content contracts | Phase 4/7 |
 | Accessible-name mismatches | High | Confirmed by Lighthouse | Label/content-name audit | Voice control/screen reader confusion | Align visible labels and aria labels | Phase 8 |
 | Undefined `--space-5` | Low | Resolved | `--space-5` added to `tokens.css`; undefined-variable scan clean | Regression would affect wide Learning spacing | Keep token scan in release validation | Phase 3 closed |
 | Navigation hard-coded motion values | Low-medium | Confirmed | `Navigation.css` uses local `0.12s`, `0.15s`, and `0.2s` `ease` transitions; reduced-motion block exists | Possible motion inconsistency, but current behavior is stable | Defer until a motion-token alignment phase can preserve or intentionally change behavior | Phase 3 closed / later polish |
@@ -748,6 +757,7 @@ Scope:
 - Phase 3 validation checkpoint: `npm run lint`, `npm run test`, `npm run build`, focused CSS custom property scan, and `npm run build-storybook` with Node `22.12.0` passed. Default shell Node remains `v22.2.0`, so `npm run build` still prints the known Vite Node-floor warning.
 - Phase 3 motion/responsive baseline checkpoint: documented current motion-token coverage, deferred navigation hard-coded transitions, breakpoint reference-token strategy, section-specific responsive values, and portable Storybook/Node guidance. No visual polish or component behavior changes were made.
 - Phase 3 closeout checkpoint: Phase 3 is closed as of May 18, 2026 after lint/test/build/Storybook, CSS variable scan, motion scan, breakpoint scan, machine-specific command scan for current guidance, and `git diff --check` passed. Phase 4 is ready for evidence capture only; no Phase 4 implementation has started.
+- Phase 4 evidence checkpoint: created `docs/planning/phase-4-image-cls-evidence.md`, captured fresh Lighthouse desktop artifacts locally, confirmed image payload weight, documented conflicting CLS evidence, and inspected image rendering/code paths. No image delivery or CLS implementation was started.
 
 Files created:
 

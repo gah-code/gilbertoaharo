@@ -326,6 +326,16 @@ Readiness checkpoint (May 18, 2026):
 - Files likely affected later, after evidence: `src/content/contentful/*`, `src/components/sections/*`, `src/components/articles/ArticleCard.*`, `src/components/rich-text/*`, and performance/audit docs.
 - Out of scope until Phase 4 implementation starts: image helper changes, `srcset`/format changes, layout reservation changes, CLS fixes, route changes, CMS migrations, typography, card/elevation, or section visual polish.
 
+Evidence checkpoint (May 18, 2026):
+
+- Status: Evidence captured; implementation not started.
+- Evidence report: `docs/planning/phase-4-image-cls-evidence.md`.
+- Fresh Lighthouse desktop artifacts were captured locally under `.tmp/design-system-audit/` and remain untracked.
+- CLS evidence is conflicting: previous desktop artifact reported `0.908`, while the fresh Phase 4 desktop run reported `0.009` and only identified the broad `main#main-content` node. Do not assign a CLS root cause or implement layout reservation changes until a repeated trace/filmstrip review confirms a specific source.
+- Image payload issue is confirmed: fresh Lighthouse desktop reports `8,356 KiB` total byte weight, `5` image requests totaling `8,388,839 B`, and `8,101 KiB` estimated image-delivery savings. The largest assets are raw Contentful hero/timeline images.
+- Code-path inspection found raw Contentful asset URLs flowing through hero, timeline, project, article card, article detail, and rich-text rendering paths. Future implementation should use derived Contentful image URLs/`srcset`/`sizes` without changing CMS models or normalized content contracts.
+- No image delivery implementation, CLS fix, layout change, routing change, CMS model change, Contentful migration, typography/card/elevation polish, or production behavior change was introduced during evidence capture.
+
 ## Phase 5 - Typography Decision and Type-Scale Refinement
 
 Objective:

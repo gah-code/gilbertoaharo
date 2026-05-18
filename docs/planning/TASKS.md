@@ -7,9 +7,11 @@ Roadmap v2 status: complete. Phases `A` through `F` are closed (April 24, 2026).
 
 ## Now
 
-- [ ] **Design System + UX Roadmap — Phase 4 readiness gate**
+- [ ] **Design System + UX Roadmap — Phase 4 evidence review / implementation decision**
   - Phase 3 — Token Verification and Responsive/Motion Token Alignment is closed.
-  - Phase 4 is ready to begin with evidence capture only: confirm desktop CLS with Lighthouse trace/filmstrip evidence and review image payload evidence before assigning root cause or changing implementation.
+  - Phase 4 evidence capture is documented in `docs/planning/phase-4-image-cls-evidence.md`.
+  - Fresh Lighthouse desktop evidence did not reproduce the severe CLS finding (`0.009` fresh vs. `0.908` previous), so CLS root cause remains unconfirmed and must not drive layout changes yet.
+  - Image payload weight is confirmed: fresh desktop Lighthouse reports `8,356 KiB` total byte weight, `5` image requests totaling `8,388,839 B`, and `8,101 KiB` estimated image-delivery savings.
   - Do not start image delivery changes, CLS fixes, typography, card/elevation, section polish, routing, IA, CMS, or Contentful migration work without explicit Phase 4 implementation approval.
 
 - [ ] **Roadmap v2 closeout complete — maintenance mode**
@@ -74,16 +76,14 @@ A phase cannot be considered complete unless:
 
 ---
 
-## Verification Snapshot (Latest: Phase 3 closeout gate, May 18, 2026)
+## Verification Snapshot (Latest: Phase 4 evidence capture, May 18, 2026)
 
 - [x] `npm run lint`
 - [x] `npm run test`
 - [x] `npm run build`
 - [x] `npm run build-storybook` (pass with Node `22.12.0` selected through the local version manager)
-- [x] Focused CSS custom property scan (no concrete undefined references; dynamic `Stack` `--space-` scan hit remains a documented false positive)
-- [x] Motion baseline scan (navigation local transition values documented as deferred)
-- [x] Responsive/breakpoint scan (reference tokens confirmed; explicit media-query values documented)
-- [x] Current Storybook guidance uses portable Node `22.12+` instructions instead of a machine-specific PATH command.
+- [x] Fresh desktop Lighthouse performance evidence captured locally under `.tmp/design-system-audit/` (untracked)
+- [x] Phase 4 image payload inventory and image code-path inventory documented
 - [x] `git diff --check`
 
 Runtime note:
@@ -110,7 +110,8 @@ Runtime note:
 
 - Current design-system roadmap: `docs/planning/design-system-roadmap-current.md`
 - Phase 2 deploy validation spec: `docs/planning/phase-2-deploy-artifact-validation-spec.md`
-- Phase 4 evidence source: `.tmp/design-system-audit/` local Lighthouse artifacts (untracked)
+- Phase 4 evidence report: `docs/planning/phase-4-image-cls-evidence.md`
+- Phase 4 raw evidence source: `.tmp/design-system-audit/` local Lighthouse artifacts (untracked)
 - Phase F maintenance discipline record: `docs/planning/PHASE-F-MAINTENANCE-QA-RELEASE-DISCIPLINE.md`
 - Phase E structure hardening record: `docs/planning/PHASE-E-PROJECT-STRUCTURE-HARDENING.md`
 - Phase D spacing/layout record: `docs/planning/PHASE-D-SPACING-LAYOUT-SPEC.md`
