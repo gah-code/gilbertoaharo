@@ -26,6 +26,14 @@ Evidence is sufficient to plan an image-delivery implementation pass, but not su
 | Speed Index | `1.5 s` | `1.5 s` | Stable across both desktop artifacts. |
 | Total byte weight | `8,355 KiB` | `8,356 KiB` | Payload issue is stable and confirmed. |
 
+Repeat CLS sanity check, May 18, 2026:
+
+| Artifact | Performance | CLS | LCP | TBT | Speed Index | Total byte weight |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `.tmp/design-system-audit/lighthouse-phase-4-cls-repeat.report.json` | `0.57` | `0.908` | `1.5 s` | `200 ms` | `2.1 s` | `8,355 KiB` |
+
+The repeat check reproduced the severe desktop CLS value, but the affected node remained the broad `main#main-content` region. That is enough to keep CLS in the Phase 4 risk register, but still not enough to implement a layout-reservation fix without isolating the specific source in trace/filmstrip review.
+
 Artifacts used:
 
 - Previous: `.tmp/design-system-audit/lighthouse-desktop.report.json`
@@ -37,14 +45,14 @@ The fresh Lighthouse command initially failed inside the sandbox because the npm
 
 ## 3. CLS Evidence
 
-- CLS value: fresh desktop `0.009`; previous desktop `0.908`.
-- Affected node(s): fresh run reports `body > div#root > div.page-shell > main#main-content`.
+- CLS value: fresh desktop `0.009`; previous desktop `0.908`; repeat desktop `0.908`.
+- Affected node(s): fresh and repeat runs report `body > div#root > div.page-shell > main#main-content`.
 - Trace/filmstrip evidence: fresh Lighthouse JSON includes `screenshot-thumbnails` and `final-screenshot`; the broad shifted node does not isolate a root cause.
 - Suspected cause: unconfirmed. Candidate areas remain async CMS content, header/main content positioning, media sizing, footer/header behavior, or font/render timing.
-- Confidence: low for CLS root cause; high that the severe prior lab finding needs repeat confirmation before implementation.
+- Confidence: low for CLS root cause; high that the severe lab finding can reproduce.
 - Root cause confirmed: no.
 
-Do not assign CLS root cause from the previous `0.908` value alone. The fresh run did not reproduce the severe shift, and the affected node is too broad to justify a layout fix without another trace/filmstrip pass.
+Do not assign CLS root cause from the `0.908` value alone. The affected node is too broad to justify a layout fix without another trace/filmstrip pass that identifies the specific shifting element or timing source.
 
 ## 4. Image Payload Inventory
 

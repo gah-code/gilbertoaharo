@@ -336,6 +336,15 @@ Evidence checkpoint (May 18, 2026):
 - Code-path inspection found raw Contentful asset URLs flowing through hero, timeline, project, article card, article detail, and rich-text rendering paths. Future implementation should use derived Contentful image URLs/`srcset`/`sizes` without changing CMS models or normalized content contracts.
 - No image delivery implementation, CLS fix, layout change, routing change, CMS model change, Contentful migration, typography/card/elevation polish, or production behavior change was introduced during evidence capture.
 
+Implementation planning checkpoint (May 18, 2026):
+
+- Status: Planning complete; implementation not started.
+- Plan: `docs/planning/phase-4-image-delivery-implementation-plan.md`.
+- Repeat desktop Lighthouse sanity check reproduced severe CLS (`0.908`) but still identified only the broad `main#main-content` node. CLS fixes remain blocked until trace/filmstrip review isolates a specific source.
+- Recommended first implementation batch: add a pure, unit-tested Contentful image URL helper at `src/lib/images/contentfulImage.ts`.
+- Recommended first adoption surfaces: Hero media through `MediaFrame`, then Timeline media images. Projects, ArticleCard, ArticlePage, and RichTextRenderer remain later extensions after Hero/Timeline prove the pattern.
+- No image rendering, layout reservation, CMS model, Contentful migration, route, typography/card/elevation, or production behavior change was introduced during planning.
+
 ## Phase 5 - Typography Decision and Type-Scale Refinement
 
 Objective:

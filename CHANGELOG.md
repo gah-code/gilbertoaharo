@@ -7,6 +7,7 @@
 - Closed Phase 3 token verification after confirming the `--space-5` fix, focused CSS variable scan, motion baseline, responsive/breakpoint baseline, and portable Storybook/Node guidance. (`docs/planning/design-system-roadmap-current.md`, `docs/planning/TASKS.md`, `docs/design-system/design-system-snapshot-audit-current.md`)
 - Added Phase 4 readiness notes that keep the next step limited to Lighthouse trace/filmstrip and image payload evidence capture before any image delivery or CLS implementation work. (`docs/planning/design-system-roadmap-current.md`, `docs/design-system/design-system-snapshot-audit-current.md`)
 - Captured Phase 4 evidence for image delivery and desktop CLS, including a fresh Lighthouse desktop artifact summary, image payload inventory, code-path inventory, and implementation decision tree without changing production behavior. (`docs/planning/phase-4-image-cls-evidence.md`, `docs/planning/design-system-roadmap-current.md`, `docs/planning/TASKS.md`, `docs/design-system/design-system-snapshot-audit-current.md`)
+- Added a Phase 4 image-delivery implementation plan that scopes the first approved path to a pure Contentful image URL helper, Hero/MediaFrame adoption, and Timeline media adoption while keeping CLS fixes blocked until a specific shift source is isolated. (`docs/planning/phase-4-image-delivery-implementation-plan.md`)
 
 ### Verification
 
@@ -18,6 +19,7 @@
 - Motion and breakpoint scans pass as closeout evidence; the machine-specific command scan finds only historical phase-record evidence, while current README/active docs remain portable.
 - `git diff --check` (passes)
 - Fresh Phase 4 Lighthouse desktop evidence captured locally under `.tmp/design-system-audit/`; CLS was not severely reproduced (`0.009` fresh vs. `0.908` previous), while image payload weight remains confirmed (`8,356 KiB`, estimated image-delivery savings `8,101 KiB`).
+- Repeat Phase 4 desktop Lighthouse sanity check reproduced severe CLS (`0.908`) and confirmed the same image payload issue (`8,355 KiB` total byte weight, `8,101 KiB` estimated image-delivery savings); CLS root cause remains unconfirmed because the affected node is still the broad `main#main-content` region.
 
 ## [2026-05-15]
 

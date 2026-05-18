@@ -613,11 +613,19 @@ Phase 4 evidence checkpoint (May 18, 2026):
 - Largest payload contributors are raw Contentful hero/timeline images. Future implementation should preserve current CMS contracts while adding derived image URL delivery, responsive `srcset`/`sizes`, modern format, and quality parameters.
 - No image delivery implementation, CLS fix, layout change, routing change, CMS model change, Contentful migration, typography/card/elevation polish, or production behavior change was introduced during evidence capture.
 
+Phase 4 implementation planning checkpoint (May 18, 2026):
+
+- Plan: `docs/planning/phase-4-image-delivery-implementation-plan.md`.
+- Repeat desktop Lighthouse sanity check reproduced severe CLS (`0.908`), but the affected node remains the broad `main#main-content` region. CLS fixes remain blocked until a specific source is isolated.
+- Recommended first implementation path: pure Contentful image URL helper, then Hero/MediaFrame responsive image adoption, then Timeline media adoption.
+- Later surfaces remain deferred: Projects, ArticleCard, ArticlePage, and RichTextRenderer.
+- No image delivery implementation, CLS fix, layout reservation change, CMS model change, Contentful migration, typography/card/elevation polish, or production behavior change was introduced during planning.
+
 | Risk | Severity | Likelihood | Evidence | User impact | Recommended mitigation | Owner/phase |
 | --- | --- | --- | --- | --- | --- | --- |
 | Invalid robots/sitemap | Low | Resolved | Phase 2 live `curl -s` checks return robots text/XML, not SPA HTML | Regression would harm crawl control and sitemap discovery | Keep body checks in release validation | Phase 2 closed |
 | Invalid live canonical | Low | Resolved | Lighthouse SEO follow-up score `100`; canonical audit passes | Regression would create duplicate/ambiguous URL signals | Keep canonical spot checks in release validation | Phase 2 closed |
-| Desktop CLS severe lab finding | High | Conflicting evidence; root cause unconfirmed | Previous desktop CLS `0.908`; fresh Phase 4 desktop CLS `0.009`; affected node remains broad `main#main-content` | Potential jarring layout shift and CWV risk if severe result reproduces | Repeat trace/filmstrip review before assigning root cause, then mitigate only the verified shift source | Phase 4/8 |
+| Desktop CLS severe lab finding | High | Reproduced; root cause unconfirmed | Previous desktop CLS `0.908`; fresh Phase 4 desktop CLS `0.009`; repeat Phase 4 desktop CLS `0.908`; affected node remains broad `main#main-content` | Potential jarring layout shift and CWV risk | Trace/filmstrip review must isolate the specific shift source before any layout-reservation fix | Phase 4/8 |
 | Oversized Contentful images | High | Confirmed by Lighthouse | Fresh desktop total byte weight `8,356 KiB`; image requests total `8,388,839 B`; estimated image-delivery savings `8,101 KiB` | Slow loads, data cost, LCP risk | Use Contentful image transforms/responsive sizes after preserving current content contracts | Phase 4/7 |
 | Accessible-name mismatches | High | Confirmed by Lighthouse | Label/content-name audit | Voice control/screen reader confusion | Align visible labels and aria labels | Phase 8 |
 | Undefined `--space-5` | Low | Resolved | `--space-5` added to `tokens.css`; undefined-variable scan clean | Regression would affect wide Learning spacing | Keep token scan in release validation | Phase 3 closed |
@@ -758,6 +766,7 @@ Scope:
 - Phase 3 motion/responsive baseline checkpoint: documented current motion-token coverage, deferred navigation hard-coded transitions, breakpoint reference-token strategy, section-specific responsive values, and portable Storybook/Node guidance. No visual polish or component behavior changes were made.
 - Phase 3 closeout checkpoint: Phase 3 is closed as of May 18, 2026 after lint/test/build/Storybook, CSS variable scan, motion scan, breakpoint scan, machine-specific command scan for current guidance, and `git diff --check` passed. Phase 4 is ready for evidence capture only; no Phase 4 implementation has started.
 - Phase 4 evidence checkpoint: created `docs/planning/phase-4-image-cls-evidence.md`, captured fresh Lighthouse desktop artifacts locally, confirmed image payload weight, documented conflicting CLS evidence, and inspected image rendering/code paths. No image delivery or CLS implementation was started.
+- Phase 4 planning checkpoint: created `docs/planning/phase-4-image-delivery-implementation-plan.md`, repeated the CLS sanity check, kept CLS fixes blocked, and planned the first image-delivery path around a pure Contentful image URL helper plus Hero/Timeline adoption. No implementation was started.
 
 Files created:
 
