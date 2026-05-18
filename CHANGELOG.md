@@ -2,6 +2,10 @@
 
 ## [2026-05-18]
 
+### Added
+
+- Added a pure Contentful image URL helper with unit coverage for URL normalization, Contentful URL detection, transformed URL generation, and `srcset` generation. This batch does not adopt the helper in UI image rendering yet. (`src/lib/images/contentfulImage.ts`, `src/lib/images/contentfulImage.test.ts`)
+
 ### Changed
 
 - Closed Phase 3 token verification after confirming the `--space-5` fix, focused CSS variable scan, motion baseline, responsive/breakpoint baseline, and portable Storybook/Node guidance. (`docs/planning/design-system-roadmap-current.md`, `docs/planning/TASKS.md`, `docs/design-system/design-system-snapshot-audit-current.md`)
@@ -12,7 +16,8 @@
 ### Verification
 
 - `npm run lint` (passes)
-- `npm run test` (passes: Vitest 31/31 files, 101/101 tests)
+- `npm run test` (passes: Vitest 32/32 files, 115/115 tests)
+- `npm run test -- src/lib/images/contentfulImage.test.ts` (passes: Vitest 1/1 file, 14/14 tests)
 - `npm run build` (passes; local Node `22.2.0` still prints the Vite Node-floor warning)
 - `npm run build-storybook` (passes with Node `22.12.0` selected through the local version manager)
 - Focused CSS custom property scan passes; only the documented dynamic `Stack` false positive remains.

@@ -226,6 +226,14 @@ Current baseline to compare against:
 - Protocol-relative URL behavior matches existing normalizers.
 - No rendering behavior changes have been introduced.
 
+Batch 4.1 checkpoint, May 18, 2026:
+
+- Status: complete.
+- Added `src/lib/images/contentfulImage.ts`.
+- Added `src/lib/images/contentfulImage.test.ts`.
+- Targeted validation passed: `npm run test -- src/lib/images/contentfulImage.test.ts`.
+- No UI image adoption, image rendering component change, layout change, CMS model change, Contentful migration, or CLS fix was introduced.
+
 ### After Hero/Timeline Adoption
 
 - No layout change.

@@ -345,6 +345,14 @@ Implementation planning checkpoint (May 18, 2026):
 - Recommended first adoption surfaces: Hero media through `MediaFrame`, then Timeline media images. Projects, ArticleCard, ArticlePage, and RichTextRenderer remain later extensions after Hero/Timeline prove the pattern.
 - No image rendering, layout reservation, CMS model, Contentful migration, route, typography/card/elevation, or production behavior change was introduced during planning.
 
+Batch 4.1 checkpoint (May 18, 2026):
+
+- Status: Helper implemented; no UI adoption yet.
+- Added pure Contentful image URL helper and tests: `src/lib/images/contentfulImage.ts`, `src/lib/images/contentfulImage.test.ts`.
+- Helper covers URL normalization, Contentful image URL detection, transformed URL generation, and `srcset` generation while preserving non-Contentful URL behavior.
+- Targeted validation passed: `npm run test -- src/lib/images/contentfulImage.test.ts`.
+- No Hero, MediaFrame, Timeline, Projects, ArticleCard, ArticlePage, RichTextRenderer, CSS, layout, routing, CMS model, Contentful migration, CLS fix, typography/card/elevation, or production image rendering adoption was introduced in Batch 4.1.
+
 ## Phase 5 - Typography Decision and Type-Scale Refinement
 
 Objective:

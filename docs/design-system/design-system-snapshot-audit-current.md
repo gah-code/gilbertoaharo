@@ -621,6 +621,14 @@ Phase 4 implementation planning checkpoint (May 18, 2026):
 - Later surfaces remain deferred: Projects, ArticleCard, ArticlePage, and RichTextRenderer.
 - No image delivery implementation, CLS fix, layout reservation change, CMS model change, Contentful migration, typography/card/elevation polish, or production behavior change was introduced during planning.
 
+Phase 4 Batch 4.1 checkpoint (May 18, 2026):
+
+- Added pure Contentful image URL helper and tests: `src/lib/images/contentfulImage.ts`, `src/lib/images/contentfulImage.test.ts`.
+- Helper covers image URL normalization, Contentful image URL detection, transform query generation, and `srcset` generation while preserving non-Contentful behavior.
+- No UI adoption has started. Hero/MediaFrame and Timeline image rendering remain unchanged.
+- CLS fixes remain blocked until trace/filmstrip review isolates a specific shift source.
+- No layout, IA, routing, CMS model, Contentful migration, typography/card/elevation polish, or production rendering behavior change was introduced in Batch 4.1.
+
 | Risk | Severity | Likelihood | Evidence | User impact | Recommended mitigation | Owner/phase |
 | --- | --- | --- | --- | --- | --- | --- |
 | Invalid robots/sitemap | Low | Resolved | Phase 2 live `curl -s` checks return robots text/XML, not SPA HTML | Regression would harm crawl control and sitemap discovery | Keep body checks in release validation | Phase 2 closed |
@@ -767,6 +775,7 @@ Scope:
 - Phase 3 closeout checkpoint: Phase 3 is closed as of May 18, 2026 after lint/test/build/Storybook, CSS variable scan, motion scan, breakpoint scan, machine-specific command scan for current guidance, and `git diff --check` passed. Phase 4 is ready for evidence capture only; no Phase 4 implementation has started.
 - Phase 4 evidence checkpoint: created `docs/planning/phase-4-image-cls-evidence.md`, captured fresh Lighthouse desktop artifacts locally, confirmed image payload weight, documented conflicting CLS evidence, and inspected image rendering/code paths. No image delivery or CLS implementation was started.
 - Phase 4 planning checkpoint: created `docs/planning/phase-4-image-delivery-implementation-plan.md`, repeated the CLS sanity check, kept CLS fixes blocked, and planned the first image-delivery path around a pure Contentful image URL helper plus Hero/Timeline adoption. No implementation was started.
+- Phase 4 Batch 4.1 checkpoint: added pure Contentful image URL helper and unit tests, preserving non-Contentful/protocol-relative behavior and avoiding all UI image adoption or CLS work.
 
 Files created:
 

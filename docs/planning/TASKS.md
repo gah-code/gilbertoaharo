@@ -7,13 +7,14 @@ Roadmap v2 status: complete. Phases `A` through `F` are closed (April 24, 2026).
 
 ## Now
 
-- [ ] **Design System + UX Roadmap — Phase 4 image delivery implementation approval**
+- [ ] **Design System + UX Roadmap — Phase 4 Hero/Timeline image delivery approval**
   - Phase 3 — Token Verification and Responsive/Motion Token Alignment is closed.
   - Phase 4 evidence capture is documented in `docs/planning/phase-4-image-cls-evidence.md`.
   - Phase 4 implementation planning is documented in `docs/planning/phase-4-image-delivery-implementation-plan.md`.
+  - Batch 4.1 is complete: a pure Contentful image URL helper and unit tests are in place, with no UI image adoption yet.
   - Repeat Lighthouse desktop evidence reproduced the severe CLS finding (`0.908`), but the affected node remains broad (`main#main-content`), so CLS root cause remains unconfirmed and must not drive layout changes yet.
   - Image payload weight is confirmed: fresh desktop Lighthouse reports `8,356 KiB` total byte weight, `5` image requests totaling `8,388,839 B`, and `8,101 KiB` estimated image-delivery savings.
-  - Recommended first implementation batch, pending approval: pure Contentful image URL helper, then Hero/MediaFrame adoption, then Timeline media adoption.
+  - Recommended next implementation batch, pending approval: Hero/MediaFrame adoption, then Timeline media adoption.
   - Do not start image delivery changes, CLS fixes, typography, card/elevation, section polish, routing, IA, CMS, or Contentful migration work without explicit Phase 4 implementation approval.
 
 - [ ] **Roadmap v2 closeout complete — maintenance mode**
@@ -78,10 +79,11 @@ A phase cannot be considered complete unless:
 
 ---
 
-## Verification Snapshot (Latest: Phase 4 implementation planning, May 18, 2026)
+## Verification Snapshot (Latest: Phase 4 Batch 4.1 helper, May 18, 2026)
 
 - [x] `npm run lint`
 - [x] `npm run test`
+- [x] `npm run test -- src/lib/images/contentfulImage.test.ts`
 - [x] `npm run build`
 - [x] `npm run build-storybook` (pass with Node `22.12.0` selected through the local version manager)
 - [x] Fresh desktop Lighthouse performance evidence captured locally under `.tmp/design-system-audit/` (untracked)
