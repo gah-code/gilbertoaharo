@@ -14,13 +14,15 @@
 - Added a Phase 4 image-delivery implementation plan that scopes the first approved path to a pure Contentful image URL helper, Hero/MediaFrame adoption, and Timeline media adoption while keeping CLS fixes blocked until a specific shift source is isolated. (`docs/planning/phase-4-image-delivery-implementation-plan.md`)
 - Adopted the Contentful image helper for Hero media only by adding generic `srcSet`/`sizes` support to `MediaFrame` and deriving transformed Hero image `src`, `srcset`, and `sizes` values without changing layout, Timeline, Projects, article, rich-text, CMS, or CLS behavior. (`src/components/sections/HeroSection.tsx`, `src/components/sections/primitives/MediaFrame.tsx`, `src/components/sections/HeroSection.test.tsx`)
 - Verified the deployed Batch 4.2 Hero image delivery impact: Netlify production serves commit `e4b2ac06`, the Hero request is transformed to WebP with responsive delivery, total byte weight dropped from about `8,356 KiB` to `5,874 KiB`, and Timeline adoption is approved as the next image-delivery batch while CLS fixes remain blocked. (`docs/planning/design-system-roadmap-current.md`, `docs/planning/TASKS.md`, `docs/planning/phase-4-image-delivery-implementation-plan.md`, `docs/design-system/design-system-snapshot-audit-current.md`)
+- Adopted the Contentful image helper for Timeline media only, adding transformed fallback `src`, responsive `srcset`, and `sizes` while preserving lazy loading, async decoding, Timeline layout/CSS, Hero behavior, Projects, article, rich-text, CMS, and CLS behavior. (`src/components/sections/TimelineSection.tsx`, `src/components/sections/TimelineSection.test.tsx`)
 
 ### Verification
 
 - `npm run lint` (passes)
-- `npm run test` (passes: Vitest 33/33 files, 117/117 tests)
+- `npm run test` (passes: Vitest 33/33 files, 119/119 tests)
 - `npm run test -- src/lib/images/contentfulImage.test.ts` (passes: Vitest 1/1 file, 14/14 tests)
 - `npm run test -- src/components/sections/HeroSection.test.tsx` (passes: Vitest 1/1 file, 2/2 tests)
+- `npm run test -- src/components/sections/TimelineSection.test.tsx` (passes: Vitest 1/1 file, 4/4 tests)
 - `npm run build` (passes; local Node `22.2.0` still prints the Vite Node-floor warning)
 - `npm run build-storybook` (passes with Node `22.12.0` selected through the local version manager)
 - Focused CSS custom property scan passes; only the documented dynamic `Stack` false positive remains.

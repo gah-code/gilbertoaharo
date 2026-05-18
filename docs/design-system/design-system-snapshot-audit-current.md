@@ -648,6 +648,15 @@ Phase 4 Batch 4.2 deploy verification checkpoint (May 18, 2026):
 - Lighthouse still reports CLS `0.908` against broad `main#main-content`, so CLS fixes remain blocked until a specific source is isolated.
 - No production code changed during this verification pass.
 
+Phase 4 Batch 4.3 checkpoint (May 18, 2026):
+
+- Adopted the existing Contentful image helper for Timeline media only through `TimelineSection`.
+- Timeline Contentful images now use transformed fallback `src`, responsive `srcset`, and `(min-width: 768px) 316px, 90vw` sizes; non-Contentful Timeline media keeps the existing single-`src` behavior.
+- Timeline loading remains `lazy`, decoding remains `async`, and no Timeline CSS, card hierarchy, layout, or aspect-ratio reservation changed.
+- Hero/MediaFrame behavior is preserved. Projects, ArticleCard, ArticlePage, and RichTextRenderer remain deferred and unchanged.
+- CLS fixes remain blocked until trace/filmstrip review isolates a specific shift source.
+- No layout, IA, routing, CMS model, Contentful migration, typography/card/elevation polish, or unrelated production behavior change was introduced in Batch 4.3.
+
 | Risk | Severity | Likelihood | Evidence | User impact | Recommended mitigation | Owner/phase |
 | --- | --- | --- | --- | --- | --- | --- |
 | Invalid robots/sitemap | Low | Resolved | Phase 2 live `curl -s` checks return robots text/XML, not SPA HTML | Regression would harm crawl control and sitemap discovery | Keep body checks in release validation | Phase 2 closed |
@@ -797,6 +806,7 @@ Scope:
 - Phase 4 Batch 4.1 checkpoint: added pure Contentful image URL helper and unit tests, preserving non-Contentful/protocol-relative behavior and avoiding all UI image adoption or CLS work.
 - Phase 4 Batch 4.2 checkpoint: adopted responsive Contentful delivery for Hero media through `MediaFrame`, preserving non-Contentful behavior and leaving Timeline/later image surfaces and CLS work untouched.
 - Phase 4 Batch 4.2 deploy verification checkpoint: production serves commit `e4b2ac06`, Hero transformed delivery is verified by Lighthouse, total byte weight improved to `5,874 KiB`, and Timeline adoption is approved next while CLS fixes remain blocked.
+- Phase 4 Batch 4.3 checkpoint: adopted responsive Contentful delivery for Timeline media, preserving Timeline layout/CSS, Hero behavior, later image surfaces, CMS boundaries, and CLS blockers.
 
 Files created:
 

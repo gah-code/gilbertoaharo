@@ -255,6 +255,17 @@ Batch 4.2 deploy verification, May 18, 2026:
 - LCP is `0.8 s`, TBT is `30 ms`, and CLS remains `0.908` with broad `main#main-content` attribution. Do not implement CLS fixes until a specific shift source is isolated.
 - Decision: proceed to Batch 4.3 Timeline media adoption; keep Projects, ArticleCard, ArticlePage, RichTextRenderer, layout reservation, and CLS fixes out of scope.
 
+Batch 4.3 checkpoint, May 18, 2026:
+
+- Status: complete locally; deploy verification pending.
+- Adopted the Contentful image helper for Timeline media only, using transformed fallback `src`, responsive `srcset`, and `(min-width: 768px) 316px, 90vw` sizes.
+- Timeline width candidates are `320`, `480`, `640`, and `800`; fallback transformed `src` uses width `800`, quality `75`, and format `webp`.
+- Non-Contentful Timeline URLs preserve the existing single-`src` behavior.
+- Loading remains `lazy` and decoding remains `async`.
+- Targeted validation passed: `npm run test -- src/components/sections/TimelineSection.test.tsx` and `npm run test -- src/lib/images/contentfulImage.test.ts`.
+- No Timeline CSS, layout, card hierarchy, aspect-ratio reservation, Hero behavior, Projects, ArticleCard, ArticlePage, RichTextRenderer, routing, CMS model, Contentful migration, or CLS fix was introduced.
+- Next gate: deploy and verify live Timeline payload impact before approving later image surfaces.
+
 ### After Hero/Timeline Adoption
 
 - No layout change.

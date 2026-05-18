@@ -373,6 +373,15 @@ Batch 4.2 deploy verification checkpoint (May 18, 2026):
 - Lighthouse after deploy: performance `0.75`, LCP `0.8 s`, CLS `0.908`, TBT `30 ms`. CLS still identifies only broad `main#main-content`, so CLS fixes remain blocked.
 - No production code changed during this verification pass.
 
+Batch 4.3 checkpoint (May 18, 2026):
+
+- Status: Timeline media adoption implemented locally; deploy payload verification is next.
+- `TimelineSection` now derives transformed Contentful Timeline media `src`, `srcset`, and `sizes` values using the existing helper (`webp`, quality `75`, widths `320/480/640/800`, fallback width `800`, sizes `(min-width: 768px) 316px, 90vw`).
+- Non-Contentful Timeline media keeps the existing single-`src` behavior and omits `srcset`/`sizes`.
+- Timeline image `loading="lazy"` and `decoding="async"` behavior is preserved.
+- Targeted validation passed: `npm run test -- src/components/sections/TimelineSection.test.tsx` and `npm run test -- src/lib/images/contentfulImage.test.ts`.
+- No Timeline CSS, layout, card hierarchy, aspect-ratio reservation, Hero behavior, Projects, ArticleCard, ArticlePage, RichTextRenderer, routing, IA, CMS model, Contentful migration, CLS fix, typography/card/elevation, or unrelated production behavior change was introduced in Batch 4.3.
+
 ## Phase 5 - Typography Decision and Type-Scale Refinement
 
 Objective:
