@@ -1,5 +1,22 @@
 # Changelog
 
+## [2026-05-18]
+
+### Changed
+
+- Closed Phase 3 token verification after confirming the `--space-5` fix, focused CSS variable scan, motion baseline, responsive/breakpoint baseline, and portable Storybook/Node guidance. (`docs/planning/design-system-roadmap-current.md`, `docs/planning/TASKS.md`, `docs/design-system/design-system-snapshot-audit-current.md`)
+- Added Phase 4 readiness notes that keep the next step limited to Lighthouse trace/filmstrip and image payload evidence capture before any image delivery or CLS implementation work. (`docs/planning/design-system-roadmap-current.md`, `docs/design-system/design-system-snapshot-audit-current.md`)
+
+### Verification
+
+- `npm run lint` (passes)
+- `npm run test` (passes: Vitest 31/31 files, 101/101 tests)
+- `npm run build` (passes; local Node `22.2.0` still prints the Vite Node-floor warning)
+- `npm run build-storybook` (passes with Node `22.12.0` selected through the local version manager)
+- Focused CSS custom property scan passes; only the documented dynamic `Stack` false positive remains.
+- Motion and breakpoint scans pass as closeout evidence; the machine-specific command scan finds only historical phase-record evidence, while current README/active docs remain portable.
+- `git diff --check` (passes)
+
 ## [2026-05-15]
 
 ### Added

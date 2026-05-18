@@ -1,7 +1,7 @@
 # Design System + UX Roadmap - Current
 
 Date: May 15, 2026  
-Status: proposed roadmap after current-state audit  
+Status: Phase 3 closed; Phase 4 ready for evidence capture
 Mode: preserve UI-first, CMS-second architecture; no layout/IA/routing/CMS changes without explicit approval.
 
 Preferred path:
@@ -239,6 +239,19 @@ Batch 2 checkpoint (May 15, 2026):
 - README Storybook guidance now uses portable Node `22.12+` instructions via `.nvmrc`, `.node-version`, or an equivalent version manager instead of a machine-specific PATH command.
 - No layout, IA, routing, CMS model, Contentful migration, typography, card/elevation, image delivery, CLS, or visual polish work was started.
 
+Closeout checkpoint (May 18, 2026):
+
+- Status: Closed.
+- `--space-5` token defect is resolved and documented in `src/styles/tokens.css`, `src/stories/Tokens.stories.tsx`, and `docs/design-system/foundations.md`.
+- Focused CSS custom property scan passes. The only remaining scan hit is the documented dynamic `Stack` false positive (`--space-` from `var(--space-${gap})`).
+- Motion baseline is documented: primitives, ArticleCard, Projects, Hero, and Footer use shared motion tokens with reduced-motion coverage.
+- Responsive/breakpoint baseline is documented: reference tokens remain documentation/JS anchors, and explicit media-query values remain the browser-safe CSS strategy.
+- Deferred findings are preserved for navigation hard-coded transition values and section-specific breakpoints (`96rem`, `820px`, `900px`/`901px`, `480px`); these are later QA/polish findings, not Phase 3 blockers.
+- Current Storybook guidance uses portable Node `22.12+` instructions through `.nvmrc`, `.node-version`, or an equivalent version manager.
+- Validation passed: `npm run lint`, `npm run test`, `npm run build`, `npm run build-storybook` with Node `22.12.0`, focused CSS custom property scan, motion scan, breakpoint scan, machine-specific command scan for current guidance, and `git diff --check`.
+- No layout, IA, routing, CMS model, Contentful migration, typography/card/elevation polish, image delivery, CLS implementation, or production behavior changes were introduced during Phase 3 closeout.
+- Reopen only if a true regression is discovered in token definitions, undefined custom property hygiene, motion/reduced-motion documentation, breakpoint reference documentation, or current Storybook Node guidance.
+
 ## Phase 4 - Image Delivery and Desktop CLS Confirmation
 
 Objective:
@@ -302,6 +315,16 @@ Rollback strategy:
 Type:
 
 - Investigation first; implementation only after confirmation.
+
+Readiness checkpoint (May 18, 2026):
+
+- Status: Ready / next, but not started.
+- Why Phase 4 exists: the current audit found heavy live image payloads and a serious desktop CLS Lighthouse lab finding that should be confirmed before visual polish or implementation changes.
+- Current evidence: `.tmp/design-system-audit/lighthouse-desktop.report.json`, `.tmp/design-system-audit/lighthouse-desktop.report.html`, `.tmp/design-system-audit/lighthouse-mobile.report.json`, `.tmp/design-system-audit/lighthouse-mobile.report.html`, and Phase 2 SEO follow-up artifacts remain local/untracked.
+- Missing evidence: trace/filmstrip review that identifies the exact desktop CLS source, image payload inventory by asset/source, and confirmation of whether Contentful image sizing, async content, media reservation, header/footer behavior, or font fallback contributes to the shift.
+- Required first task: capture or review Lighthouse desktop trace/filmstrip evidence and image network payload evidence before assigning root cause or changing image delivery.
+- Files likely affected later, after evidence: `src/content/contentful/*`, `src/components/sections/*`, `src/components/articles/ArticleCard.*`, `src/components/rich-text/*`, and performance/audit docs.
+- Out of scope until Phase 4 implementation starts: image helper changes, `srcset`/format changes, layout reservation changes, CLS fixes, route changes, CMS migrations, typography, card/elevation, or section visual polish.
 
 ## Phase 5 - Typography Decision and Type-Scale Refinement
 
@@ -742,8 +765,8 @@ Current branch:
 
 1. Complete Phase 1 baseline freeze.
 2. Phase 2 SEO cleanup is closed: robots, sitemap, canonical, `index.html` fallback metadata/icons/share tags, weak link text, and body checks now pass on the live site.
-3. Continue Phase 3 token verification: the first `--space-5` defect is fixed; keep remaining work limited to token scan documentation and responsive/motion baseline notes.
-4. Confirm desktop CLS with Lighthouse trace/filmstrip review and investigate image payloads before visual polish.
+3. Phase 3 token verification is closed.
+4. Begin Phase 4 with Lighthouse trace/filmstrip review and image payload evidence capture before visual polish or implementation changes.
 5. Keep typography system-stack for now.
 6. Define elevation model and card hierarchy before broad card CSS tuning.
 7. Improve ArticleCard/project visible link labels and card hierarchy.
@@ -769,6 +792,8 @@ Current checkpoint:
 - Phase 2 implementation checkpoint added on May 15, 2026: local crawler files, canonical fallback, fallback metadata, favicon, generic project-action label guard, tests, build output inspection, and deploy/Lighthouse follow-up are documented.
 - Phase 2 closeout checkpoint added on May 15, 2026: live crawler files, root metadata, canonical behavior, deployed commit, and Lighthouse SEO `100` are documented in `docs/planning/phase-2-deploy-artifact-validation-spec.md`. The prior blocker is preserved as a resolved Netlify stale deploy/cache incident.
 - Phase 3 implementation checkpoint added on May 15, 2026: token verification started only after Phase 2 closeout; the missing `--space-5` token was added and the undefined-variable scan found no remaining concrete undefined references.
+- Phase 3 Batch 2 checkpoint added on May 15, 2026: motion/responsive baseline documentation completed, navigation transition alignment deferred, section-specific breakpoints documented, and README Storybook guidance made portable.
+- Phase 3 closeout checkpoint added on May 18, 2026: Phase 3 is closed after validation; Phase 4 is ready for evidence capture only and no Phase 4 implementation has started.
 
 CHANGELOG guidance:
 

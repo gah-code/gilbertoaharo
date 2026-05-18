@@ -14,9 +14,9 @@ The highest-priority risks are not broad architecture gaps. They are focused rel
 - Live performance has heavy Contentful image payloads and a serious desktop CLS Lighthouse lab finding that needs trace/filmstrip confirmation before root cause is assigned.
 - Accessibility is generally strong but has content/name mismatches caused by CMS-provided `ariaLabel` values that do not include visible button/link text.
 - Heading levels skip from section headings to `h4` in timeline and learning cards.
-- Phase 3 token verification has started; the confirmed `--space-5` defect is fixed by adding the missing midpoint token to `tokens.css`.
+- Phase 3 token verification is closed: the confirmed `--space-5` defect is fixed, the CSS variable scan passes, motion/responsive baselines are documented, and deferred findings are preserved for later QA/polish.
 
-Recommended next move: continue Phase 3 token verification documentation and then move to desktop CLS/image evidence before visual polish. The preferred path remains conservative: keep the Phase 2 SEO evidence closed, finish token/responsive/motion baseline notes, confirm desktop CLS with trace/filmstrip evidence, then improve image delivery and card/section polish without changing IA, routing, CMS boundaries, or layout strategy.
+Recommended next move: start Phase 4 with evidence capture only. Confirm desktop CLS with Lighthouse trace/filmstrip evidence and review image payloads before assigning root cause or changing image delivery. The preferred path remains conservative: keep the Phase 2 SEO evidence closed, keep Phase 3 token/motion/responsive closeout intact, then improve image delivery only after evidence while preserving IA, routing, CMS boundaries, and layout strategy.
 
 ## 2. Evidence and Method
 
@@ -70,7 +70,7 @@ Known limitations:
 
 | Area | Current status | Confidence | Evidence | Risk | Recommended next action |
 | --- | --- | --- | --- | --- | --- |
-| Foundations/tokens | Strong, organized token layer with typography, color, spacing, radius, shadow, motion, breakpoint references, controls, focus, button/link/card tokens. Phase 3 added the missing `--space-5` midpoint token. | High | `src/styles/tokens.css`, `src/stories/Tokens.stories.tsx` | Navigation still has hard-coded transition values; broader motion alignment is deferred. | Continue responsive/motion baseline documentation; avoid broad visual refactors. |
+| Foundations/tokens | Strong, organized token layer with typography, color, spacing, radius, shadow, motion, breakpoint references, controls, focus, button/link/card tokens. Phase 3 added the missing `--space-5` midpoint token and is now closed. | High | `src/styles/tokens.css`, `src/stories/Tokens.stories.tsx`, `foundations.md` | Navigation still has hard-coded transition values; broader motion alignment is deferred. | Preserve Phase 3 closeout; move next to Phase 4 evidence capture. |
 | Typography | Solid system stack and role aliases; readable line-height; headline tracking is slightly tight but controlled. | High | `tokens.css`, `Heading`, `Text`, `ArticlePage.css` | Brand could remain generic; article pages could use stronger editorial rhythm. | Decide whether to stay system-font or test one variable sans. |
 | Color/contrast | Automated contrast passes in Lighthouse; semantic colors exist. | High | Lighthouse color contrast score 1, tokens. | Border token `#8f887e` can feel heavy if overused. | Keep palette; tune border/elevation locally if visual noise appears. |
 | Spacing/whitespace | Strong section/card spacing tokens and colocated usage; `--space-5` now exists as the midpoint between `--space-4` and `--space-6`. | High | `tokens.css`, `base.css`, Phase D docs | Breakpoint values are still explicit by design because CSS custom properties are not reliable in media queries. | Keep token verification scoped; do not redesign spacing. |
@@ -207,7 +207,7 @@ Results:
 | Foundation | Exists | Used | Duplicated | Missing/gap | Change now or defer |
 | --- | --- | --- | --- | --- | --- |
 | Typography tokens | `--font-sans`, `--font-mono`, sizes, roles, line-height, tracking. | `Heading`, `Text`, sections, pages. | Some page/section CSS uses direct clamps. | No web-font decision recorded for brand direction. | Defer font change; document decision first. |
-| Spacing tokens | `--space-1/2/3/4/5/6/8/10/12/16`, section/card/grid aliases. | Broadly used. | Explicit media-query values duplicate breakpoint intent. | No concrete undefined spacing-token references remain after Phase 3 start. | Continue token scan documentation; defer broad spacing changes. |
+| Spacing tokens | `--space-1/2/3/4/5/6/8/10/12/16`, section/card/grid aliases. | Broadly used. | Explicit media-query values duplicate breakpoint intent. | No concrete undefined spacing-token references remain after Phase 3 closeout. | Preserve token scan evidence; defer broad spacing changes. |
 | Color tokens | Background/surface/accent/text/muted/border/state colors. | Broadly used. | Some local `rgba` and `color-mix` values. | No formal non-text contrast token matrix. | Defer matrix; keep contrast QA. |
 | Radius tokens | `sm`, `md`, `lg`, `pill`. | Cards, badges, nav, sections. | Some `calc(radius + px)` local usage. | No elevation/radius pairing guidance. | Defer to polish phase. |
 | Shadow/elevation tokens | `--shadow-soft`, `--shadow-soft-strong`. | Cards/media/ArticleCard/sections. | Nav has some hard-coded shadows. | No "no shadow vs border vs elevated" spec. | Add guidance before visual tuning. |
@@ -589,6 +589,21 @@ Phase 3 motion/responsive baseline note (May 15, 2026):
 - README Storybook guidance was updated to portable Node `22.12+` instructions through `.nvmrc`, `.node-version`, or an equivalent version manager.
 - No layout, IA, routing, CMS model, Contentful migration, typography, card/elevation, image delivery, CLS, or visual polish work was started.
 
+Phase 3 closeout note (May 18, 2026):
+
+- Phase 3 is closed.
+- Closeout evidence: `--space-5` token defect resolved, focused CSS custom property scan passes with only the documented dynamic `Stack` false positive, motion baseline documented, responsive/breakpoint baseline documented, and current Storybook guidance uses portable Node `22.12+` instructions.
+- Deferred findings remain intentionally open for later QA/polish: navigation hard-coded transition values, section-specific breakpoint values, and manual responsive QA.
+- Validation passed: `npm run lint`, `npm run test`, `npm run build`, `npm run build-storybook` with Node `22.12.0`, CSS variable scan, motion scan, breakpoint scan, machine-specific command scan for current guidance, and `git diff --check`.
+- No layout, IA, routing, CMS model, Contentful migration, typography/card/elevation polish, image delivery, CLS implementation, or production behavior changes were introduced during Phase 3 closeout.
+
+Phase 4 readiness note (May 18, 2026):
+
+- Phase 4 is ready to begin, but implementation has not started.
+- Phase 4 should start with evidence capture: review Lighthouse desktop trace/filmstrip evidence and image network payloads before assigning CLS root cause or changing image delivery.
+- Existing local evidence lives in `.tmp/design-system-audit/` and remains untracked.
+- Missing evidence: confirmed desktop CLS source, asset-by-asset payload inventory, and an evidence-backed decision on whether Contentful image sizing, async content, media reservation, header/footer behavior, or font fallback contributes to the measured shift.
+
 | Risk | Severity | Likelihood | Evidence | User impact | Recommended mitigation | Owner/phase |
 | --- | --- | --- | --- | --- | --- | --- |
 | Invalid robots/sitemap | Low | Resolved | Phase 2 live `curl -s` checks return robots text/XML, not SPA HTML | Regression would harm crawl control and sitemap discovery | Keep body checks in release validation | Phase 2 closed |
@@ -596,8 +611,8 @@ Phase 3 motion/responsive baseline note (May 15, 2026):
 | Desktop CLS 0.908 | High | Confirmed by Lighthouse lab output; root cause unconfirmed | Desktop performance 73 | Potential jarring layout shift and CWV risk | Confirm with trace/filmstrip before assigning root cause, then mitigate the verified shift source | Phase 4/8 |
 | Oversized Contentful images | High | Confirmed by Lighthouse | 6.9-8.3 MB total transfer | Slow loads, data cost, LCP risk | Use Contentful image transforms/responsive sizes after preserving current content contracts | Phase 4/7 |
 | Accessible-name mismatches | High | Confirmed by Lighthouse | Label/content-name audit | Voice control/screen reader confusion | Align visible labels and aria labels | Phase 8 |
-| Undefined `--space-5` | Low | Resolved | `--space-5` added to `tokens.css`; undefined-variable scan clean | Regression would affect wide Learning spacing | Keep token scan in Phase 3 validation | Phase 3 started |
-| Navigation hard-coded motion values | Low-medium | Confirmed | `Navigation.css` uses local `0.12s`, `0.15s`, and `0.2s` `ease` transitions; reduced-motion block exists | Possible motion inconsistency, but current behavior is stable | Defer until a motion-token alignment phase can preserve or intentionally change behavior | Phase 3 deferred / later polish |
+| Undefined `--space-5` | Low | Resolved | `--space-5` added to `tokens.css`; undefined-variable scan clean | Regression would affect wide Learning spacing | Keep token scan in release validation | Phase 3 closed |
+| Navigation hard-coded motion values | Low-medium | Confirmed | `Navigation.css` uses local `0.12s`, `0.15s`, and `0.2s` `ease` transitions; reduced-motion block exists | Possible motion inconsistency, but current behavior is stable | Defer until a motion-token alignment phase can preserve or intentionally change behavior | Phase 3 closed / later polish |
 | Section-specific breakpoint drift | Low-medium | Confirmed | Learning `96rem`, Hero `820px`, Footer/Header `900px`/`901px`, compact `480px` values | Potential responsive maintenance friction | Keep documented as content-specific values; verify during responsive QA before changing | Phase 8 |
 | Heading order skips | Medium | Confirmed by Lighthouse | `TimelineSection`, `LearningRoadmapTimeline` | Screen reader navigation clarity | Use semantic `h3` visual size override | Phase 8 |
 | Default Node drift | Medium | Confirmed | Node `22.2.0`; Storybook fails | Local validation friction | Make default shell resolve 22.12+ | Phase 10 |
@@ -615,7 +630,7 @@ Phase 3 motion/responsive baseline note (May 15, 2026):
 | Preserve crawler-file body validation with `curl -s` and reject SPA fallback HTML. | High | Low | Low | deploy config, validation notes | No layout |
 | Keep live canonical validation in release checks. | High | Low-medium | Medium | `src/lib/seo.ts`, env/deploy config, `SeoHead` tests | No layout |
 | Keep `index.html` fallback SEO title, description, icons, and baseline share metadata aligned with route metadata. | Medium | Low | Low | `index.html`, `public/*` | No layout |
-| Continue Phase 3 token scan documentation after fixing `--space-5`. | Medium | Low | Low | `tokens.css`, foundations docs | No layout redesign |
+| Preserve Phase 3 token/motion/responsive closeout evidence in release checks. | Medium | Low | Low | `tokens.css`, foundations docs, planning docs | No layout redesign |
 
 ### Design Polish
 
@@ -732,6 +747,7 @@ Scope:
 - Phase 3 start checkpoint: token verification began after Phase 2 closeout; `--space-5` was added and the focused undefined-variable scan is clean.
 - Phase 3 validation checkpoint: `npm run lint`, `npm run test`, `npm run build`, focused CSS custom property scan, and `npm run build-storybook` with Node `22.12.0` passed. Default shell Node remains `v22.2.0`, so `npm run build` still prints the known Vite Node-floor warning.
 - Phase 3 motion/responsive baseline checkpoint: documented current motion-token coverage, deferred navigation hard-coded transitions, breakpoint reference-token strategy, section-specific responsive values, and portable Storybook/Node guidance. No visual polish or component behavior changes were made.
+- Phase 3 closeout checkpoint: Phase 3 is closed as of May 18, 2026 after lint/test/build/Storybook, CSS variable scan, motion scan, breakpoint scan, machine-specific command scan for current guidance, and `git diff --check` passed. Phase 4 is ready for evidence capture only; no Phase 4 implementation has started.
 
 Files created:
 
