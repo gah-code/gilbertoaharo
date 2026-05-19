@@ -15,6 +15,7 @@ type AssetLike = {
     file?: {
       url?: string;
       fileName?: string;
+      contentType?: string;
       details?: {
         image?: {
           width?: number;
@@ -45,6 +46,42 @@ function parsePositiveDimension(value: unknown): number | undefined {
   return typeof value === "number" && Number.isFinite(value) && value > 0
     ? value
     : undefined;
+}
+
+function isExternalHref(href: string): boolean {
+  return /^https?:\/\//i.test(href) || href.startsWith("//");
+}
+
+function isImageAsset(contentType?: string, url?: string): boolean {
+  if (contentType) return contentType.startsWith("image/");
+  return /\.(avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(url ?? "");
+}
+
+function renderChildren(node: RichTextNode, key: string | number): React.ReactNode[] {
+  return nodeChildren(node).map((child, i) =>
+    renderNode(child, `${key}-${i}`),
+  );
+}
+
+function renderLink(
+  key: string | number,
+  href: string | undefined,
+  children: React.ReactNode,
+) {
+  const resolvedHref = href?.trim();
+  if (!resolvedHref) return <React.Fragment key={key}>{children}</React.Fragment>;
+
+  const isExternal = isExternalHref(resolvedHref);
+  return (
+    <a
+      key={key}
+      href={resolvedHref}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noreferrer noopener" : undefined}
+    >
+      {children}
+    </a>
+  );
 }
 
 function applyMarks(text: string, marks: RichTextMark[]) {
@@ -79,6 +116,26 @@ function renderAsset(
   const alt = description || title || file?.fileName || "Embedded media";
   const width = parsePositiveDimension(file?.details?.image?.width);
   const height = parsePositiveDimension(file?.details?.image?.height);
+  const isImage = isImageAsset(file?.contentType, url);
+
+  if (!isImage) {
+    const label = title || file?.fileName || "Open embedded asset";
+
+    if (inline) {
+      return (
+        <span key={key} className="embedded-asset embedded-asset--inline embedded-asset--file">
+          {renderLink(`${key}-link`, url, label)}
+        </span>
+      );
+    }
+
+    return (
+      <figure key={key} className="embedded-asset embedded-asset--file">
+        {renderLink(`${key}-link`, url, label)}
+        {description && <figcaption>{description}</figcaption>}
+      </figure>
+    );
+  }
 
   if (inline) {
     return (
@@ -123,9 +180,7 @@ function renderNode(node: RichTextNode, key: string | number): React.ReactNode {
     case "paragraph":
       return (
         <p key={key}>
-          {children.map((child, i) =>
-            renderNode(child, `${key}-${i}`),
-          )}
+          {renderChildren(node, key)}
         </p>
       );
 
@@ -134,62 +189,49 @@ function renderNode(node: RichTextNode, key: string | number): React.ReactNode {
       return applyMarks(node.value ?? "", marks);
     }
 
+    case "heading-1":
     case "heading-2":
       return (
         <h2 key={key}>
-          {children.map((child, i) =>
-            renderNode(child, `${key}-${i}`),
-          )}
+          {renderChildren(node, key)}
         </h2>
       );
     case "heading-3":
       return (
         <h3 key={key}>
-          {children.map((child, i) =>
-            renderNode(child, `${key}-${i}`),
-          )}
+          {renderChildren(node, key)}
         </h3>
       );
     case "heading-4":
       return (
         <h4 key={key}>
-          {children.map((child, i) =>
-            renderNode(child, `${key}-${i}`),
-          )}
+          {renderChildren(node, key)}
         </h4>
       );
 
     case "unordered-list":
       return (
         <ul key={key}>
-          {children.map((child, i) =>
-            renderNode(child, `${key}-${i}`),
-          )}
+          {renderChildren(node, key)}
         </ul>
       );
     case "ordered-list":
       return (
         <ol key={key}>
-          {children.map((child, i) =>
-            renderNode(child, `${key}-${i}`),
-          )}
+          {renderChildren(node, key)}
         </ol>
       );
     case "list-item":
       return (
         <li key={key}>
-          {children.map((child, i) =>
-            renderNode(child, `${key}-${i}`),
-          )}
+          {renderChildren(node, key)}
         </li>
       );
 
     case "quote":
       return (
         <blockquote key={key}>
-          {children.map((child, i) =>
-            renderNode(child, `${key}-${i}`),
-          )}
+          {renderChildren(node, key)}
         </blockquote>
       );
 
@@ -197,13 +239,16 @@ function renderNode(node: RichTextNode, key: string | number): React.ReactNode {
       return <hr key={key} />;
 
     case "hyperlink": {
-      const href = typeof node.data?.uri === "string" ? node.data.uri : "#";
-      return (
-        <a key={key} href={href} target="_blank" rel="noreferrer noopener">
-          {children.map((child, i) =>
-            renderNode(child, `${key}-${i}`),
-          )}
-        </a>
+      const href = typeof node.data?.uri === "string" ? node.data.uri : undefined;
+      return renderLink(key, href, renderChildren(node, key));
+    }
+
+    case "asset-hyperlink": {
+      const asset = asNode(node.data?.target) as AssetLike | null;
+      return renderLink(
+        key,
+        resolveAssetUrl(asset?.fields?.file?.url),
+        renderChildren(node, key),
       );
     }
 
@@ -212,6 +257,10 @@ function renderNode(node: RichTextNode, key: string | number): React.ReactNode {
 
     case "embedded-asset-inline":
       return renderAsset(node, key, true);
+
+    case "entry-hyperlink":
+    case "embedded-entry-inline":
+      return <React.Fragment key={key}>{renderChildren(node, key)}</React.Fragment>;
 
     default:
       return null;

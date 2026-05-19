@@ -38,6 +38,40 @@ A phase cannot be considered complete unless:
 
 ## Recently Completed
 
+- [x] **Phase 9G — Article Mobile Overflow + Content Formatting Audit**
+  - Status: complete.
+  - Reviewed `/articles/web-development-certifications-learning-journey` from the live Contentful source at 375px, 430px, 768px, and 1280px. QA screenshots and metrics were captured under `.tmp/phase-9g-certifications-qa/` as local untracked evidence.
+  - Findings: the article body is a Contentful Rich Text document containing only paragraph/text nodes, including 12 Markdown-like `###` heading strings and 11 raw certificate URLs. This is a content authoring issue, not a renderer bug.
+  - Overflow defect: before the patch, the 375px viewport had horizontal overflow from `.article-body__content` caused by long visible URL text. After the CSS guardrail patch, all checked viewports reported no document or body overflow.
+  - Patches: added local article body overflow guards in `ArticlePage.css` and added Contentful Rich Text authoring guidance to `docs/content/editorial-guidelines.md`.
+  - Manual Contentful cleanup remains recommended: convert pasted `### Course Title` text into actual Heading 3 blocks, convert raw certificate URLs into descriptive `View certificate` hyperlinks, and keep provider/completed/hours content as paragraph text or structured list content.
+  - Guardrails: no Contentful model changes, article data shape changes, route changes, `ArticlePage` refactor, `RichTextRenderer` refactor, or Markdown parser were added.
+
+- [x] **Phase 9F — Article Rich Text Stress QA + Contentful Source Debug**
+  - Status: complete.
+  - Added the static-source article fixture `/articles/rich-text-formatting-qa` to exercise paragraph text, rich text heading 1 downgrade, h2/h3/h4 headings, unordered and ordered lists, blockquotes, horizontal rules, external and internal links, bold, italic, underline, inline code, embedded image assets, embedded non-image file assets, long paragraphs, long link text, and attachment rendering.
+  - Reviewed the fixture route at 375px, 768px, and 1280px with the static content source. QA screenshots and metrics were captured under `.tmp/phase-9f-rich-text-qa/` as local untracked evidence.
+  - Findings: the rich text rendering contract held across the article shell, including a single page-level `h1`, body heading 1 rendering as `h2`, safe external links, readable list/blockquote/hr rhythm, embedded asset layout, file fallback links, and no horizontal overflow.
+  - Patches: no `ArticlePage.css`, `ArticlePage.tsx`, route, renderer, Contentful model, or Contentful adapter changes were needed. The only runtime data change was the static QA fixture.
+  - Contentful source debug: local env keys for space, environment, and delivery token are present; `VITE_CONTENT_SOURCE` is not configured locally, so the app defaults to `contentful`. A sanitized delivery API query returned article slugs `web-development-certifications-learning-journey` and `about-me`; the previously preferred `/articles/resilient-content-systems` slug is not present in the configured delivery environment.
+  - Live Contentful parity remains a content/configuration follow-up: confirm the intended article slug is published in the configured Contentful environment, or use `/articles/about-me` for live-source QA. Preview env vars are present, but preview mode is not wired into the current content source.
+  - Verification passed with Node `22.12.0`: `npm run lint`, `npm run build`, `npm run test`, and `npm run build-storybook`.
+
+- [x] **Phase 9E — Article Preview QA Pass**
+  - Status: complete.
+  - Reviewed `/articles/resilient-content-systems` at 375px, 768px, and 1280px using the static content source because the live Contentful source did not resolve article data in the local dev session.
+  - Findings: article shell, context nav, title, metadata wrapping, lede rhythm, hero crop, body measure, footer nav, and horizontal overflow all passed for the available fixture content.
+  - Patches: no CSS, renderer, route, Contentful model, or article data changes were needed. QA screenshots and metrics were captured under `.tmp/phase-9e-article-qa-static/` as local untracked evidence.
+
+- [x] **Phase 9D — Contentful Article Editorial QA Checklist**
+  - Status: complete.
+  - Created editorial QA guidance for Contentful article formatting based on the Phase 9B article layout and Phase 9C `RichTextRenderer` contract.
+
+- [x] **Phase 9A — ProjectsSection Card Scale Patch**
+  - Goal: reduced oversized `ProjectsSection` card behavior, especially in the single-card state.
+  - Scope: CSS-only patch in `ProjectsSection.css`, reduced single-card max width, tightened card rhythm, capped media height, and preserved slider, accessibility, reduced-motion, and data contracts.
+  - Guardrails: no Contentful model changes, normalized data changes, route changes, or shared Card component changes.
+
 - [x] **Phase 3 — Token Verification and Responsive/Motion Token Alignment** (closed May 18, 2026)
   - `--space-5` token defect resolved, focused CSS custom property scan passes with only the documented dynamic `Stack` false positive, motion/responsive baseline notes are documented, and portable Storybook/Node guidance is current.
   - Deferred findings are preserved for navigation hard-coded transition alignment and section-specific responsive QA; these are not Phase 3 blockers.
