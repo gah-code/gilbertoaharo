@@ -7,7 +7,7 @@ Roadmap v2 status: complete. Phases `A` through `F` are closed (April 24, 2026).
 
 ## Now
 
-- [ ] **Design System + UX Roadmap — Phase 4 later image-surface planning**
+- [ ] **Design System + UX Roadmap — Phase 4 ArticleCard image-delivery planning**
   - Phase 3 — Token Verification and Responsive/Motion Token Alignment is closed.
   - Phase 4 evidence capture is documented in `docs/planning/phase-4-image-cls-evidence.md`.
   - Phase 4 implementation planning is documented in `docs/planning/phase-4-image-delivery-implementation-plan.md`.
@@ -16,9 +16,11 @@ Roadmap v2 status: complete. Phases `A` through `F` are closed (April 24, 2026).
   - Batch 4.2 deploy verification passed: production deploy `e4b2ac06` is ready, live Lighthouse requested the Hero image as transformed WebP (`w=720&q=75&fm=webp`), total byte weight dropped from about `8,356 KiB` to `5,874 KiB`, and Hero transfer dropped from about `2,565,640 B` to `24,470 B`.
   - Batch 4.3 is complete and deploy-verified: Timeline media now uses Contentful-derived transformed URLs and responsive `srcset`/`sizes`, with no Projects, ArticleCard, ArticlePage, RichTextRenderer, layout/CSS, CMS, Contentful migration, or CLS work.
   - Batch 4.3 deploy verification passed: production serves the Batch 4.3 bundle, Timeline image requests are transformed WebP Contentful URLs, total byte weight dropped from about `5,874 KiB` to `235 KiB`, image transfer dropped from `5,846,759 B` to `72,782 B` including favicon, remaining estimated image-delivery savings dropped to `18 KiB`, and Lighthouse reports LCP `1.6 s`, CLS `0.009`, TBT `210 ms`, and performance score `0.84`.
+  - Batch 4.4 planning/evidence is complete: route-specific Lighthouse evidence shows `/articles` still has `3,859 KiB` total byte weight, `3,794,510 B` image transfer, and `2,044 KiB` estimated image-delivery savings from ArticleCard images.
+  - Batch 4.4 defers ProjectsSection, ArticlePage, and RichTextRenderer image adoption because current homepage and article detail route evidence does not show meaningful image-delivery savings for those surfaces.
   - Repeat Lighthouse desktop evidence reproduced the severe CLS finding (`0.908`), but the affected node remains broad (`main#main-content`), so CLS root cause remains unconfirmed and must not drive layout changes yet.
   - Image payload weight was confirmed and materially reduced by Hero/Timeline adoption: baseline desktop Lighthouse reported `8,356 KiB` total byte weight, while Batch 4.3 deploy verification reports `235 KiB`.
-  - Recommended next step: plan Batch 4.4 for later image surfaces with route-specific evidence before implementing Projects, ArticleCard, ArticlePage, or RichTextRenderer adoption. CLS fixes remain blocked.
+  - Recommended next step: plan a narrow ArticleCard-only image-delivery implementation batch for `/articles`, then deploy-verify route payload before deciding whether Phase 4 can close. CLS fixes remain blocked.
   - Do not start image delivery changes, CLS fixes, typography, card/elevation, section polish, routing, IA, CMS, or Contentful migration work without explicit Phase 4 implementation approval.
 
 - [ ] **Roadmap v2 closeout complete — maintenance mode**
@@ -83,7 +85,7 @@ A phase cannot be considered complete unless:
 
 ---
 
-## Verification Snapshot (Latest: Phase 4 Batch 4.3 Timeline deploy verification, May 18, 2026)
+## Verification Snapshot (Latest: Phase 4 Batch 4.4 later image-surface evidence, May 18, 2026)
 
 - [x] `npm run lint`
 - [x] `npm run test`
@@ -96,6 +98,7 @@ A phase cannot be considered complete unless:
 - [x] Repeat desktop Lighthouse CLS sanity check captured locally under `.tmp/design-system-audit/` (untracked)
 - [x] Batch 4.2 live Lighthouse Hero-after evidence captured locally under `.tmp/design-system-audit/` (untracked)
 - [x] Batch 4.3 live Lighthouse Timeline-after evidence captured locally under `.tmp/design-system-audit/` (untracked)
+- [x] Batch 4.4 route-specific Lighthouse evidence captured locally under `.tmp/design-system-audit/batch-4-4/` (untracked)
 - [x] Phase 4 image payload inventory and image code-path inventory documented
 - [x] Phase 4 image-delivery implementation plan documented
 - [x] `git diff --check`
@@ -126,6 +129,7 @@ Runtime note:
 - Phase 2 deploy validation spec: `docs/planning/phase-2-deploy-artifact-validation-spec.md`
 - Phase 4 evidence report: `docs/planning/phase-4-image-cls-evidence.md`
 - Phase 4 implementation plan: `docs/planning/phase-4-image-delivery-implementation-plan.md`
+- Phase 4 Batch 4.4 later-surface evidence: `docs/planning/phase-4-batch-4-4-later-image-surfaces.md`
 - Phase 4 raw evidence source: `.tmp/design-system-audit/` local Lighthouse artifacts (untracked)
 - Phase F maintenance discipline record: `docs/planning/PHASE-F-MAINTENANCE-QA-RELEASE-DISCIPLINE.md`
 - Phase E structure hardening record: `docs/planning/PHASE-E-PROJECT-STRUCTURE-HARDENING.md`

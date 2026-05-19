@@ -392,6 +392,16 @@ Batch 4.3 deploy verification checkpoint (May 18, 2026):
 - Lighthouse after deploy: performance `0.84`, LCP `1.6 s`, CLS `0.009`, TBT `210 ms`. CLS fixes remain blocked because no specific severe shift source has been isolated across the conflicting runs.
 - No production code changed during this verification pass.
 
+Batch 4.4 planning/evidence checkpoint (May 18, 2026):
+
+- Status: Complete; approve a narrow future ArticleCard image-delivery batch only.
+- Report: `docs/planning/phase-4-batch-4-4-later-image-surfaces.md`.
+- Route-specific Lighthouse evidence was gathered for `/`, `/articles`, and all three sitemap article detail routes.
+- `/articles` remains a measured image payload issue: total byte weight `3,859 KiB`, image transfer `3,794,510 B`, Contentful image transfer `3,793,727 B`, and estimated image-delivery savings `2,044 KiB` from ArticleCard images.
+- Homepage Projects image adoption is deferred because the current homepage evidence is already reduced to `235 KiB` total byte weight and does not show Projects images as a meaningful initial-route contributor.
+- ArticlePage and RichTextRenderer image adoption are deferred because all three current article detail routes show about `149 KiB` total weight, favicon-only image transfer, no Contentful image transfer, and no image-delivery findings.
+- No ProjectsSection, ArticleCard, ArticlePage, RichTextRenderer, layout, routing, IA, CMS model, Contentful migration, CLS fix, typography/card/elevation, or production code change was introduced during Batch 4.4 planning.
+
 ## Phase 5 - Typography Decision and Type-Scale Refinement
 
 Objective:

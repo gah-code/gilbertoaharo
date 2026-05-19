@@ -277,6 +277,16 @@ Batch 4.3 deploy verification, May 18, 2026:
 - LCP is `1.6 s`, TBT is `210 ms`, performance score is `0.84`, and CLS is `0.009`; CLS fixes remain blocked until a specific severe shift source is isolated.
 - Decision: proceed to separately scoped Batch 4.4 planning for Projects, ArticleCard, ArticlePage, and RichTextRenderer using route-specific evidence; do not implement broad later-surface adoption without approval.
 
+Batch 4.4 later image-surface evidence, May 18, 2026:
+
+- Status: planning/evidence complete; no implementation changes.
+- Report: `docs/planning/phase-4-batch-4-4-later-image-surfaces.md`.
+- Route-specific Lighthouse evidence covers `/`, `/articles`, and all three sitemap article detail routes.
+- Decision: approve a narrow future ArticleCard image-delivery batch because `/articles` still reports `3,859 KiB` total byte weight, `3,794,510 B` image transfer, and `2,044 KiB` estimated image-delivery savings from ArticleCard images.
+- Defer ProjectsSection because homepage evidence no longer shows Projects images as a meaningful initial-route contributor after Hero/Timeline adoption.
+- Defer ArticlePage and RichTextRenderer because current article detail routes show favicon-only image transfer and no image-delivery savings.
+- CLS fixes remain blocked; the homepage route reproduced CLS `0.908` in this evidence pass, but no specific severe shift source has been isolated.
+
 ### After Hero/Timeline Adoption
 
 - No layout change.

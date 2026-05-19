@@ -666,12 +666,21 @@ Phase 4 Batch 4.3 deploy verification checkpoint (May 18, 2026):
 - Later image surfaces may proceed to a separate Batch 4.4 planning step with route-specific evidence. CLS fixes remain blocked until a specific severe shift source is isolated.
 - No production code changed during this verification pass.
 
+Phase 4 Batch 4.4 later image-surface evidence checkpoint (May 18, 2026):
+
+- Created `docs/planning/phase-4-batch-4-4-later-image-surfaces.md`.
+- Route-specific Lighthouse evidence was gathered for `/`, `/articles`, and all three sitemap article detail routes.
+- `/articles` remains a confirmed payload issue: total byte weight `3,859 KiB`, image transfer `3,794,510 B`, Contentful image transfer `3,793,727 B`, and estimated image-delivery savings `2,044 KiB` from ArticleCard images.
+- ProjectsSection, ArticlePage, and RichTextRenderer image adoption are deferred because current route evidence does not show meaningful image-delivery savings for those surfaces.
+- No production code changed during this planning/evidence pass.
+
 | Risk | Severity | Likelihood | Evidence | User impact | Recommended mitigation | Owner/phase |
 | --- | --- | --- | --- | --- | --- | --- |
 | Invalid robots/sitemap | Low | Resolved | Phase 2 live `curl -s` checks return robots text/XML, not SPA HTML | Regression would harm crawl control and sitemap discovery | Keep body checks in release validation | Phase 2 closed |
 | Invalid live canonical | Low | Resolved | Lighthouse SEO follow-up score `100`; canonical audit passes | Regression would create duplicate/ambiguous URL signals | Keep canonical spot checks in release validation | Phase 2 closed |
 | Desktop CLS severe lab finding | High | Reproduced; root cause unconfirmed | Previous desktop CLS `0.908`; fresh Phase 4 desktop CLS `0.009`; repeat Phase 4 desktop CLS `0.908`; affected node remains broad `main#main-content` | Potential jarring layout shift and CWV risk | Trace/filmstrip review must isolate the specific shift source before any layout-reservation fix | Phase 4/8 |
 | Oversized Contentful images | Medium | Improved on homepage; route surfaces still need evidence | Baseline desktop total byte weight `8,356 KiB`; Batch 4.3 deploy verification total byte weight `235 KiB`; remaining estimated image-delivery savings `18 KiB` | Route-specific images may still create data cost or LCP risk | Plan later-surface adoption with route-specific Lighthouse/network evidence before implementation | Phase 4/7 |
+| Oversized ArticleCard images | High | Confirmed on `/articles` | `/articles` total byte weight `3,859 KiB`; image transfer `3,794,510 B`; estimated image-delivery savings `2,044 KiB` | Slow article index loading and data cost | Implement narrow ArticleCard responsive Contentful image delivery, then deploy-verify `/articles` | Phase 4 |
 | Accessible-name mismatches | High | Confirmed by Lighthouse | Label/content-name audit | Voice control/screen reader confusion | Align visible labels and aria labels | Phase 8 |
 | Undefined `--space-5` | Low | Resolved | `--space-5` added to `tokens.css`; undefined-variable scan clean | Regression would affect wide Learning spacing | Keep token scan in release validation | Phase 3 closed |
 | Navigation hard-coded motion values | Low-medium | Confirmed | `Navigation.css` uses local `0.12s`, `0.15s`, and `0.2s` `ease` transitions; reduced-motion block exists | Possible motion inconsistency, but current behavior is stable | Defer until a motion-token alignment phase can preserve or intentionally change behavior | Phase 3 closed / later polish |
@@ -817,6 +826,7 @@ Scope:
 - Phase 4 Batch 4.2 deploy verification checkpoint: production serves commit `e4b2ac06`, Hero transformed delivery is verified by Lighthouse, total byte weight improved to `5,874 KiB`, and Timeline adoption is approved next while CLS fixes remain blocked.
 - Phase 4 Batch 4.3 checkpoint: adopted responsive Contentful delivery for Timeline media, preserving Timeline layout/CSS, Hero behavior, later image surfaces, CMS boundaries, and CLS blockers.
 - Phase 4 Batch 4.3 deploy verification checkpoint: production serves the Batch 4.3 bundle, Timeline transformed delivery is verified by Lighthouse, total byte weight improved to `235 KiB`, remaining image-delivery savings dropped to `18 KiB`, and later image surfaces are cleared for separate Batch 4.4 planning while CLS fixes remain blocked.
+- Phase 4 Batch 4.4 later-surface evidence checkpoint: route-specific evidence confirms ArticleCard images on `/articles` still need optimization, while ProjectsSection, ArticlePage, and RichTextRenderer are deferred. No production code changed.
 
 Files created:
 
