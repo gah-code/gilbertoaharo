@@ -657,12 +657,21 @@ Phase 4 Batch 4.3 checkpoint (May 18, 2026):
 - CLS fixes remain blocked until trace/filmstrip review isolates a specific shift source.
 - No layout, IA, routing, CMS model, Contentful migration, typography/card/elevation polish, or unrelated production behavior change was introduced in Batch 4.3.
 
+Phase 4 Batch 4.3 deploy verification checkpoint (May 18, 2026):
+
+- Production serves the Batch 4.3 bundle and live Lighthouse confirms Timeline image requests are transformed Contentful WebP URLs at `w=320&q=75&fm=webp`.
+- Total byte weight improved from the Batch 4.2 post-Hero value of `5,874 KiB` to `235 KiB`; image transfer improved from `5,846,759 B` to `72,782 B` including favicon.
+- Timeline image requests are `10,148 B`, `10,241 B`, `13,049 B`, and `14,067 B`; remaining estimated image-delivery savings are `18 KiB`.
+- Lighthouse after deploy reports performance `0.84`, LCP `1.6 s`, CLS `0.009`, and TBT `210 ms`.
+- Later image surfaces may proceed to a separate Batch 4.4 planning step with route-specific evidence. CLS fixes remain blocked until a specific severe shift source is isolated.
+- No production code changed during this verification pass.
+
 | Risk | Severity | Likelihood | Evidence | User impact | Recommended mitigation | Owner/phase |
 | --- | --- | --- | --- | --- | --- | --- |
 | Invalid robots/sitemap | Low | Resolved | Phase 2 live `curl -s` checks return robots text/XML, not SPA HTML | Regression would harm crawl control and sitemap discovery | Keep body checks in release validation | Phase 2 closed |
 | Invalid live canonical | Low | Resolved | Lighthouse SEO follow-up score `100`; canonical audit passes | Regression would create duplicate/ambiguous URL signals | Keep canonical spot checks in release validation | Phase 2 closed |
 | Desktop CLS severe lab finding | High | Reproduced; root cause unconfirmed | Previous desktop CLS `0.908`; fresh Phase 4 desktop CLS `0.009`; repeat Phase 4 desktop CLS `0.908`; affected node remains broad `main#main-content` | Potential jarring layout shift and CWV risk | Trace/filmstrip review must isolate the specific shift source before any layout-reservation fix | Phase 4/8 |
-| Oversized Contentful images | High | Confirmed by Lighthouse | Fresh desktop total byte weight `8,356 KiB`; image requests total `8,388,839 B`; estimated image-delivery savings `8,101 KiB` | Slow loads, data cost, LCP risk | Use Contentful image transforms/responsive sizes after preserving current content contracts | Phase 4/7 |
+| Oversized Contentful images | Medium | Improved on homepage; route surfaces still need evidence | Baseline desktop total byte weight `8,356 KiB`; Batch 4.3 deploy verification total byte weight `235 KiB`; remaining estimated image-delivery savings `18 KiB` | Route-specific images may still create data cost or LCP risk | Plan later-surface adoption with route-specific Lighthouse/network evidence before implementation | Phase 4/7 |
 | Accessible-name mismatches | High | Confirmed by Lighthouse | Label/content-name audit | Voice control/screen reader confusion | Align visible labels and aria labels | Phase 8 |
 | Undefined `--space-5` | Low | Resolved | `--space-5` added to `tokens.css`; undefined-variable scan clean | Regression would affect wide Learning spacing | Keep token scan in release validation | Phase 3 closed |
 | Navigation hard-coded motion values | Low-medium | Confirmed | `Navigation.css` uses local `0.12s`, `0.15s`, and `0.2s` `ease` transitions; reduced-motion block exists | Possible motion inconsistency, but current behavior is stable | Defer until a motion-token alignment phase can preserve or intentionally change behavior | Phase 3 closed / later polish |
@@ -807,6 +816,7 @@ Scope:
 - Phase 4 Batch 4.2 checkpoint: adopted responsive Contentful delivery for Hero media through `MediaFrame`, preserving non-Contentful behavior and leaving Timeline/later image surfaces and CLS work untouched.
 - Phase 4 Batch 4.2 deploy verification checkpoint: production serves commit `e4b2ac06`, Hero transformed delivery is verified by Lighthouse, total byte weight improved to `5,874 KiB`, and Timeline adoption is approved next while CLS fixes remain blocked.
 - Phase 4 Batch 4.3 checkpoint: adopted responsive Contentful delivery for Timeline media, preserving Timeline layout/CSS, Hero behavior, later image surfaces, CMS boundaries, and CLS blockers.
+- Phase 4 Batch 4.3 deploy verification checkpoint: production serves the Batch 4.3 bundle, Timeline transformed delivery is verified by Lighthouse, total byte weight improved to `235 KiB`, remaining image-delivery savings dropped to `18 KiB`, and later image surfaces are cleared for separate Batch 4.4 planning while CLS fixes remain blocked.
 
 Files created:
 

@@ -375,12 +375,22 @@ Batch 4.2 deploy verification checkpoint (May 18, 2026):
 
 Batch 4.3 checkpoint (May 18, 2026):
 
-- Status: Timeline media adoption implemented locally; deploy payload verification is next.
+- Status: Timeline media adoption implemented and deploy-verified.
 - `TimelineSection` now derives transformed Contentful Timeline media `src`, `srcset`, and `sizes` values using the existing helper (`webp`, quality `75`, widths `320/480/640/800`, fallback width `800`, sizes `(min-width: 768px) 316px, 90vw`).
 - Non-Contentful Timeline media keeps the existing single-`src` behavior and omits `srcset`/`sizes`.
 - Timeline image `loading="lazy"` and `decoding="async"` behavior is preserved.
 - Targeted validation passed: `npm run test -- src/components/sections/TimelineSection.test.tsx` and `npm run test -- src/lib/images/contentfulImage.test.ts`.
 - No Timeline CSS, layout, card hierarchy, aspect-ratio reservation, Hero behavior, Projects, ArticleCard, ArticlePage, RichTextRenderer, routing, IA, CMS model, Contentful migration, CLS fix, typography/card/elevation, or unrelated production behavior change was introduced in Batch 4.3.
+
+Batch 4.3 deploy verification checkpoint (May 18, 2026):
+
+- Status: Pass for Timeline payload impact; later image surfaces are approved for separate Batch 4.4 planning, not broad immediate adoption.
+- Production serves the Batch 4.3 bundle (`/assets/index-B70R9aYh.js`), which includes the Timeline width candidates, sizes string, and transformed URL calls (`width:800`, `quality:75`, `format:"webp"`).
+- Lighthouse network evidence confirms the four Timeline images are requested as transformed Contentful WebP URLs at `w=320&q=75&fm=webp`.
+- Payload moved from Batch 4.2's `5,874 KiB` total byte weight / `5,846,759 B` image transfer to `235 KiB` total byte weight / `72,782 B` image transfer including favicon.
+- Timeline image transfers are `10,148 B`, `10,241 B`, `13,049 B`, and `14,067 B`; remaining estimated image-delivery savings are `18 KiB`.
+- Lighthouse after deploy: performance `0.84`, LCP `1.6 s`, CLS `0.009`, TBT `210 ms`. CLS fixes remain blocked because no specific severe shift source has been isolated across the conflicting runs.
+- No production code changed during this verification pass.
 
 ## Phase 5 - Typography Decision and Type-Scale Refinement
 

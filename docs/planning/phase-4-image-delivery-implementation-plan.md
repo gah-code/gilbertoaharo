@@ -257,14 +257,25 @@ Batch 4.2 deploy verification, May 18, 2026:
 
 Batch 4.3 checkpoint, May 18, 2026:
 
-- Status: complete locally; deploy verification pending.
+- Status: complete and deploy-verified.
 - Adopted the Contentful image helper for Timeline media only, using transformed fallback `src`, responsive `srcset`, and `(min-width: 768px) 316px, 90vw` sizes.
 - Timeline width candidates are `320`, `480`, `640`, and `800`; fallback transformed `src` uses width `800`, quality `75`, and format `webp`.
 - Non-Contentful Timeline URLs preserve the existing single-`src` behavior.
 - Loading remains `lazy` and decoding remains `async`.
 - Targeted validation passed: `npm run test -- src/components/sections/TimelineSection.test.tsx` and `npm run test -- src/lib/images/contentfulImage.test.ts`.
 - No Timeline CSS, layout, card hierarchy, aspect-ratio reservation, Hero behavior, Projects, ArticleCard, ArticlePage, RichTextRenderer, routing, CMS model, Contentful migration, or CLS fix was introduced.
-- Next gate: deploy and verify live Timeline payload impact before approving later image surfaces.
+
+Batch 4.3 deploy verification, May 18, 2026:
+
+- Status: pass.
+- Production serves the Batch 4.3 bundle with Timeline responsive image constants and transformed URL calls.
+- Lighthouse confirms Timeline images are requested as transformed Contentful WebP URLs at `w=320&q=75&fm=webp`.
+- Total byte weight improved from Batch 4.2's `5,874 KiB` to `235 KiB`.
+- Image transfer improved from Batch 4.2's `5,846,759 B` to `72,782 B` including favicon.
+- Timeline image requests are `10,148 B`, `10,241 B`, `13,049 B`, and `14,067 B`.
+- Remaining image-delivery savings dropped from about `5,631 KiB` to `18 KiB`.
+- LCP is `1.6 s`, TBT is `210 ms`, performance score is `0.84`, and CLS is `0.009`; CLS fixes remain blocked until a specific severe shift source is isolated.
+- Decision: proceed to separately scoped Batch 4.4 planning for Projects, ArticleCard, ArticlePage, and RichTextRenderer using route-specific evidence; do not implement broad later-surface adoption without approval.
 
 ### After Hero/Timeline Adoption
 
