@@ -67,6 +67,19 @@ const staticArticleAuthor = {
   },
 };
 
+const richTextQaFileAsset: Asset = {
+  sys: { id: "article-rich-text-qa-brief" },
+  fields: {
+    title: "Rich text QA brief",
+    description: "A non-image embedded asset used to verify file-link rendering.",
+    file: {
+      url: "https://example.com/assets/rich-text-qa-brief.pdf",
+      fileName: "rich-text-qa-brief.pdf",
+      contentType: "application/pdf",
+    },
+  },
+};
+
 function makeArticleBody(paragraph: string) {
   return {
     nodeType: "document",
@@ -81,7 +94,257 @@ function makeArticleBody(paragraph: string) {
   };
 }
 
+const richTextFormattingQaBody = {
+  nodeType: "document",
+  data: {},
+  content: [
+    {
+      nodeType: "paragraph",
+      data: {},
+      content: [
+        {
+          nodeType: "text",
+          value: "This QA article exercises the rich text renderer with ",
+          marks: [],
+          data: {},
+        },
+        {
+          nodeType: "text",
+          value: "bold",
+          marks: [{ type: "bold" }],
+          data: {},
+        },
+        { nodeType: "text", value: ", ", marks: [], data: {} },
+        {
+          nodeType: "text",
+          value: "italic",
+          marks: [{ type: "italic" }],
+          data: {},
+        },
+        { nodeType: "text", value: ", ", marks: [], data: {} },
+        {
+          nodeType: "text",
+          value: "underlined",
+          marks: [{ type: "underline" }],
+          data: {},
+        },
+        { nodeType: "text", value: ", and ", marks: [], data: {} },
+        {
+          nodeType: "text",
+          value: "inline code",
+          marks: [{ type: "code" }],
+          data: {},
+        },
+        { nodeType: "text", value: " marks.", marks: [], data: {} },
+      ],
+    },
+    {
+      nodeType: "heading-1",
+      data: {},
+      content: [
+        {
+          nodeType: "text",
+          value: "Body heading one should render as heading two",
+          marks: [],
+          data: {},
+        },
+      ],
+    },
+    {
+      nodeType: "paragraph",
+      data: {},
+      content: [
+        {
+          nodeType: "text",
+          value:
+            "A deliberately longer paragraph checks reading rhythm and line length across mobile, tablet, and desktop widths. It includes enough text to wrap naturally without relying on forced breaks, so the article measure and paragraph spacing can be reviewed in a realistic flow.",
+          marks: [],
+          data: {},
+        },
+      ],
+    },
+    {
+      nodeType: "heading-2",
+      data: {},
+      content: [{ nodeType: "text", value: "Heading two section", marks: [], data: {} }],
+    },
+    {
+      nodeType: "heading-3",
+      data: {},
+      content: [{ nodeType: "text", value: "Heading three subsection", marks: [], data: {} }],
+    },
+    {
+      nodeType: "heading-4",
+      data: {},
+      content: [{ nodeType: "text", value: "Heading four detail", marks: [], data: {} }],
+    },
+    {
+      nodeType: "unordered-list",
+      data: {},
+      content: [
+        {
+          nodeType: "list-item",
+          data: {},
+          content: [
+            {
+              nodeType: "paragraph",
+              data: {},
+              content: [{ nodeType: "text", value: "Unordered item with concise copy.", marks: [], data: {} }],
+            },
+          ],
+        },
+        {
+          nodeType: "list-item",
+          data: {},
+          content: [
+            {
+              nodeType: "paragraph",
+              data: {},
+              content: [{ nodeType: "text", value: "Second unordered item for spacing review.", marks: [], data: {} }],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      nodeType: "ordered-list",
+      data: {},
+      content: [
+        {
+          nodeType: "list-item",
+          data: {},
+          content: [
+            {
+              nodeType: "paragraph",
+              data: {},
+              content: [{ nodeType: "text", value: "First ordered step.", marks: [], data: {} }],
+            },
+          ],
+        },
+        {
+          nodeType: "list-item",
+          data: {},
+          content: [
+            {
+              nodeType: "paragraph",
+              data: {},
+              content: [{ nodeType: "text", value: "Second ordered step.", marks: [], data: {} }],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      nodeType: "quote",
+      data: {},
+      content: [
+        {
+          nodeType: "paragraph",
+          data: {},
+          content: [
+            {
+              nodeType: "text",
+              value: "Blockquotes should feel intentional without overwhelming the article flow.",
+              marks: [],
+              data: {},
+            },
+          ],
+        },
+      ],
+    },
+    { nodeType: "hr", data: {}, content: [] },
+    {
+      nodeType: "paragraph",
+      data: {},
+      content: [
+        { nodeType: "text", value: "Review an ", marks: [], data: {} },
+        {
+          nodeType: "hyperlink",
+          data: { uri: "https://example.com/editorial/rich-text-rendering-contract" },
+          content: [
+            {
+              nodeType: "text",
+              value: "external renderer reference",
+              marks: [],
+              data: {},
+            },
+          ],
+        },
+        { nodeType: "text", value: " and an ", marks: [], data: {} },
+        {
+          nodeType: "hyperlink",
+          data: { uri: "/articles/resilient-content-systems" },
+          content: [
+            {
+              nodeType: "text",
+              value: "internal article reference",
+              marks: [],
+              data: {},
+            },
+          ],
+        },
+        {
+          nodeType: "text",
+          value: " in the same paragraph.",
+          marks: [],
+          data: {},
+        },
+      ],
+    },
+    {
+      nodeType: "paragraph",
+      data: {},
+      content: [
+        {
+          nodeType: "hyperlink",
+          data: {
+            uri: "https://example.com/really-long-rich-text-formatting-check-with-a-long-readable-link-label-and-no-layout-overflow",
+          },
+          content: [
+            {
+              nodeType: "text",
+              value:
+                "A long descriptive link label that should wrap cleanly without causing horizontal scrolling in the article column",
+              marks: [],
+              data: {},
+            },
+          ],
+        },
+      ],
+    },
+    {
+      nodeType: "embedded-asset-block",
+      data: { target: mediaAssets[0] },
+      content: [],
+    },
+    {
+      nodeType: "embedded-asset-block",
+      data: { target: richTextQaFileAsset },
+      content: [],
+    },
+  ],
+};
+
 export const staticArticles: Article[] = [
+  {
+    sys: makeSys("article-rich-text-formatting-qa", "article"),
+    fields: {
+      internalName: "Rich Text Formatting QA",
+      slug: "rich-text-formatting-qa",
+      title: "Rich Text Formatting QA",
+      excerpt:
+        "A static article fixture that exercises supported Contentful rich text formatting.",
+      author: staticArticleAuthor,
+      publishedAt: "2026-05-19T09:00:00.000Z",
+      updatedAt: "2026-05-19T09:00:00.000Z",
+      body: richTextFormattingQaBody,
+      heroImage: mediaAssets[0],
+      attachments: [richTextQaFileAsset],
+      metaTitle: "Rich Text Formatting QA",
+      metaDescription:
+        "Static QA coverage for article headings, lists, links, marks, and embedded assets.",
+    },
+  },
   {
     sys: makeSys("article-resilient-content-systems", "article"),
     fields: {

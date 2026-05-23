@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, type ButtonVariant } from "../../ui/Button";
 import { Cluster, type ClusterGap } from "../../ui/Cluster";
+import { getAriaLabelWithVisibleText } from "../../ui/accessibleName";
 import "./ActionGroup.css";
 
 export type ActionItem = {
@@ -35,7 +36,7 @@ export function ActionGroup({
           href={action.href}
           target={action.openInNewTab ? "_blank" : undefined}
           rel={action.openInNewTab ? "noreferrer noopener" : undefined}
-          aria-label={action.ariaLabel ?? action.label}
+          aria-label={getAriaLabelWithVisibleText(action.label, action.ariaLabel)}
           variant={action.variant ?? "primary"}
         >
           {action.label}

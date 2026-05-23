@@ -71,10 +71,10 @@ describe("ProjectsSection", () => {
     render(<ProjectsSection section={multiProjectsSection} />);
 
     expect(
-      screen.getByRole("button", { name: "Scroll to previous project" }),
+      screen.getByRole("button", { name: "Previous project" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Scroll to next project" }),
+      screen.getByRole("button", { name: "Next project" }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText("Project slider")).toBeInTheDocument();
   });

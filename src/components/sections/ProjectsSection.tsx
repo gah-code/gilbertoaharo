@@ -9,6 +9,7 @@ import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { Cluster } from "../ui/Cluster";
 import { Inline } from "../ui/Inline";
+import { getAriaLabelWithVisibleText } from "../ui/accessibleName";
 import { normalizeProjectsSection } from "./projects/normalizeProjectsSection";
 import "./ProjectsSection.css";
 
@@ -138,7 +139,7 @@ export function ProjectsSection({ section }: { section: SectionProjects }) {
                 size="sm"
                 onClick={() => scrollByDirection("prev")}
                 disabled={!sliderState.canScrollPrev}
-                aria-label="Scroll to previous project"
+                aria-label="Previous project"
               >
                 Previous
               </Button>
@@ -147,7 +148,7 @@ export function ProjectsSection({ section }: { section: SectionProjects }) {
                 size="sm"
                 onClick={() => scrollByDirection("next")}
                 disabled={!sliderState.canScrollNext}
-                aria-label="Scroll to next project"
+                aria-label="Next project"
               >
                 Next
               </Button>
@@ -261,7 +262,10 @@ export function ProjectsSection({ section }: { section: SectionProjects }) {
                               href={action.href}
                               variant={action.variant}
                               size="sm"
-                              aria-label={action.ariaLabel ?? action.analyticsLabel ?? action.label}
+                              aria-label={getAriaLabelWithVisibleText(
+                                action.label,
+                                action.ariaLabel,
+                              )}
                               target={action.openInNewTab ? "_blank" : undefined}
                               rel={action.openInNewTab ? "noreferrer noopener" : undefined}
                             >

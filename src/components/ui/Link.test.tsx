@@ -8,7 +8,28 @@ describe("Link", () => {
 
     const link = screen.getByRole("link", { name: "External" });
     expect(link).toHaveAttribute("target", "_blank");
-    expect(link).toHaveAttribute("rel", "noreferrer");
+    expect(link).toHaveAttribute("rel", "noreferrer noopener");
+  });
+
+  it("preserves custom rel tokens while enforcing safe target blank tokens", () => {
+    render(
+      <Link href="https://example.com" rel="nofollow">
+        External
+      </Link>,
+    );
+
+    expect(screen.getByRole("link", { name: "External" })).toHaveAttribute(
+      "rel",
+      "nofollow noreferrer noopener",
+    );
+  });
+
+  it("does not open mail links in a new tab by default", () => {
+    render(<Link href="mailto:hello@example.com">Email</Link>);
+
+    const link = screen.getByRole("link", { name: "Email" });
+    expect(link).not.toHaveAttribute("target");
+    expect(link).not.toHaveAttribute("rel");
   });
 
   it("prevents interaction when disabled", () => {

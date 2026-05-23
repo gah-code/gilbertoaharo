@@ -1,6 +1,7 @@
 import React from "react";
 import type { SectionFooter } from "@/content/contentful/types";
 import { Link } from "../ui/Link";
+import { getAriaLabelWithVisibleText } from "../ui/accessibleName";
 import { SectionShell } from "./SectionShell";
 import { normalizeFooterSection } from "./footer/normalizeFooterSection";
 import { FooterLinkIcon } from "./footer/FooterLinkIcon";
@@ -77,7 +78,10 @@ export function FooterSection({ section }: { section: SectionFooter }) {
                   <Link
                     key={link.key}
                     href={link.href}
-                    aria-label={link.ariaLabel}
+                    aria-label={getAriaLabelWithVisibleText(
+                      link.label,
+                      link.ariaLabel,
+                    )}
                     target={link.openInNewTab ? "_blank" : "_self"}
                     rel={link.openInNewTab ? EXTERNAL_REL : undefined}
                     variant="unstyled"
@@ -110,7 +114,10 @@ export function FooterSection({ section }: { section: SectionFooter }) {
                         <li key={link.key}>
                           <Link
                             href={link.href}
-                            aria-label={link.ariaLabel}
+                            aria-label={getAriaLabelWithVisibleText(
+                              link.label,
+                              link.ariaLabel,
+                            )}
                             aria-current={isActive ? "page" : undefined}
                             target={link.openInNewTab ? "_blank" : "_self"}
                             rel={link.openInNewTab ? EXTERNAL_REL : undefined}

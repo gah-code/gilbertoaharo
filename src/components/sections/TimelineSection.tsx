@@ -12,6 +12,7 @@ import { Card } from "../ui/Card";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { Inline } from "../ui/Inline";
+import { getAriaLabelWithVisibleText } from "../ui/accessibleName";
 import { normalizeTimelineSection } from "./timeline/normalizeTimelineSection";
 import "./TimelineSection.css";
 
@@ -107,7 +108,10 @@ export function TimelineSection({ section }: { section: SectionTimeline }) {
                                 href={item.action.href}
                                 variant={item.action.variant}
                                 size="sm"
-                                aria-label={item.action.ariaLabel}
+                                aria-label={getAriaLabelWithVisibleText(
+                                  item.action.label,
+                                  item.action.ariaLabel,
+                                )}
                                 target={item.action.openInNewTab ? "_blank" : undefined}
                                 rel={item.action.openInNewTab ? "noreferrer noopener" : undefined}
                               >
