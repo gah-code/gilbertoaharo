@@ -4,7 +4,7 @@ import type { Asset, SectionHero } from "@/content/contentful/types";
 import { HeroSection } from "./HeroSection";
 
 const contentfulHeroUrl =
-  "https://images.ctfassets.net/i36fvclphdnv/hero-id/hero-design.jpeg";
+  "https://images.ctfassets.net/test-space-id/test-asset-hero/test-hero-image.jpeg";
 
 function makeAsset(id: string, url: string, description = "Hero image"): Asset {
   return {

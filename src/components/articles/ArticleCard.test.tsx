@@ -9,6 +9,9 @@ import {
   updatedOnlyArticleListItemFixture,
 } from "./__fixtures__/articleList.fixture";
 
+const TEST_CONTENTFUL_IMAGE_URL =
+  "https://images.ctfassets.net/test-space-id/test-asset-article/test-article-image.jpg";
+
 describe("ArticleCard", () => {
   it("renders the article title", () => {
     render(<ArticleCard article={defaultArticleListItemFixture} />);
@@ -100,14 +103,11 @@ describe("ArticleCard", () => {
   });
 
   it("uses transformed responsive Contentful image URLs", () => {
-    const heroImageUrl =
-      "https://images.ctfassets.net/i36fvclphdnv/article-id/article-image.jpg";
-
     render(
       <ArticleCard
         article={{
           ...defaultArticleListItemFixture,
-          heroImageUrl,
+          heroImageUrl: TEST_CONTENTFUL_IMAGE_URL,
         }}
       />,
     );
@@ -118,15 +118,15 @@ describe("ArticleCard", () => {
 
     expect(image).toHaveAttribute(
       "src",
-      `${heroImageUrl}?w=800&q=75&fm=webp`,
+      `${TEST_CONTENTFUL_IMAGE_URL}?w=800&q=75&fm=webp`,
     );
     expect(image).toHaveAttribute(
       "srcset",
       [
-        `${heroImageUrl}?w=320&q=75&fm=webp 320w`,
-        `${heroImageUrl}?w=480&q=75&fm=webp 480w`,
-        `${heroImageUrl}?w=640&q=75&fm=webp 640w`,
-        `${heroImageUrl}?w=800&q=75&fm=webp 800w`,
+        `${TEST_CONTENTFUL_IMAGE_URL}?w=320&q=75&fm=webp 320w`,
+        `${TEST_CONTENTFUL_IMAGE_URL}?w=480&q=75&fm=webp 480w`,
+        `${TEST_CONTENTFUL_IMAGE_URL}?w=640&q=75&fm=webp 640w`,
+        `${TEST_CONTENTFUL_IMAGE_URL}?w=800&q=75&fm=webp 800w`,
       ].join(", "),
     );
     expect(image).toHaveAttribute(

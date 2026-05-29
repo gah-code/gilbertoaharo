@@ -4,7 +4,7 @@ import type { Asset, SectionTimeline, TimelineItem } from "@/content/contentful/
 import { TimelineSection } from "./TimelineSection";
 
 const contentfulTimelineUrl =
-  "https://images.ctfassets.net/i36fvclphdnv/timeline-id/timeline-image.png";
+  "https://images.ctfassets.net/test-space-id/test-asset-timeline/test-timeline-image.png";
 
 function makeAsset(id: string, url: string, title = "Timeline media"): Asset {
   return {

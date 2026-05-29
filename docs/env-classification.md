@@ -1,6 +1,8 @@
 # Environment Classification (Phase 3)
 
-This document defines the current client/server environment boundary without changing runtime flow. Phase 4 will implement the migration path.
+This document defines the current client/server environment boundary. Vite
+compiles `VITE_*` variables into browser-delivered code, so those values must be
+treated as public client configuration rather than secrets.
 
 ## Classification Table
 
@@ -22,9 +24,11 @@ This document defines the current client/server environment boundary without cha
 | `CONTENTFUL_DELIVERY_TOKEN` | `server-only-target` | Intended server-side replacement for delivery access in a later phase (not wired yet). |
 | `CONTENTFUL_SPACE_ID` | `server-only-target` | Intended server-side Contentful space id in a later phase (not wired yet). |
 | `CONTENTFUL_ENVIRONMENT` | `server-only-target` | Intended server-side Contentful environment in a later phase (not wired yet). |
+| `CONTENTFUL_PREVIEW_TOKEN` | `server-only-sensitive` | Preview token must stay behind a server-only boundary if preview support is implemented later. |
+| `CONTENTFUL_MANAGEMENT_TOKEN` | `server-only-sensitive` | Management token must never be exposed to the browser bundle. |
 | `GITHUB_TOKEN` | `server-only-target` | Intended server-side token for future private/sensitive GitHub access (not wired yet). |
-| `VITE_CONTENTFUL_USE_PREVIEW` | `unused-or-obsolete` | Not used by current source runtime. |
-| `VITE_CONTENTFUL_PREVIEW_TOKEN` | `unused-or-obsolete` | Not used by current source runtime. |
+| `VITE_CONTENTFUL_USE_PREVIEW` | `client-forbidden` | Preview mode is deferred; do not configure browser-side preview mode flags. |
+| `VITE_CONTENTFUL_PREVIEW_TOKEN` | `client-forbidden` | Preview tokens must not use the `VITE_` prefix or enter the client bundle. |
 
 ## Migration Decision Note
 
@@ -34,3 +38,12 @@ This document defines the current client/server environment boundary without cha
 - Future GitHub private/sensitive access should move behind a serverless proxy.
 
 Phase 4 will choose and implement one of these paths.
+
+## Fixture and Build Artifact Hygiene
+
+- Tests must use fake Contentful image fixture URLs such as `test-space-id`
+  values, not real Contentful space or asset identifiers.
+- Raw build outputs can embed resolved public env values and must remain
+  untracked.
+- If Netlify secret scanning flags a public `VITE_*` value, prefer fixing the
+  Netlify environment classification before using scan bypass settings.

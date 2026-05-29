@@ -6,20 +6,38 @@
 // - `VITE_GITHUB_TOKEN` (if used) is also client-exposed by Vite and must be treated as public.
 // - A later phase may move delivery access to a server-only boundary.
 
-const runtimeEnv = import.meta.env as Record<string, unknown>;
+const clientEnv = {
+  VITE_BUILD_TARGET: import.meta.env.VITE_BUILD_TARGET,
+  VITE_CONTENT_SOURCE: import.meta.env.VITE_CONTENT_SOURCE,
+  VITE_SITE_URL: import.meta.env.VITE_SITE_URL,
+  VITE_SITE_NAME: import.meta.env.VITE_SITE_NAME,
+  VITE_ARTICLE_ROUTE_PREFIX: import.meta.env.VITE_ARTICLE_ROUTE_PREFIX,
+  VITE_CONTENTFUL_SPACE_ID: import.meta.env.VITE_CONTENTFUL_SPACE_ID,
+  VITE_CONTENTFUL_ENVIRONMENT: import.meta.env.VITE_CONTENTFUL_ENVIRONMENT,
+  VITE_CONTENTFUL_INCLUDE_CONTENT_SOURCE_MAPS:
+    import.meta.env.VITE_CONTENTFUL_INCLUDE_CONTENT_SOURCE_MAPS,
+  VITE_CONTENTFUL_DELIVERY_TOKEN:
+    import.meta.env.VITE_CONTENTFUL_DELIVERY_TOKEN,
+  VITE_GITHUB_OWNER: import.meta.env.VITE_GITHUB_OWNER,
+  VITE_GITHUB_REPO: import.meta.env.VITE_GITHUB_REPO,
+  VITE_GITHUB_TOKEN: import.meta.env.VITE_GITHUB_TOKEN,
+  VITE_GITHUB_API_BASE: import.meta.env.VITE_GITHUB_API_BASE,
+} as const;
 
-function readEnv(name: string): string | undefined {
-  const value = runtimeEnv[name];
+type ClientEnvKey = keyof typeof clientEnv;
+
+function readEnv(name: ClientEnvKey): string | undefined {
+  const value = clientEnv[name];
   return typeof value === "string" ? value : undefined;
 }
 
-function must(name: string): string {
+function must(name: ClientEnvKey): string {
   const value = readEnv(name);
   if (!value) throw new Error(`Missing env var: ${name}`);
   return value;
 }
 
-function readNonEmptyEnv(name: string): string | undefined {
+function readNonEmptyEnv(name: ClientEnvKey): string | undefined {
   const value = readEnv(name)?.trim();
   return value && value.length > 0 ? value : undefined;
 }
@@ -94,7 +112,6 @@ export const envClassification = {
     "CONTENTFUL_ENVIRONMENT",
     "GITHUB_TOKEN",
   ],
-  unusedOrObsolete: ["VITE_CONTENTFUL_USE_PREVIEW", "VITE_CONTENTFUL_PREVIEW_TOKEN"],
 } as const;
 
 export const env = {

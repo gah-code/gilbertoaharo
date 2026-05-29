@@ -386,6 +386,8 @@ Optional env vars:
 Environment boundary note:
 
 - Variable classification and the Phase 4 migration options are documented in [`docs/env-classification.md`](docs/env-classification.md).
+- `VITE_*` values are browser-exposed by Vite; do not use that prefix for
+  preview, management, admin, or other sensitive tokens.
 
 ### GitHub API Integration (Phase 1)
 
@@ -467,6 +469,9 @@ This project deploys to Netlify as a Vite SPA.
 ### Exposure and Secret Handling
 
 - `VITE_*` variables are compiled into client bundles by Vite and should be treated as public-at-runtime configuration.
+- `VITE_CONTENTFUL_SPACE_ID`, `VITE_CONTENTFUL_ENVIRONMENT`, and `VITE_SITE_URL` are public client configuration and should not be marked as secret in Netlify.
+- `VITE_CONTENTFUL_DELIVERY_TOKEN` is currently client-exposed because the app reads published Contentful content from the browser; move it server-side before treating it as sensitive.
+- Preview or management tokens must stay server-only, for example as `CONTENTFUL_PREVIEW_TOKEN` or `CONTENTFUL_MANAGEMENT_TOKEN`, and must not use the `VITE_` prefix.
 - This also applies to `VITE_GITHUB_TOKEN`; do not use client-side VITE token patterns for sensitive/private GitHub access.
 - Never commit real values in `.env.example`, `.env.preview.example`, docs, changelog entries, or generated build artifacts.
 - Do not commit generated output directories (`dist/`, `storybook-static/`) because they can embed resolved environment values.

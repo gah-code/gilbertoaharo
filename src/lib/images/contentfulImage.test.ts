@@ -7,7 +7,10 @@ import {
 } from "./contentfulImage";
 
 const contentfulUrl =
-  "https://images.ctfassets.net/i36fvclphdnv/asset-id/file-name.png";
+  "https://images.ctfassets.net/test-space-id/test-asset-id/test-image.png";
+
+const protocolRelativeContentfulUrl =
+  "//images.ctfassets.net/test-space-id/test-asset-protocol/test-protocol-image.jpg";
 
 function paramsFor(url: string) {
   return new URL(url).searchParams;
@@ -22,8 +25,8 @@ describe("normalizeImageUrl", () => {
   });
 
   it("trims input and normalizes protocol-relative URLs", () => {
-    expect(normalizeImageUrl("  //images.ctfassets.net/example/image.jpg  ")).toBe(
-      "https://images.ctfassets.net/example/image.jpg",
+    expect(normalizeImageUrl(`  ${protocolRelativeContentfulUrl}  `)).toBe(
+      `https:${protocolRelativeContentfulUrl}`,
     );
   });
 
@@ -38,7 +41,7 @@ describe("normalizeImageUrl", () => {
 describe("isContentfulImageUrl", () => {
   it("detects Contentful image URLs", () => {
     expect(isContentfulImageUrl(contentfulUrl)).toBe(true);
-    expect(isContentfulImageUrl("//images.ctfassets.net/example/image.jpg")).toBe(true);
+    expect(isContentfulImageUrl(protocolRelativeContentfulUrl)).toBe(true);
   });
 
   it("rejects non-Contentful, local, and empty URLs", () => {
