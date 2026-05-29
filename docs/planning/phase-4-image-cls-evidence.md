@@ -4,7 +4,7 @@ Date: May 18, 2026
 
 Live URL: `https://gilbertaharo.com/`
 
-Mode: evidence capture only; no implementation changes
+Mode: evidence capture plus implementation checkpoint tracking
 
 ## 1. Executive Verdict
 
@@ -14,6 +14,7 @@ Evidence is sufficient to plan an image-delivery implementation pass, but not su
 - CLS evidence is conflicting: the original desktop artifact reported `0.908`; the fresh Phase 4 desktop run reports `0.009`.
 - Root cause is not confirmed. The fresh run reports the broad `main#main-content` node as the shifted element, which is not specific enough to justify layout reservation or CLS implementation changes.
 - Phase 4 should continue with implementation planning for Contentful image sizing/format delivery and repeat CLS trace review before any layout changes.
+- Batch 4.4 implementation update: ArticleCard image delivery now reuses the existing Contentful image helper for the `/articles` list route only. Deploy verification is still required.
 
 ## 2. Current Metrics
 
@@ -82,7 +83,7 @@ Fresh Lighthouse image-delivery insight:
 | Timeline rendering | `src/components/sections/TimelineSection.tsx` | Renders raw `item.mediaSrc` with `loading="lazy"` and `decoding="async"`. | Four large Contentful PNGs dominate transfer size. | Add timeline-specific responsive image sizes after helper design. |
 | Timeline reservation | `src/components/sections/TimelineSection.css` | Uses media frame `aspect-ratio: 4 / 3`. | Reservation exists; fresh CLS does not prove a timeline layout-shift source. | Preserve while improving image delivery. |
 | Projects rendering | `src/components/sections/ProjectsSection.tsx` | Renders raw project thumbnail `src` with lazy loading. | Future project assets could repeat the same payload issue. | Apply shared responsive image strategy after hero/timeline proof. |
-| Article card rendering | `src/components/articles/ArticleCard.tsx` | Renders raw article hero URL with lazy loading. | Future article list images may be oversized. | Apply shared article-card image sizing if article images appear in payload traces. |
+| Article card rendering | `src/components/articles/ArticleCard.tsx` | Batch 4.4 now renders transformed Contentful image URLs with responsive `srcset`/`sizes`; non-Contentful URLs keep single-`src` fallback behavior. | Deploy verification still needed on `/articles`. | Compare production payload against the Batch 4.4 `/articles` baseline before closing. |
 | Article detail | `src/pages/ArticlePage.tsx` | Renders raw article hero URL with lazy loading. | Article hero images may be oversized and should have route-appropriate sizing. | Add article detail sizes after homepage image path is proven. |
 | Rich text embeds | `src/components/rich-text/RichTextRenderer.tsx` | Renders embedded assets with width/height when Contentful image details exist. | Better reservation than most paths, but no responsive transform. | Preserve dimensions; add transformed `srcSet`/`sizes` later. |
 
@@ -118,15 +119,39 @@ Fresh Lighthouse image-delivery insight:
 2. Draft a small Contentful image URL helper that accepts the current raw asset URL and returns derived URLs for width, format, and quality.
 3. Apply the helper first to `MediaFrame`/Hero and Timeline media with conservative `sizes` values matching current CSS frames.
 4. Validate that the change reduces image transfer without changing layout, IA, routing, CMS models, or normalized content contracts.
-5. Extend the same strategy to Projects, ArticleCard, ArticlePage, and rich text only after the first path is proven.
+5. Extend the same strategy to ArticleCard first because `/articles` route evidence identifies ArticleCard images as the next meaningful target. Keep Projects, ArticlePage, and rich text deferred unless route-specific evidence later justifies them.
 
 ## 8. Out of Scope Confirmed
 
-- No image delivery implementation.
+- No image delivery implementation beyond the approved Batch 4.4 ArticleCard-only pass.
 - No CLS implementation.
 - No layout changes.
+- No ProjectsSection image delivery adoption.
+- No ArticlePage image delivery adoption.
+- No RichTextRenderer image delivery adoption.
 - No routing changes.
 - No CMS model changes.
 - No Contentful migration.
 - No typography/card/elevation polish.
-- No production behavior changes.
+- No SEO robots/noindex/keywords changes.
+- No `.tmp` cleanup or repo-ignore changes.
+- No production deploy verification has been completed for Batch 4.4 yet.
+
+## 9. Batch 4.4 ArticleCard Implementation Checkpoint
+
+Date: May 29, 2026
+
+- Status: implemented locally; deploy verification pending.
+- Scope: ArticleCard image delivery only for the `/articles` list route.
+- Implementation: `ArticleCard` now reuses `buildContentfulImageUrl`, `buildContentfulSrcSet`, and `normalizeImageUrl` from `src/lib/images/contentfulImage.ts`.
+- Contentful ArticleCard images now request transformed fallback URLs with width `800`, quality `75`, and WebP format, plus responsive width candidates `320`, `480`, `640`, and `800`.
+- Responsive `sizes` value: `(min-width: 1120px) 320px, (min-width: 768px) 33vw, 100vw`.
+- Existing alt text behavior is preserved: image alt text remains the article title.
+- Existing loading and decoding behavior is preserved: ArticleCard images remain `loading="lazy"` and `decoding="async"`.
+- Existing ArticleCard CSS, aspect ratio, card layout, spacing, typography, border radius, elevation, routing, IA, CMS models, and Contentful data contracts were not changed.
+- Non-Contentful ArticleCard image URLs preserve the normalized single-`src` fallback behavior and do not receive Contentful `srcset`/`sizes`.
+- ProjectsSection, ArticlePage, and RichTextRenderer image delivery remain deferred.
+- CLS/layout/CSS fixes remain deferred because the severe desktop CLS root cause is still unconfirmed.
+- SEO robots/noindex/keywords work remains deferred.
+- `.tmp` cleanup and repo-ignore work remain deferred.
+- Deploy verification must compare `/articles` against the documented baseline: `3,859 KiB` total byte weight, `3,794,510 B` image transfer, and `2,044 KiB` estimated image-delivery savings.

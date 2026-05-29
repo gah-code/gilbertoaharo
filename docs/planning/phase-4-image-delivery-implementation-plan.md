@@ -2,7 +2,7 @@
 
 Date: May 18, 2026
 
-Mode: plan only; no implementation changes
+Mode: implementation plan plus checkpoint tracking
 
 ## 1. Executive Recommendation
 
@@ -15,7 +15,8 @@ Recommended order:
 1. Batch 4.1: add and test a pure Contentful image URL helper.
 2. Batch 4.2: add generic `srcSet`/`sizes` support to `MediaFrame` and adopt it for Hero media.
 3. Batch 4.3: add responsive delivery for Timeline media images.
-4. Batch 4.4: extend the proven pattern to Projects, ArticleCard, ArticlePage, and RichTextRenderer only after Hero/Timeline validation.
+4. Batch 4.4: adopt the proven pattern for ArticleCard only on `/articles`, based on route-specific Lighthouse evidence.
+5. Future batches: keep ProjectsSection, ArticlePage, and RichTextRenderer deferred unless route-specific evidence later justifies them.
 
 ## 2. Evidence Basis
 
@@ -143,7 +144,7 @@ Implementation shape:
 | 4.1 | Add pure Contentful image helper and tests. | `src/lib/images/contentfulImage.ts`, `src/lib/images/contentfulImage.test.ts` | Low | Helper tests pass; non-Contentful URLs and protocol-relative URLs preserve current behavior. |
 | 4.2 | Adopt responsive delivery for Hero through `MediaFrame`. | `src/components/sections/primitives/MediaFrame.tsx`, `src/components/sections/HeroSection.tsx`, related tests/stories if needed | Medium | Hero layout unchanged; Lighthouse image payload drops; CLS/LCP do not materially regress. |
 | 4.3 | Adopt responsive delivery for Timeline media. | `src/components/sections/TimelineSection.tsx`, Timeline tests/stories if needed | Medium | Timeline layout unchanged; Timeline image transfer drops; lazy loading remains. |
-| 4.4 | Extend the proven pattern to later surfaces. | `ProjectsSection`, `ArticleCard`, `ArticlePage`, `RichTextRenderer` | Medium | Extension only after Hero/Timeline validates cleanly. |
+| 4.4 | Adopt the proven pattern for ArticleCard images only. | `src/components/articles/ArticleCard.tsx`, `src/components/articles/ArticleCard.test.tsx` | Medium | `/articles` is ready for deploy verification; no ProjectsSection, ArticlePage, RichTextRenderer, layout, CLS, SEO, or `.tmp` work is introduced. |
 
 Batch details:
 
@@ -171,13 +172,13 @@ Batch details:
 - Rollback: remove Timeline `srcSet`/`sizes` usage.
 - Acceptance criteria: Timeline image transfer drops; layout remains unchanged; lazy loading remains.
 
-### Batch 4.4 — Extend Later
+### Batch 4.4 — ArticleCard Image Delivery
 
-- Objective: apply the proven image delivery strategy to remaining image surfaces.
-- Out of scope: starting before Hero/Timeline results are validated.
-- Validation commands: targeted component tests, Storybook build, Lighthouse route checks where relevant.
-- Rollback: surface-specific revert.
-- Acceptance criteria: each later surface reduces transfer without layout or contract changes.
+- Objective: apply the proven image delivery strategy to ArticleCard images on `/articles` only.
+- Out of scope: ProjectsSection, ArticlePage, RichTextRenderer, CLS/layout/CSS fixes, typography, card/elevation polish, routing/IA, CMS models, Contentful migration, SEO robots/noindex/keywords, and `.tmp` cleanup.
+- Validation commands: targeted ArticleCard tests, `npm run lint`, `npm run build`, `npm run test`, `npm run build-storybook`, and deploy Lighthouse route checks after merge/deploy.
+- Rollback: remove ArticleCard `srcset`/`sizes` usage and restore the normalized single-`src` behavior.
+- Acceptance criteria: ArticleCard images use Contentful-derived transformed URLs and responsive attributes where applicable, `/articles` is ready for deploy verification, and non-ArticleCard surfaces remain untouched.
 
 ## 7. Validation Plan
 
@@ -287,6 +288,18 @@ Batch 4.4 later image-surface evidence, May 18, 2026:
 - Defer ArticlePage and RichTextRenderer because current article detail routes show favicon-only image transfer and no image-delivery savings.
 - CLS fixes remain blocked; the homepage route reproduced CLS `0.908` in this evidence pass, but no specific severe shift source has been isolated.
 
+Batch 4.4 ArticleCard implementation checkpoint, May 29, 2026:
+
+- Status: implemented locally; deploy verification pending.
+- Adopted the Contentful image helper for ArticleCard media only, using transformed fallback `src`, responsive `srcset`, and `(min-width: 1120px) 320px, (min-width: 768px) 33vw, 100vw` sizes.
+- ArticleCard width candidates are `320`, `480`, `640`, and `800`; fallback transformed `src` uses width `800`, quality `75`, and format `webp`.
+- Non-Contentful ArticleCard URLs preserve the existing normalized single-`src` behavior.
+- Existing ArticleCard alt text, lazy loading, async decoding, CSS, aspect ratio, card layout, spacing, typography, border radius, elevation, route behavior, and content contracts are preserved.
+- Targeted coverage was added for transformed Contentful ArticleCard image URLs and responsive markup.
+- Deploy verification must compare `/articles` against the documented baseline: `3,859 KiB` total byte weight, `3,794,510 B` image transfer, and `2,044 KiB` estimated image-delivery savings.
+- ProjectsSection, ArticlePage, and RichTextRenderer remain deferred because current route evidence does not justify adoption in this batch.
+- CLS/layout/CSS, SEO robots/noindex/keywords, `.tmp` cleanup, routing/IA, CMS model, Contentful migration, typography, and card/elevation work remain deferred.
+
 ### After Hero/Timeline Adoption
 
 - No layout change.
@@ -302,7 +315,9 @@ Batch 4.4 later image-surface evidence, May 18, 2026:
 - CMS model changes.
 - Contentful migrations.
 - Typography/card/elevation polish.
-- Project, article, and rich-text adoption until Hero/Timeline prove the pattern.
+- ProjectsSection, ArticlePage, and RichTextRenderer image adoption.
+- SEO robots/noindex/keywords changes.
+- `.tmp` cleanup or repo-ignore changes.
 - Any route or IA change.
 
 ## 10. Open Questions

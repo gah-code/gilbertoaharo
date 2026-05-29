@@ -95,5 +95,44 @@ describe("ArticleCard", () => {
       "src",
       "https://images.example.com/articles/protocol-relative.jpg",
     );
+    expect(image).not.toHaveAttribute("srcset");
+    expect(image).not.toHaveAttribute("sizes");
+  });
+
+  it("uses transformed responsive Contentful image URLs", () => {
+    const heroImageUrl =
+      "https://images.ctfassets.net/i36fvclphdnv/article-id/article-image.jpg";
+
+    render(
+      <ArticleCard
+        article={{
+          ...defaultArticleListItemFixture,
+          heroImageUrl,
+        }}
+      />,
+    );
+
+    const image = screen.getByRole("img", {
+      name: defaultArticleListItemFixture.title,
+    });
+
+    expect(image).toHaveAttribute(
+      "src",
+      `${heroImageUrl}?w=800&q=75&fm=webp`,
+    );
+    expect(image).toHaveAttribute(
+      "srcset",
+      [
+        `${heroImageUrl}?w=320&q=75&fm=webp 320w`,
+        `${heroImageUrl}?w=480&q=75&fm=webp 480w`,
+        `${heroImageUrl}?w=640&q=75&fm=webp 640w`,
+        `${heroImageUrl}?w=800&q=75&fm=webp 800w`,
+      ].join(", "),
+    );
+    expect(image).toHaveAttribute(
+      "sizes",
+      "(min-width: 1120px) 320px, (min-width: 768px) 33vw, 100vw",
+    );
+    expect(image).toHaveAttribute("alt", defaultArticleListItemFixture.title);
   });
 });

@@ -1,12 +1,16 @@
 import type { ArticleListItem } from "@/content/contentful/types";
 import { Link } from "@/components/ui/Link";
 import { buildArticlePath } from "@/router/routes";
+import {
+  buildContentfulImageUrl,
+  buildContentfulSrcSet,
+  normalizeImageUrl,
+} from "@/lib/images/contentfulImage";
 import "./ArticleCard.css";
 
-function resolveAssetUrl(url?: string | null) {
-  if (!url) return undefined;
-  return url.startsWith("//") ? `https:${url}` : url;
-}
+const ARTICLE_CARD_IMAGE_WIDTHS = [320, 480, 640, 800];
+const ARTICLE_CARD_IMAGE_SIZES =
+  "(min-width: 1120px) 320px, (min-width: 768px) 33vw, 100vw";
 
 function formatDate(iso?: string) {
   if (!iso) return undefined;
@@ -21,7 +25,21 @@ function formatDate(iso?: string) {
 
 export function ArticleCard({ article }: { article: ArticleListItem }) {
   const href = buildArticlePath(article.slug);
-  const imageUrl = resolveAssetUrl(article.heroImageUrl);
+  const imageUrl = normalizeImageUrl(article.heroImageUrl);
+  const imageSrc = imageUrl
+    ? buildContentfulImageUrl(imageUrl, {
+        width: 800,
+        quality: 75,
+        format: "webp",
+      })
+    : undefined;
+  const imageSrcSet = imageUrl
+    ? buildContentfulSrcSet(imageUrl, ARTICLE_CARD_IMAGE_WIDTHS, {
+        quality: 75,
+        format: "webp",
+      })
+    : undefined;
+  const imageSizes = imageSrcSet ? ARTICLE_CARD_IMAGE_SIZES : undefined;
   const publishedLabel = formatDate(article.publishedAt);
   const updatedLabel = formatDate(article.updatedAt);
   const dateLabel = publishedLabel ?? updatedLabel;
@@ -31,14 +49,16 @@ export function ArticleCard({ article }: { article: ArticleListItem }) {
 
   return (
     <article className="article-card">
-      {imageUrl ? (
+      {imageSrc ? (
         <Link
           href={href}
           className="article-card__media"
           variant="unstyled"
         >
           <img
-            src={imageUrl}
+            src={imageSrc}
+            srcSet={imageSrcSet}
+            sizes={imageSizes}
             alt={article.title}
             loading="lazy"
             decoding="async"
