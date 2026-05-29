@@ -155,3 +155,26 @@ Date: May 29, 2026
 - SEO robots/noindex/keywords work remains deferred.
 - `.tmp` cleanup and repo-ignore work remain deferred.
 - Deploy verification must compare `/articles` against the documented baseline: `3,859 KiB` total byte weight, `3,794,510 B` image transfer, and `2,044 KiB` estimated image-delivery savings.
+
+## 10. Batch 4.4 ArticleCard Deploy Verification
+
+Date: May 29, 2026
+
+- Status: pass; Batch 4.4 image-delivery work is deploy-verified.
+- Production route checked: `https://gilbertaharo.com/articles`.
+- Runtime deploy evidence: Git commit `bfc1d2a` was pushed to `origin/master`; production served JavaScript asset `/assets/index-CiKzfXWF.js`, which contains the ArticleCard responsive width list and sizes string.
+- Live ArticleCard image requests were transformed Contentful WebP URLs. Lighthouse observed three ArticleCard image requests:
+  - `...?w=320&q=75&fm=webp`, transfer `12,335 B`, MIME `image/webp`.
+  - `...?w=320&q=75&fm=webp`, transfer `13,659 B`, MIME `image/webp`.
+  - `...?w=320&q=75&fm=webp`, transfer `8,947 B`, MIME `image/webp`.
+- Responsive markup was present in the Lighthouse node snippet, including the Batch 4.4 `sizes` value and `srcset`.
+- Payload comparison for `/articles`:
+  - Total byte weight improved from `3,859 KiB` to `194 KiB`.
+  - Image transfer improved from `3,794,510 B` to `34,941 B`.
+  - Estimated image-delivery savings improved from `2,044 KiB` to `5 KiB` (`4,996 B` debug wasted bytes).
+- Lighthouse metrics: performance score `0.96`, LCP `1.4 s`, CLS `0.004`, TBT `60 ms`.
+- CLS was observed only. No CLS/layout/CSS fix was made, and Phase 4 still does not assign CLS root cause from this route check.
+- ProjectsSection, ArticlePage, and RichTextRenderer image delivery remain deferred.
+- SEO robots/noindex/keywords work remains deferred.
+- `.tmp` cleanup and repo-ignore work remain deferred.
+- Phase 4 image-delivery work is ready for closeout after this deploy verification record; continue next with the separate repo hygiene batch.

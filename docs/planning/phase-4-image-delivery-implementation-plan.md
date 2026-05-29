@@ -300,6 +300,20 @@ Batch 4.4 ArticleCard implementation checkpoint, May 29, 2026:
 - ProjectsSection, ArticlePage, and RichTextRenderer remain deferred because current route evidence does not justify adoption in this batch.
 - CLS/layout/CSS, SEO robots/noindex/keywords, `.tmp` cleanup, routing/IA, CMS model, Contentful migration, typography, and card/elevation work remain deferred.
 
+Batch 4.4 deploy verification, May 29, 2026:
+
+- Status: pass.
+- Production route checked: `https://gilbertaharo.com/articles`.
+- Deploy/build evidence: Git commit `bfc1d2a` was pushed to `origin/master`; production served `/assets/index-CiKzfXWF.js`, and the bundle contains the ArticleCard responsive width list plus `(min-width: 1120px) 320px, (min-width: 768px) 33vw, 100vw`.
+- Live Lighthouse/network evidence confirms ArticleCard image requests are transformed Contentful WebP URLs with `w=320&q=75&fm=webp` at the checked desktop viewport.
+- `/articles` total byte weight improved from `3,859 KiB` to `194 KiB`.
+- `/articles` image transfer improved from `3,794,510 B` to `34,941 B`.
+- `/articles` estimated image-delivery savings improved from `2,044 KiB` to `5 KiB` (`4,996 B`).
+- Lighthouse reports performance score `0.96`, LCP `1.4 s`, CLS `0.004`, and TBT `60 ms`.
+- CLS was observed only and not fixed; no root cause is assigned by this batch.
+- ProjectsSection, ArticlePage, RichTextRenderer, SEO robots/noindex/keywords, `.tmp` cleanup, routing/IA, CMS model, Contentful migration, typography, and card/elevation work remain deferred.
+- Decision: Phase 4 image-delivery work is ready for closeout; continue separately with repo hygiene, then SEO metadata.
+
 ### After Hero/Timeline Adoption
 
 - No layout change.
