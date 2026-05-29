@@ -1,9 +1,18 @@
 import React from "react";
+import {
+  DEFAULT_ROBOTS_META,
+  DEFAULT_SEO_KEYWORDS,
+  formatKeywords,
+  formatRobotsMeta,
+  type RobotsMeta,
+} from "@/lib/seo";
 
 type SeoProps = {
   title?: string;
   description?: string;
   canonicalUrl?: string;
+  robots?: RobotsMeta;
+  keywords?: string[];
 };
 
 function upsertMeta(name: string, content: string) {
@@ -40,7 +49,16 @@ function removeLink(rel: string) {
   }
 }
 
-export function SeoHead({ title, description, canonicalUrl }: SeoProps) {
+export function SeoHead({
+  title,
+  description,
+  canonicalUrl,
+  robots,
+  keywords,
+}: SeoProps) {
+  const robotsContent = formatRobotsMeta(robots ?? DEFAULT_ROBOTS_META);
+  const keywordsContent = formatKeywords(keywords ?? DEFAULT_SEO_KEYWORDS);
+
   React.useEffect(() => {
     const fallback = (import.meta.env.VITE_SITE_NAME as string) || undefined;
     if (title) {
@@ -65,6 +83,18 @@ export function SeoHead({ title, description, canonicalUrl }: SeoProps) {
       removeLink("canonical");
     }
   }, [canonicalUrl]);
+
+  React.useEffect(() => {
+    upsertMeta("robots", robotsContent);
+  }, [robotsContent]);
+
+  React.useEffect(() => {
+    if (keywordsContent) {
+      upsertMeta("keywords", keywordsContent);
+    } else {
+      removeMeta("keywords");
+    }
+  }, [keywordsContent]);
 
   return null;
 }

@@ -12,7 +12,7 @@ The highest-priority risks are not broad architecture gaps. They are focused rel
 
 - Phase 2 live SEO gate is now closed: `robots.txt` returns plain robots rules, `sitemap.xml` returns XML, live fallback metadata is updated, canonical behavior passes, and Lighthouse SEO follow-up returned `100`.
 - Live performance has heavy Contentful image payloads and a serious desktop CLS Lighthouse lab finding that needs trace/filmstrip confirmation before root cause is assigned.
-- Accessibility is generally strong but has content/name mismatches caused by CMS-provided `ariaLabel` values that do not include visible button/link text.
+- Accessibility is generally strong. The prior CTA content/name mismatch is locally remediated for shared button-like link call sites; deploy/Lighthouse verification is still pending.
 - Heading levels skip from section headings to `h4` in timeline and learning cards.
 - Phase 3 token verification is closed: the confirmed `--space-5` defect is fixed, the CSS variable scan passes, motion/responsive baselines are documented, and deferred findings are preserved for later QA/polish.
 
@@ -184,7 +184,7 @@ Top desktop problems:
 | 1 | Invalid `robots.txt` | Lighthouse reports 15 parse errors because HTML is served. | Add valid robots file and ensure SPA rewrite does not catch it. |
 | 2 | Invalid canonical | Lighthouse reports no valid `rel=canonical`. | Ensure absolute canonical output on live routes. |
 | 3 | Desktop CLS | Desktop CLS 0.908 with `main#main-content` as shifting node in Lighthouse lab output. | Confirm with trace/filmstrip, then investigate the verified shift source. |
-| 4 | Accessible-name mismatch | Hero/project/footer links have `aria-label` values that omit visible text. | Align content and aria labels; prefer descriptive visible labels. |
+| 4 | Accessible-name mismatch | Hero/project/footer links had `aria-label` values that omitted visible text; shared code now prefixes supplemental labels with visible text. | Deploy-verify the updated CTA names and keep CMS content labels descriptive. |
 | 5 | Heading-order skips | Timeline and Learning card headings render as `h4` after section headings. | Use semantic `h3` and visual size overrides if needed. |
 
 ### Core Web Vitals / PSI / CrUX Availability
@@ -375,7 +375,7 @@ Confirmed issues:
 
 | Issue | Severity | Evidence | Affected files | Recommended fix | Storybook/a11y coverage |
 | --- | --- | --- | --- | --- | --- |
-| Accessible names do not include visible text for several links/buttons. | High | Lighthouse `label-content-name-mismatch`; hero CTAs, project action, footer link. | `ActionGroup.tsx`, `ProjectsSection.tsx`, `FooterSection.tsx`, CMS link content. | Prefer visible text that is already descriptive; otherwise ensure `aria-label` includes visible text. | Add a11y stories/notes for CTA labels. |
+| Accessible names do not include visible text for several links/buttons. | High | Lighthouse `label-content-name-mismatch`; hero CTAs, project action, footer link. | `ActionGroup.tsx`, `ProjectsSection.tsx`, `TimelineSection.tsx`, `FooterSection.tsx`, CMS link content. | Locally remediated with shared visible-text-aware action labels; deploy-verify with Lighthouse/a11y checks. | Add a11y stories/notes for CTA labels. |
 | Heading order skips to `h4` under `h2` sections. | Medium | Lighthouse `heading-order`; timeline card and learning roadmap card headings. | `TimelineSection.tsx`, `LearningRoadmapTimeline.tsx` | Use semantic `level={3}` with visual size override if needed. | Add section stories with a11y addon checks. |
 | `robots.txt` invalid affects SEO, not WCAG, but automated audit flags crawler/accessibility-adjacent structure. | Medium | Lighthouse SEO audit. | `public/robots.txt` missing; Netlify redirect behavior. | Add static `robots.txt`; ensure redirect rule does not rewrite it. | Not Storybook. |
 | Project "Read more" link is not descriptive. | Medium | Lighthouse SEO `link-text`. | Current live CMS/content and `ProjectsSection` visible action labels. | Change visible label in content/model to descriptive text. | Add Projects story with descriptive CTAs. |
@@ -681,7 +681,7 @@ Phase 4 Batch 4.4 later image-surface evidence checkpoint (May 18, 2026):
 | Desktop CLS severe lab finding | High | Reproduced; root cause unconfirmed | Previous desktop CLS `0.908`; fresh Phase 4 desktop CLS `0.009`; repeat Phase 4 desktop CLS `0.908`; affected node remains broad `main#main-content` | Potential jarring layout shift and CWV risk | Trace/filmstrip review must isolate the specific shift source before any layout-reservation fix | Phase 4/8 |
 | Oversized Contentful images | Medium | Improved on homepage; route surfaces still need evidence | Baseline desktop total byte weight `8,356 KiB`; Batch 4.3 deploy verification total byte weight `235 KiB`; remaining estimated image-delivery savings `18 KiB` | Route-specific images may still create data cost or LCP risk | Plan later-surface adoption with route-specific Lighthouse/network evidence before implementation | Phase 4/7 |
 | Oversized ArticleCard images | High | Confirmed on `/articles` | `/articles` total byte weight `3,859 KiB`; image transfer `3,794,510 B`; estimated image-delivery savings `2,044 KiB` | Slow article index loading and data cost | Implement narrow ArticleCard responsive Contentful image delivery, then deploy-verify `/articles` | Phase 4 |
-| Accessible-name mismatches | High | Confirmed by Lighthouse | Label/content-name audit | Voice control/screen reader confusion | Align visible labels and aria labels | Phase 8 |
+| Accessible-name mismatches | High | Locally remediated; deploy verification pending | Label/content-name audit; shared `accessibleName` helper now used by hero/project/timeline/footer action surfaces | Voice control/screen reader confusion if CMS or future call sites bypass the helper | Deploy-verify and keep CMS visible labels descriptive | Phase 8 |
 | Undefined `--space-5` | Low | Resolved | `--space-5` added to `tokens.css`; undefined-variable scan clean | Regression would affect wide Learning spacing | Keep token scan in release validation | Phase 3 closed |
 | Navigation hard-coded motion values | Low-medium | Confirmed | `Navigation.css` uses local `0.12s`, `0.15s`, and `0.2s` `ease` transitions; reduced-motion block exists | Possible motion inconsistency, but current behavior is stable | Defer until a motion-token alignment phase can preserve or intentionally change behavior | Phase 3 closed / later polish |
 | Section-specific breakpoint drift | Low-medium | Confirmed | Learning `96rem`, Hero `820px`, Footer/Header `900px`/`901px`, compact `480px` values | Potential responsive maintenance friction | Keep documented as content-specific values; verify during responsive QA before changing | Phase 8 |
@@ -715,7 +715,7 @@ Phase 4 Batch 4.4 later image-surface evidence checkpoint (May 18, 2026):
 
 | Recommendation | Impact | Effort | Risk | Files likely affected | Layout/functionality change |
 | --- | --- | --- | --- | --- | --- |
-| Ensure aria labels include visible text or remove redundant aria labels. | High | Low-medium | Medium if CMS content changes | CMS content, `ActionGroup`, `ProjectsSection`, `FooterSection` | No visual layout required |
+| Ensure aria labels include visible text or remove redundant aria labels. | High | Low-medium | Medium if CMS content changes | CMS content, `ActionGroup`, `ProjectsSection`, `TimelineSection`, `FooterSection` | Locally implemented for shared action call sites; no visual layout change |
 | Adjust timeline/learning card headings to semantic `h3`. | Medium | Low | Low | `TimelineSection.tsx`, `LearningRoadmapTimeline.tsx` | No visual change if size override used |
 | Add Storybook a11y states for CTA label patterns. | Medium | Medium | Low | stories | No |
 
@@ -827,6 +827,7 @@ Scope:
 - Phase 4 Batch 4.3 checkpoint: adopted responsive Contentful delivery for Timeline media, preserving Timeline layout/CSS, Hero behavior, later image surfaces, CMS boundaries, and CLS blockers.
 - Phase 4 Batch 4.3 deploy verification checkpoint: production serves the Batch 4.3 bundle, Timeline transformed delivery is verified by Lighthouse, total byte weight improved to `235 KiB`, remaining image-delivery savings dropped to `18 KiB`, and later image surfaces are cleared for separate Batch 4.4 planning while CLS fixes remain blocked.
 - Phase 4 Batch 4.4 later-surface evidence checkpoint: route-specific evidence confirms ArticleCard images on `/articles` still need optimization, while ProjectsSection, ArticlePage, and RichTextRenderer are deferred. No production code changed.
+- Button interaction maintenance checkpoint (May 23, 2026): link-mode button variant colors now persist across hover, active, and visited states; disabled buttons avoid press movement; external web-link defaults enforce `noreferrer noopener`; `mailto:` links stay same-context by default; and shared CTA action labels include visible text through `accessibleName`. Validation passed with `npm test`, `npm run lint`, and `npm run build` locally, with the known Node `22.2.0` Vite warning still present.
 
 Files created:
 

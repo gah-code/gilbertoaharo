@@ -8,16 +8,22 @@ vi.mock("./SeoHead", () => ({
     title,
     description,
     canonicalUrl,
+    robots,
+    keywords,
   }: {
     title?: string;
     description?: string;
     canonicalUrl?: string;
+    robots?: { index: boolean; follow: boolean };
+    keywords?: string[];
   }) => (
     <div
       data-testid="seo-head"
       data-title={title ?? ""}
       data-description={description ?? ""}
       data-canonical-url={canonicalUrl ?? ""}
+      data-robots={robots ? `${robots.index},${robots.follow}` : ""}
+      data-keywords={keywords?.join(",") ?? ""}
     />
   ),
 }));
@@ -53,6 +59,8 @@ describe("PageShell", () => {
         title="Route Title"
         description="Route description."
         canonicalUrl="https://example.com/route"
+        robots={{ index: true, follow: true }}
+        keywords={["React", "Contentful"]}
       >
         <div>Page content</div>
       </PageShell>,
@@ -62,5 +70,7 @@ describe("PageShell", () => {
     expect(seoHead).toHaveAttribute("data-title", "Route Title");
     expect(seoHead).toHaveAttribute("data-description", "Route description.");
     expect(seoHead).toHaveAttribute("data-canonical-url", "https://example.com/route");
+    expect(seoHead).toHaveAttribute("data-robots", "true,true");
+    expect(seoHead).toHaveAttribute("data-keywords", "React,Contentful");
   });
 });

@@ -105,7 +105,10 @@ Guardrails:
 - CSS custom properties are reference anchors for breakpoints, not media-query inputs. Explicit media query values are acceptable when they match the documented breakpoint scale.
 - Phase C interaction baseline:
   - button hover/focus/press states remain subtle and token-aligned
+  - link-mode buttons own their variant text color across hover, active, and visited states
+  - disabled buttons and disabled link-mode buttons should not animate like pressed controls
   - link underline/tint transitions prioritize readability over decoration
+  - optional CTA `aria-label` values must include the visible action text, or be omitted when the visible text is already descriptive
   - interactive cards may lift slightly, while static cards should not imply clickability
 - Storybook interaction-state guidance should be updated when focus/hover/disabled or motion contracts change.
 

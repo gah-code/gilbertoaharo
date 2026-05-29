@@ -1,9 +1,18 @@
 import { render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
+import { DEFAULT_SEO_KEYWORDS } from "@/lib/seo";
 import { SeoHead } from "./SeoHead";
 
 function getDescriptionMeta() {
   return document.querySelector('meta[name="description"]');
+}
+
+function getRobotsMeta() {
+  return document.querySelector('meta[name="robots"]');
+}
+
+function getKeywordsMeta() {
+  return document.querySelector('meta[name="keywords"]');
 }
 
 function getCanonicalLink() {
@@ -16,6 +25,8 @@ describe("SeoHead", () => {
 
   afterEach(() => {
     getDescriptionMeta()?.remove();
+    getRobotsMeta()?.remove();
+    getKeywordsMeta()?.remove();
     getCanonicalLink()?.remove();
     document.title = "";
     runtimeEnv.VITE_SITE_NAME = originalSiteName;
@@ -38,6 +49,11 @@ describe("SeoHead", () => {
     expect(getCanonicalLink()).toHaveAttribute(
       "href",
       "https://gilbertaharo.com/",
+    );
+    expect(getRobotsMeta()).toHaveAttribute("content", "index, follow");
+    expect(getKeywordsMeta()).toHaveAttribute(
+      "content",
+      DEFAULT_SEO_KEYWORDS.join(", "),
     );
   });
 
@@ -63,5 +79,31 @@ describe("SeoHead", () => {
     expect(document.title).toBe("Not found | Gilberto Haro");
     expect(getDescriptionMeta()).toBeNull();
     expect(getCanonicalLink()).toBeNull();
+    expect(getRobotsMeta()).toHaveAttribute("content", "index, follow");
+    expect(getKeywordsMeta()).toHaveAttribute(
+      "content",
+      DEFAULT_SEO_KEYWORDS.join(", "),
+    );
+  });
+
+  it("supports route-level robots and keywords overrides", () => {
+    const { rerender } = render(
+      <SeoHead
+        title="Debug | Gilberto Haro"
+        robots={{ index: false, follow: false }}
+        keywords={[" debug ", "", "Contentful", "Contentful"]}
+      />,
+    );
+
+    expect(getRobotsMeta()).toHaveAttribute("content", "noindex, nofollow");
+    expect(getKeywordsMeta()).toHaveAttribute("content", "debug, Contentful");
+
+    rerender(<SeoHead title="Landing | Gilberto Haro" />);
+
+    expect(getRobotsMeta()).toHaveAttribute("content", "index, follow");
+    expect(getKeywordsMeta()).toHaveAttribute(
+      "content",
+      DEFAULT_SEO_KEYWORDS.join(", "),
+    );
   });
 });

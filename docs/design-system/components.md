@@ -3,8 +3,9 @@
 **Purpose:** Current components, API contracts, and style colocation.
 
 ## Primitives (`src/components/ui`)
-- **Button** (`Button.tsx`, `Button.css`): explicit `variant` (`primary|secondary|text`), `size` (`sm|md|lg`), `fullWidth`, disabled behavior for button/link modes, reduced-motion handling, and subtle hover/focus/press interaction states.
-- **Link** (`Link.tsx`, `Link.css`): explicit `variant` (`default|muted|unstyled`), `size` (`sm|md|lg`), `disabled` contract (`aria-disabled`, tab exclusion, click guard), safe external rel handling, and readable token-aligned underline/tint transitions.
+- **Button** (`Button.tsx`, `Button.css`): explicit `variant` (`primary|secondary|text`), `size` (`sm|md|lg`), `fullWidth`, disabled behavior for button/link modes, reduced-motion handling, touch-friendly button behavior, centered labels, and subtle hover/focus/press interaction states. Link-mode buttons must keep variant text color across hover, active, and visited states.
+- **Link** (`Link.tsx`, `Link.css`): explicit `variant` (`default|muted|unstyled`), `size` (`sm|md|lg`), `disabled` contract (`aria-disabled`, tab exclusion, click guard), safe external web-link defaults (`target="_blank"` with `noreferrer noopener`), same-context non-web links such as `mailto:`, and readable token-aligned underline/tint transitions.
+- **Accessible action names** (`accessibleName.ts`): shared helper for CTA/button-like links whose optional `aria-label` must include the visible label text. Prefer no `aria-label` when the visible label is already descriptive.
 - **Card** (`Card.tsx`, `Card.css`): explicit `variant` (`default|subtle|elevated`), `density` (`sm|md|lg`), optional `interactive` state styles, and restrained hover/focus lift for interactive surfaces only.
 - **Badge** (`Badge.tsx`, `Badge.css`): explicit `tone` (`default|muted|success|warning`) and `size` (`sm|md`).
 - **Text** (`Text.tsx`, `Text.css`): semantic `kind` presets (`body`, `bodyLarge`, `bodySmall`, `meta`, `eyebrow`, `caption`) with explicit override props (`tone`, `size`, `weight`, `tracking`) and semantic `as`.

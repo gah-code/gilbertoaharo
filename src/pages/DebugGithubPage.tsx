@@ -36,6 +36,11 @@ const debugGithubRouteSeo = {
   canonicalUrl: buildCanonicalUrl("/debug/github"),
 };
 
+const debugRobots = {
+  index: false,
+  follow: false,
+};
+
 export function DebugGithubPage() {
   const [state, setState] = React.useState<DebugGithubState>({
     loading: true,
@@ -87,6 +92,7 @@ export function DebugGithubPage() {
         title={debugGithubRouteSeo.title}
         description={debugGithubRouteSeo.description}
         canonicalUrl={debugGithubRouteSeo.canonicalUrl}
+        robots={debugRobots}
       >
         <h1>GitHub Debug</h1>
         <p>
@@ -105,6 +111,7 @@ export function DebugGithubPage() {
         title={debugGithubRouteSeo.title}
         description={debugGithubRouteSeo.description}
         canonicalUrl={debugGithubRouteSeo.canonicalUrl}
+        robots={debugRobots}
       >
         <h1>GitHub Debug</h1>
         <p>
@@ -122,6 +129,7 @@ export function DebugGithubPage() {
         title={debugGithubRouteSeo.title}
         description={debugGithubRouteSeo.description}
         canonicalUrl={debugGithubRouteSeo.canonicalUrl}
+        robots={debugRobots}
       >
         <h1>GitHub Debug</h1>
         <p>
@@ -139,6 +147,7 @@ export function DebugGithubPage() {
       title={debugGithubRouteSeo.title}
       description={debugGithubRouteSeo.description}
       canonicalUrl={debugGithubRouteSeo.canonicalUrl}
+      robots={debugRobots}
     >
       <section>
         <h1>GitHub Debug</h1>

@@ -9,12 +9,18 @@ const notFoundRouteSeo = {
   canonicalUrl: buildCanonicalUrl("/404"),
 };
 
+const notFoundRobots = {
+  index: false,
+  follow: true,
+};
+
 export function NotFoundPage() {
   return (
     <PageShell
       title={notFoundRouteSeo.title}
       description={notFoundRouteSeo.description}
       canonicalUrl={notFoundRouteSeo.canonicalUrl}
+      robots={notFoundRobots}
     >
       <h1>Page not found</h1>
       <p>We couldn&apos;t find that page.</p>

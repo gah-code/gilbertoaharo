@@ -5,6 +5,10 @@ This roadmap supersedes legacy sequencing in `docs/planning/ROADMAP.md`.
 Roadmap status: Completed (Phases 0-7 closed on April 24, 2026).
 Reopen prior phases only when a true regression is discovered.
 
+## Post-Closeout Maintenance Log
+
+- May 23, 2026 — Button interaction hardening recorded as a maintenance fix, not a phase reopen. Updated the shared button/link interaction contract so link-mode buttons preserve variant text color across hover, active, and visited states; disabled buttons avoid press movement; action rows keep touch-friendly button behavior; external web links enforce `noreferrer noopener`; `mailto:` links stay in the current browsing context by default; and CTA `aria-label` values include visible button/link text. Affected surfaces: `Button`, `Link`, section `ActionGroup`, `ProjectsSection`, `TimelineSection`, and `FooterSection`. Validation passed with `npm test`, `npm run lint`, and `npm run build`; the build still prints the known local Node `22.2.0` warning against the project `22.12+` Vite floor.
+
 ## Roadmap v2 Follow-On Sequence (Post Closeout)
 
 Tracked operationally in `docs/planning/TASKS.md` and phase records:

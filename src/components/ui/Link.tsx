@@ -1,5 +1,5 @@
 import React from "react";
-import { handleLinkClick, isInternalHref } from "@/router/link";
+import { handleLinkClick } from "@/router/link";
 import { classNames } from "./classNames";
 import "./Link.css";
 
@@ -12,6 +12,27 @@ export type LinkProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "sty
   size?: LinkSize;
   disabled?: boolean;
 };
+
+function mergeRelForTarget(rel: string | undefined, target: string | undefined) {
+  const tokens = new Set(rel?.split(/\s+/).filter(Boolean));
+
+  if (target === "_blank") {
+    tokens.add("noreferrer");
+    tokens.add("noopener");
+  }
+
+  return tokens.size ? Array.from(tokens).join(" ") : undefined;
+}
+
+function shouldOpenInNewTabByDefault(href: string) {
+  try {
+    const url = new URL(href, window.location.origin);
+    const isWebUrl = url.protocol === "http:" || url.protocol === "https:";
+    return isWebUrl && url.origin !== window.location.origin;
+  } catch {
+    return false;
+  }
+}
 
 export function Link({
   href,
@@ -37,11 +58,9 @@ export function Link({
     handleLinkClick(event, href);
   };
 
-  const isInternal = isInternalHref(href);
-  const computedTarget = target ?? (isInternal ? undefined : "_blank");
-  const computedRel =
-    rel ??
-    (!isInternal && computedTarget === "_blank" ? "noreferrer" : undefined);
+  const computedTarget =
+    target ?? (shouldOpenInNewTabByDefault(href) ? "_blank" : undefined);
+  const computedRel = mergeRelForTarget(rel, computedTarget);
 
   return (
     <a

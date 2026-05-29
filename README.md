@@ -226,10 +226,10 @@ src/
 ### SEO Ownership
 
 - Route pages own metadata values (`title`, `description`, `canonicalUrl`) and pass them to `PageShell`.
-- `SeoHead` applies document-level updates and clears stale description/canonical tags between route transitions.
+- `SeoHead` applies document-level updates for title, description, canonical, robots, and keywords metadata, and clears stale description/canonical tags between route transitions.
 - Metadata fallbacks are route-defined and canonical generation is centralized in `src/lib/seo.ts`.
 - Phase 2 inventory and ownership notes: `docs/planning/PHASE-2-SEO-FOUNDATION.md`.
-- Structured data/schema, sitemap, robots directives, and broader discoverability changes are deferred to later phases.
+- Structured data/schema and broader discoverability changes are deferred to later phases.
 
 ### Content Source Abstraction
 

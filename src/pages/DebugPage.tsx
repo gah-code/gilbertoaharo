@@ -13,6 +13,11 @@ const debugRouteSeo = {
   canonicalUrl: buildCanonicalUrl("/debug"),
 };
 
+const debugRobots = {
+  index: false,
+  follow: false,
+};
+
 async function summarize(type: string): Promise<Summary> {
   const res = await contentful.getEntries({
     content_type: type,
@@ -66,6 +71,7 @@ export function DebugPage() {
         title={debugRouteSeo.title}
         description={debugRouteSeo.description}
         canonicalUrl={debugRouteSeo.canonicalUrl}
+        robots={debugRobots}
       >
         <h1>Contentful Debug</h1>
         <p>
@@ -82,6 +88,7 @@ export function DebugPage() {
         title={debugRouteSeo.title}
         description={debugRouteSeo.description}
         canonicalUrl={debugRouteSeo.canonicalUrl}
+        robots={debugRobots}
       >
         <h1>Contentful Debug</h1>
         <p>
@@ -99,6 +106,7 @@ export function DebugPage() {
       title={debugRouteSeo.title}
       description={debugRouteSeo.description}
       canonicalUrl={debugRouteSeo.canonicalUrl}
+      robots={debugRobots}
     >
       <div style={{ padding: 16 }}>
         <h1>Contentful Debug</h1>

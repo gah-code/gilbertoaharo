@@ -25,8 +25,17 @@ Route-level pages own SEO metadata and pass it through `PageShell` using:
 - `title`
 - `description`
 - `canonicalUrl`
+- optional `robots`
+- optional `keywords`
 
 `PageShell` delegates to `SeoHead` for document updates. UI primitives and section components do not own route metadata.
+
+Default metadata behavior:
+
+- `SeoHead` emits `robots` as `index, follow` for public pages unless a route intentionally overrides it.
+- `SeoHead` emits a concise default portfolio keyword set covering Gilberto Haro, frontend engineering, content systems, design systems, React, TypeScript, Contentful, AEM, web performance, SEO, and accessibility.
+- Debug routes intentionally use `noindex, nofollow` and remain excluded by `public/robots.txt`.
+- The not-found route intentionally uses `noindex, follow`.
 
 ## Fallback Rules
 

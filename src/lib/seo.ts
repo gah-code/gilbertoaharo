@@ -6,11 +6,65 @@ export type RouteSeo = {
   canonicalUrl?: string;
 };
 
+export type RobotsMeta = {
+  index: boolean;
+  follow: boolean;
+};
+
 export const DEFAULT_SITE_URL = "https://gilbertaharo.com";
+
+export const DEFAULT_SEO_KEYWORDS = [
+  "Gilberto Haro",
+  "Gilbert Alejandro Haro",
+  "web developer",
+  "frontend developer",
+  "frontend engineer",
+  "Content Systems Specialist",
+  "content systems",
+  "CMS",
+  "design systems",
+  "AI-enabled workflows",
+  "React",
+  "TypeScript",
+  "Contentful",
+  "AEM",
+  "portfolio",
+  "web performance",
+  "SEO",
+  "accessibility",
+];
+
+export const DEFAULT_ROBOTS_META: RobotsMeta = {
+  index: true,
+  follow: true,
+};
 
 function trimNonEmpty(value?: string | null): string | undefined {
   const normalized = value?.trim();
   return normalized && normalized.length > 0 ? normalized : undefined;
+}
+
+function uniqueNonEmptyValues(values: string[]): string[] {
+  const seen = new Set<string>();
+  return values.reduce<string[]>((result, value) => {
+    const normalized = trimNonEmpty(value);
+    if (!normalized || seen.has(normalized)) return result;
+    seen.add(normalized);
+    result.push(normalized);
+    return result;
+  }, []);
+}
+
+export function formatKeywords(keywords = DEFAULT_SEO_KEYWORDS): string {
+  return uniqueNonEmptyValues(keywords).join(", ");
+}
+
+export function formatRobotsMeta(
+  robots: RobotsMeta = DEFAULT_ROBOTS_META,
+): string {
+  return `${robots.index ? "index" : "noindex"}, ${
+    robots.follow ? "follow" : "nofollow"
+  }`;
 }
 
 function normalizePath(pathname: string): string {

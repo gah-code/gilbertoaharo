@@ -56,3 +56,23 @@ describe("buildCanonicalUrl", () => {
     );
   });
 });
+
+describe("metadata format helpers", () => {
+  it("formats robots directives", async () => {
+    const { formatRobotsMeta } = await loadSeo("");
+
+    expect(formatRobotsMeta({ index: true, follow: true })).toBe("index, follow");
+    expect(formatRobotsMeta({ index: false, follow: true })).toBe("noindex, follow");
+    expect(formatRobotsMeta({ index: false, follow: false })).toBe(
+      "noindex, nofollow",
+    );
+  });
+
+  it("formats concise keyword metadata with empty and duplicate values removed", async () => {
+    const { formatKeywords } = await loadSeo("");
+
+    expect(formatKeywords([" React ", "", "Contentful", "React"])).toBe(
+      "React, Contentful",
+    );
+  });
+});
