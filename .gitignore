@@ -11,6 +11,10 @@ node_modules
 dist
 dist-ssr
 storybook-static
+
+# Local temporary artifacts
+.tmp/
+
 *.local
 .env
 .env.local
