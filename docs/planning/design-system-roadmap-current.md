@@ -1,12 +1,31 @@
 # Design System + UX Roadmap - Current
 
-Date: May 15, 2026  
-Status: Phase 3 closed; Phase 4 ready for evidence capture
+Date: July 13, 2026
+Status: Phase 4 image delivery complete and deploy-verified; maintenance queue active
 Mode: preserve UI-first, CMS-second architecture; no layout/IA/routing/CMS changes without explicit approval.
 
 Preferred path:
 
-Audit and measure first -> fix canonical/SEO basics -> verify tokens and interaction states -> confirm desktop CLS and image delivery evidence -> decide typography conservatively -> improve Card/ArticleCard/Projects/Learning polish -> harden accessibility/responsive behavior -> expand Storybook and regression coverage -> release with checkpoint log.
+Audit and measure first -> fix canonical/SEO basics -> verify tokens and interaction states -> complete confirmed image-delivery work -> investigate desktop CLS root cause with evidence only -> decide typography conservatively -> improve Card/ArticleCard/Projects/Learning polish -> harden accessibility/responsive behavior -> expand Storybook and regression coverage -> release with checkpoint log.
+
+## Current Roadmap State
+
+Phase 4 image-delivery work is complete and deploy-verified through ArticleCard adoption on `/articles`.
+
+SEO metadata for robots and keywords is verified locally and live in production.
+
+Repo hygiene now ignores `.tmp/` artifacts and keeps raw local evidence out of git.
+
+Netlify secret-scan redeploy verification remains parked and should be revisited before the next Netlify deployment if needed.
+
+CLS root-cause direction is now identified with high confidence: short route loading states are replaced by much taller async CMS content after first paint, shifting `main#main-content` and the footer. CLS fixes remain unimplemented and require a separate narrow fix batch.
+
+Next candidate batches:
+
+1. Narrow CLS fix planning — route loading-state/layout reservation only.
+2. Netlify secret-scan redeploy verification — parked; return before the next Netlify deployment if needed.
+3. UX/design polish planning — typography/card/elevation/section polish after evidence gates.
+4. Contentful/CMS migration planning — deferred.
 
 ## Phase 1 - Baseline Freeze and Measurement
 
@@ -402,6 +421,30 @@ Batch 4.4 planning/evidence checkpoint (May 18, 2026):
 - ArticlePage and RichTextRenderer image adoption are deferred because all three current article detail routes show about `149 KiB` total weight, favicon-only image transfer, no Contentful image transfer, and no image-delivery findings.
 - No ProjectsSection, ArticleCard, ArticlePage, RichTextRenderer, layout, routing, IA, CMS model, Contentful migration, CLS fix, typography/card/elevation, or production code change was introduced during Batch 4.4 planning.
 
+Batch 4.4 ArticleCard implementation and deploy verification checkpoint (May 29, 2026):
+
+- Status: Complete and deploy-verified.
+- ArticleCard image delivery now uses the existing Contentful image helper for transformed fallback `src`, responsive `srcset`, and `(min-width: 1120px) 320px, (min-width: 768px) 33vw, 100vw` sizes on `/articles`.
+- Live `/articles` verification confirmed transformed Contentful WebP requests with `w=320&q=75&fm=webp` at the checked desktop viewport.
+- `/articles` total byte weight improved from `3,859 KiB` to `194 KiB`.
+- `/articles` image transfer improved from `3,794,510 B` to `34,941 B`.
+- `/articles` estimated image-delivery savings improved from `2,044 KiB` to `5 KiB`.
+- ProjectsSection, ArticlePage, and RichTextRenderer image delivery remain deferred because route evidence does not justify adoption.
+- CLS was observed only and not fixed; no root cause is assigned by this image-delivery work.
+- Decision: Phase 4 image-delivery work is complete. Continue separately with maintenance queue items.
+
+CLS root-cause investigation checkpoint (July 14, 2026):
+
+- Status: Evidence captured; no fix implemented.
+- Report: `docs/planning/phase-4-image-cls-evidence.md`.
+- Production Lighthouse route matrix covered `/` and `/articles` on desktop and mobile with two runs each, plus one desktop/mobile check for `/articles/resilient-content-systems`.
+- Lighthouse did not reproduce the prior severe `0.908` desktop homepage value in the repeated route matrix: homepage desktop was `0.009`/`0.009`, homepage mobile was `0.018`/`0`, `/articles` desktop was `0.004`/`0.004`, and `/articles` mobile was `0`/`0`.
+- A temporary browser `PerformanceObserver` reproduced severe route-mount shifts outside Lighthouse: homepage desktop `0.908` in one run and homepage mobile `0.921` in another.
+- Observer attribution shows `main#main-content` changing from a short loading-state rectangle to the full fetched route content, with `footer.footer-section` moving out of the initial viewport and small desktop header/main horizontal movement consistent with scrollbar appearance.
+- Likely root cause, high confidence: async route data loading replaces a very short loading state with much taller fetched CMS content after first paint.
+- Image delivery, ArticleCard images, Hero sizing, Timeline media, font loading, CSS loading order, SEO metadata, Netlify/env settings, and CMS model shape are not confirmed causes from this evidence.
+- Decision: plan a narrow CLS fix batch for route loading-state/layout reservation behavior. Do not start the fix without explicit approval.
+
 ## Phase 5 - Typography Decision and Type-Scale Refinement
 
 Objective:
@@ -784,7 +827,7 @@ Type:
 
 Current branch:
 
-- Phase 2 SEO follow-up is now 100 and the live crawler/canonical blocker is closed. Continue with token verification and trace/filmstrip confirmation before assigning desktop CLS root cause or starting visual polish.
+- Phase 2 SEO follow-up is 100, robots/keywords metadata is verified locally and live, Phase 4 image delivery is complete through ArticleCard deploy verification, and CLS root-cause direction is identified with high confidence. Continue with narrow CLS fix planning before starting visual polish.
 
 ### B. Typography
 
@@ -842,13 +885,14 @@ Current branch:
 1. Complete Phase 1 baseline freeze.
 2. Phase 2 SEO cleanup is closed: robots, sitemap, canonical, `index.html` fallback metadata/icons/share tags, weak link text, and body checks now pass on the live site.
 3. Phase 3 token verification is closed.
-4. Begin Phase 4 with Lighthouse trace/filmstrip review and image payload evidence capture before visual polish or implementation changes.
-5. Keep typography system-stack for now.
-6. Define elevation model and card hierarchy before broad card CSS tuning.
-7. Improve ArticleCard/project visible link labels and card hierarchy.
-8. Polish Projects and Learning within existing layout patterns.
-9. Harden accessibility and responsive QA.
-10. Expand Storybook a11y/visual readiness and close with release checkpoint.
+4. Phase 4 image-delivery work is complete and deploy-verified through ArticleCard adoption on `/articles`.
+5. Plan a narrow CLS fix for route loading-state/layout reservation behavior before any broader layout/CSS work.
+6. Keep typography system-stack for now.
+7. Define elevation model and card hierarchy before broad card CSS tuning.
+8. Improve ArticleCard/project visible link labels and card hierarchy.
+9. Polish Projects and Learning within existing layout patterns.
+10. Harden accessibility and responsive QA.
+11. Expand Storybook a11y/visual readiness and close with release checkpoint.
 
 ## Logging Requirements
 
@@ -870,6 +914,9 @@ Current checkpoint:
 - Phase 3 implementation checkpoint added on May 15, 2026: token verification started only after Phase 2 closeout; the missing `--space-5` token was added and the undefined-variable scan found no remaining concrete undefined references.
 - Phase 3 Batch 2 checkpoint added on May 15, 2026: motion/responsive baseline documentation completed, navigation transition alignment deferred, section-specific breakpoints documented, and README Storybook guidance made portable.
 - Phase 3 closeout checkpoint added on May 18, 2026: Phase 3 is closed after validation; Phase 4 is ready for evidence capture only and no Phase 4 implementation has started.
+- Phase 4 image-delivery checkpoint added on July 13, 2026: Hero, Timeline, and ArticleCard responsive Contentful image delivery are implemented and deploy-verified; ProjectsSection, ArticlePage, and RichTextRenderer remain deferred; CLS fixes remain blocked pending root-cause evidence.
+- Maintenance queue checkpoint added on July 13, 2026: `.tmp/` repo hygiene is complete, robots/keywords metadata is verified locally and live, Netlify secret-scan redeploy verification is parked, and the recommended next active batch is CLS root-cause investigation with evidence only.
+- CLS root-cause investigation checkpoint added on July 14, 2026: repeated Lighthouse route checks did not reproduce severe CLS, but temporary browser observer evidence reproduced severe route-mount shifts and points to short async loading states being replaced by much taller fetched CMS content. A narrow fix batch is justified; no fix has been implemented.
 
 CHANGELOG guidance:
 

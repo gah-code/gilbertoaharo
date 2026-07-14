@@ -178,3 +178,61 @@ Date: May 29, 2026
 - SEO robots/noindex/keywords work remains deferred.
 - `.tmp` cleanup and repo-ignore work remain deferred.
 - Phase 4 image-delivery work is ready for closeout after this deploy verification record; continue next with the separate repo hygiene batch.
+
+## 11. CLS Root-Cause Investigation Checkpoint
+
+Date: July 14, 2026
+
+Scope: evidence only. No CSS, layout, component, image-delivery, SEO, Netlify/env, CMS, Contentful, or `.tmp` hygiene changes were made.
+
+Artifacts are local and ignored under `.tmp/cls-root-cause-2026-07-14/`:
+
+- `home-desktop-run1.json`
+- `home-desktop-run2.json`
+- `home-mobile-run1.json`
+- `home-mobile-run2.json`
+- `articles-desktop-run1.json`
+- `articles-desktop-run2.json`
+- `articles-mobile-run1.json`
+- `articles-mobile-run2.json`
+- `article-detail-desktop-run1.json`
+- `article-detail-mobile-run1.json`
+- `layout-shift-observer-results-run1.json`
+- `layout-shift-observer-results-run2.json`
+
+Production Lighthouse evidence:
+
+| Route | Viewport | Runs | CLS | Performance | LCP | TBT | Lighthouse shifted node |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `/` | Desktop | 2 | `0.009`, `0.009` | `0.93`, `0.98` | `1.6 s`, `1.0 s` | `76 ms`, `7 ms` | `main#main-content` |
+| `/` | Mobile | 2 | `0.018`, `0` | `0.72`, `0.83` | `3.5 s`, `3.3 s` | `733 ms`, `374 ms` | `main#main-content` in the non-zero run |
+| `/articles` | Desktop | 2 | `0.004`, `0.004` | `0.99`, `0.99` | `0.8 s`, `0.7 s` | `0 ms`, `65 ms` | `main#main-content` |
+| `/articles` | Mobile | 2 | `0`, `0` | `0.85`, `0.72` | `3.4 s`, `3.0 s` | `270 ms`, `987 ms` | None |
+| `/articles/resilient-content-systems` | Desktop | 1 | `0.019` | `1.00` | `0.6 s` | `4 ms` | `footer.footer-section` |
+| `/articles/resilient-content-systems` | Mobile | 1 | `0` | `0.94` | `2.4 s` | `223 ms` | None |
+
+Temporary browser `PerformanceObserver` evidence:
+
+- Run 1 reproduced severe homepage desktop CLS: `0.908` at about `1,947 ms`. Sources were `main#main-content`, `footer.footer-section`, and `site-header__inner`.
+- Run 2 reproduced the same route-loading shift direction with lower homepage desktop CLS: `0.009` at about `1,458 ms`.
+- Run 2 reproduced severe homepage mobile CLS: `0.921` at about `1,172 ms`. Sources were `main#main-content` and `footer.footer-section`.
+- `/articles` desktop observer runs reported route-content/footer shifts of `0.142` and `0.004`; `/articles` mobile observer runs reported no layout-shift entries.
+
+Attribution details:
+
+- The shifted `main#main-content` previous rectangles were short route-loading content, for example about `25px` high at `top: 81px`.
+- The current rectangles were the full fetched route content, for example homepage content filling the viewport from about `top: 65px` to the bottom of the viewport.
+- Footer entries moved from visible positions directly below the short loading state to below or outside the viewport once fetched content mounted.
+- Header/main horizontal offsets changed by about `7px` in desktop observer entries, consistent with scrollbar appearance after the route expands from a short loading state to a long page.
+
+Suspected cause:
+
+- Likely root cause, high confidence: asynchronous route data loading renders a short loading state first, then replaces it with much taller fetched CMS route content after first paint. That content expansion moves `main#main-content` and the footer, and on desktop can also trigger a small scrollbar-gutter horizontal shift.
+- Image delivery is not the primary suspect in this evidence set. `/articles` remains stable in Lighthouse after ArticleCard image delivery (`0.004` desktop, `0` mobile), and the largest observer shifts occur before image-specific attribution.
+- Font loading, Hero sizing, Timeline media, ArticleCard images, CSS loading order, SEO metadata, Netlify/env settings, and CMS model shape are not confirmed causes from this investigation.
+
+Decision:
+
+- CLS is still reproducible intermittently, especially outside Lighthouse's throttled runs and on the homepage route.
+- The evidence is sufficient to plan a narrow CLS fix batch focused on route loading-state/layout reservation behavior for async content mounting.
+- Do not implement the fix inside this evidence batch.

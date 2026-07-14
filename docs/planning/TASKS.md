@@ -7,25 +7,15 @@ Roadmap v2 status: complete. Phases `A` through `F` are closed (April 24, 2026).
 
 ## Now
 
-- [ ] **Design System + UX Roadmap — Phase 4 ArticleCard image-delivery planning**
-  - Phase 3 — Token Verification and Responsive/Motion Token Alignment is closed.
-  - Phase 4 evidence capture is documented in `docs/planning/phase-4-image-cls-evidence.md`.
-  - Phase 4 implementation planning is documented in `docs/planning/phase-4-image-delivery-implementation-plan.md`.
-  - Batch 4.1 is complete: a pure Contentful image URL helper and unit tests are in place, with no UI image adoption yet.
-  - Batch 4.2 is complete: Hero media now uses Contentful-derived responsive image delivery through `MediaFrame`, with no Timeline or later-surface adoption yet.
-  - Batch 4.2 deploy verification passed: production deploy `e4b2ac06` is ready, live Lighthouse requested the Hero image as transformed WebP (`w=720&q=75&fm=webp`), total byte weight dropped from about `8,356 KiB` to `5,874 KiB`, and Hero transfer dropped from about `2,565,640 B` to `24,470 B`.
-  - Batch 4.3 is complete and deploy-verified: Timeline media now uses Contentful-derived transformed URLs and responsive `srcset`/`sizes`, with no Projects, ArticleCard, ArticlePage, RichTextRenderer, layout/CSS, CMS, Contentful migration, or CLS work.
-  - Batch 4.3 deploy verification passed: production serves the Batch 4.3 bundle, Timeline image requests are transformed WebP Contentful URLs, total byte weight dropped from about `5,874 KiB` to `235 KiB`, image transfer dropped from `5,846,759 B` to `72,782 B` including favicon, remaining estimated image-delivery savings dropped to `18 KiB`, and Lighthouse reports LCP `1.6 s`, CLS `0.009`, TBT `210 ms`, and performance score `0.84`.
-  - Batch 4.4 planning/evidence is complete: route-specific Lighthouse evidence shows `/articles` still has `3,859 KiB` total byte weight, `3,794,510 B` image transfer, and `2,044 KiB` estimated image-delivery savings from ArticleCard images.
-  - Batch 4.4 defers ProjectsSection, ArticlePage, and RichTextRenderer image adoption because current homepage and article detail route evidence does not show meaningful image-delivery savings for those surfaces.
-  - Repeat Lighthouse desktop evidence reproduced the severe CLS finding (`0.908`), but the affected node remains broad (`main#main-content`), so CLS root cause remains unconfirmed and must not drive layout changes yet.
-  - Image payload weight was confirmed and materially reduced by Hero/Timeline adoption: baseline desktop Lighthouse reported `8,356 KiB` total byte weight, while Batch 4.3 deploy verification reports `235 KiB`.
-  - Recommended next step: plan a narrow ArticleCard-only image-delivery implementation batch for `/articles`, then deploy-verify route payload before deciding whether Phase 4 can close. CLS fixes remain blocked.
-  - Do not start image delivery changes, CLS fixes, typography, card/elevation, section polish, routing, IA, CMS, or Contentful migration work without explicit Phase 4 implementation approval.
-
-- [ ] **Roadmap v2 closeout complete — maintenance mode**
-  - Use the Phase F maintenance workflow and release checklist for ongoing updates.
-  - Keep queue/state transitions aligned with the closeout rule below.
+- [ ] **Maintenance queue — next candidate batch selection**
+  - Current roadmap state is synced as of July 14, 2026.
+  - Phase 4 image-delivery work is complete and deploy-verified through ArticleCard adoption on `/articles`.
+  - SEO metadata for robots and keywords is verified locally and live in production.
+  - Repo hygiene now ignores `.tmp/` artifacts and keeps raw local evidence out of git.
+  - Netlify secret-scan redeploy verification remains parked and should be revisited before the next Netlify deployment if needed.
+  - CLS root-cause direction is identified with high confidence: short route loading states are replaced by much taller async CMS content after first paint, shifting `main#main-content` and the footer.
+  - Recommended next active batch: narrow CLS fix planning for route loading-state/layout reservation behavior.
+  - Do not start UI implementation, image delivery, SEO metadata, `.tmp` hygiene, Contentful/env cleanup, CMS migration, or Netlify secret-scan redeploy verification from this queue item.
 
 Phase closeout rule:
 A phase cannot be considered complete unless:
@@ -37,6 +27,44 @@ A phase cannot be considered complete unless:
 ---
 
 ## Recently Completed
+
+- [x] **CLS Root-Cause Investigation — evidence only** (completed July 14, 2026)
+  - Status: complete.
+  - Production Lighthouse evidence covered `/` and `/articles` on desktop and mobile with two runs each, plus one desktop/mobile check for `/articles/resilient-content-systems`.
+  - Lighthouse route matrix did not reproduce the prior severe desktop homepage `0.908` value: `/` desktop was `0.009`/`0.009`, `/` mobile was `0.018`/`0`, `/articles` desktop was `0.004`/`0.004`, and `/articles` mobile was `0`/`0`.
+  - Temporary browser `PerformanceObserver` evidence reproduced severe route-mount shifts outside Lighthouse: homepage desktop `0.908` in one run and homepage mobile `0.921` in another.
+  - Attribution points to async route data loading replacing a very short loading state with much taller fetched CMS content after first paint; `main#main-content` and `footer.footer-section` are the shifted surfaces, with minor desktop horizontal movement consistent with scrollbar appearance.
+  - Image delivery, Hero sizing, Timeline media, ArticleCard images, font loading, CSS loading order, SEO metadata, Netlify/env settings, CMS model shape, and `.tmp` hygiene were not changed and are not confirmed causes.
+  - Raw evidence is local and ignored under `.tmp/cls-root-cause-2026-07-14/`.
+  - Next recommended batch is narrow CLS fix planning; no fix was implemented in this investigation.
+
+- [x] **Roadmap State Sync — close SEO metadata + update maintenance queue** (completed July 13, 2026)
+  - Status: complete.
+  - Synced the active maintenance queue after Phase 4 image delivery, repo hygiene, SEO metadata, and live SEO verification completed.
+  - Parked Netlify secret-scan redeploy verification for a later deployment-focused pass.
+  - Preserved deferred status for CLS fixes, ProjectsSection image delivery, ArticlePage image delivery, RichTextRenderer image delivery, CMS model changes, and Contentful migration.
+  - Next recommended active batch is CLS root-cause investigation with evidence only and no layout changes.
+
+- [x] **SEO Metadata — robots/keywords local + live verification** (closed July 13, 2026)
+  - Status: complete.
+  - Local verification confirmed `index.html`, `SeoHead`, and `src/lib/seo.ts` already expose robots and keywords metadata, so no code changes were required.
+  - Live production verification passed for `https://gilbertaharo.com/` and `https://gilbertaharo.com/articles`: both routes expose `robots` as `index, follow` and include keyword metadata.
+  - Guardrails: no UI, image delivery, CLS/layout/CSS, `.tmp`, Contentful/env cleanup, CMS migration, or Netlify secret-scan redeploy verification work was introduced.
+
+- [x] **Repo Hygiene — .tmp ignore protection** (completed after Phase 4 Batch 4.4)
+  - Status: complete.
+  - `.tmp/` is ignored for local Lighthouse and temporary artifacts.
+  - No `.tmp` files are tracked, and raw generated evidence remains local/untracked.
+  - Useful docs/planning evidence remains tracked normally.
+
+- [x] **Design System + UX Roadmap — Phase 4 image delivery closeout**
+  - Status: complete and deploy-verified through Batch 4.4 ArticleCard adoption.
+  - Batch 4.1 added the pure Contentful image URL helper and tests.
+  - Batch 4.2 deployed Hero responsive Contentful image delivery; Hero transfer dropped from about `2,565,640 B` to `24,470 B`.
+  - Batch 4.3 deployed Timeline responsive Contentful image delivery; checked-route total byte weight dropped from about `5,874 KiB` to `235 KiB`, image transfer dropped to `72,782 B`, and estimated image-delivery savings dropped to `18 KiB`.
+  - Batch 4.4 deployed ArticleCard responsive Contentful image delivery on `/articles`; total byte weight improved from `3,859 KiB` to `194 KiB`, image transfer improved from `3,794,510 B` to `34,941 B`, and estimated image-delivery savings improved from `2,044 KiB` to `5 KiB`.
+  - ProjectsSection, ArticlePage, and RichTextRenderer image delivery remain deferred because route evidence did not justify adoption.
+  - CLS was observed only and not fixed; severe CLS root cause remains unconfirmed.
 
 - [x] **Phase 9G — Article Mobile Overflow + Content Formatting Audit**
   - Status: complete.
@@ -116,23 +144,29 @@ A phase cannot be considered complete unless:
 
 - No additional roadmap phases remain after v2 closeout.
 - Track only maintenance follow-ups and deferred candidates.
+- Next candidate batches:
+  1. Narrow CLS fix planning — route loading-state/layout reservation behavior only.
+  2. Netlify secret-scan redeploy verification — parked; return before the next Netlify deployment if needed.
+  3. UX/design polish planning — typography/card/elevation/section polish after evidence gates.
+  4. Contentful/CMS migration planning — deferred.
 
 ---
 
-## Verification Snapshot (Latest: Phase 4 Batch 4.4 later image-surface evidence, May 18, 2026)
+## Verification Snapshot (Latest: CLS root-cause investigation, July 14, 2026)
 
+- [x] `node -v` confirmed default shell Node is `22.2.0`; project verification used Node `22.12.0`.
 - [x] `npm run lint`
-- [x] `npm run test`
-- [x] `npm run test -- src/lib/images/contentfulImage.test.ts`
-- [x] `npm run test -- src/components/sections/HeroSection.test.tsx`
-- [x] `npm run test -- src/components/sections/TimelineSection.test.tsx`
 - [x] `npm run build`
-- [x] `npm run build-storybook` (pass with Node `22.12.0` selected through the local version manager)
+- [x] Production Lighthouse route matrix captured for `/` and `/articles` on desktop/mobile with repeat runs.
+- [x] Production Lighthouse check captured for `/articles/resilient-content-systems` on desktop/mobile.
+- [x] Temporary browser `PerformanceObserver` layout-shift attribution captured locally.
+- [x] Live SEO metadata verification passed for `/` and `/articles`.
 - [x] Fresh desktop Lighthouse performance evidence captured locally under `.tmp/design-system-audit/` (untracked)
 - [x] Repeat desktop Lighthouse CLS sanity check captured locally under `.tmp/design-system-audit/` (untracked)
 - [x] Batch 4.2 live Lighthouse Hero-after evidence captured locally under `.tmp/design-system-audit/` (untracked)
 - [x] Batch 4.3 live Lighthouse Timeline-after evidence captured locally under `.tmp/design-system-audit/` (untracked)
 - [x] Batch 4.4 route-specific Lighthouse evidence captured locally under `.tmp/design-system-audit/batch-4-4/` (untracked)
+- [x] Batch 4.4 ArticleCard deploy verification documented
 - [x] Phase 4 image payload inventory and image code-path inventory documented
 - [x] Phase 4 image-delivery implementation plan documented
 - [x] `git diff --check`
